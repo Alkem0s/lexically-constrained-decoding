@@ -7,6 +7,10 @@ Key metrics extracted (per the project spec):
   - Magnitude of probability manipulation required to enforce constraints.
   - Beam trajectory changes summarised from step-level pending counts
     (for hard inclusion) or from logit deltas (for exclusion / soft).
+
+Fix #13: token_level_report() was dead code — defined but never called.
+It is now integrated into compare_analyses() as an optional detail block
+that fires automatically when a tokenizer is provided.
 """
 
 from typing import List, Dict, Optional
@@ -40,9 +44,9 @@ def analyse_log(log: List[Dict], constraint_type: str) -> Dict:
             "beam_pressure"     : None,
         }
 
-    ranks    = []
-    probs    = []
-    deltas   = []
+    ranks     = []
+    probs     = []
+    deltas    = []
     pressures = []
 
     for step in log:
@@ -78,13 +82,25 @@ def analyse_log(log: List[Dict], constraint_type: str) -> Dict:
 
 # ── Comparison across constraint modes ────────────────────────────────────────
 
-def compare_analyses(analyses: Dict[str, Dict]) -> None:
+def compare_analyses(
+    analyses  : Dict[str, Dict],
+    logs      : Optional[Dict[str, List[Dict]]] = None,
+    tokenizer = None,
+    top_n_steps: int = 3,
+) -> None:
     """
     Pretty-print a side-by-side comparison of interpretability metrics
     across constraint modes for a single translation sample.
 
+    Fix #13: If `logs` and `tokenizer` are provided, the previously dead
+    token_level_report() is called here for each mode, surfacing per-step
+    token detail inline rather than being silently omitted.
+
     Args:
-        analyses: dict mapping mode_name → analyse_log() output
+        analyses   : dict mapping mode_name → analyse_log() output
+        logs       : dict mapping mode_name → raw log list (optional)
+        tokenizer  : model tokenizer for decoding token IDs (optional)
+        top_n_steps: how many steps to show in the token-level detail
     """
     print("\n  ┌─ Interpretability Summary " + "─" * 52)
 
@@ -112,6 +128,14 @@ def compare_analyses(analyses: Dict[str, Dict]) -> None:
 
     print("  └" + "─" * 80)
 
+    # Fix #13: emit token-level detail when the caller provides raw logs +
+    # a tokenizer.  This was previously unreachable dead code.
+    if logs is not None and tokenizer is not None:
+        for mode, log in logs.items():
+            if log:
+                print(f"\n  ── Token-level detail: {mode} ──")
+                token_level_report(log, tokenizer, top_n_steps=top_n_steps)
+
 
 # ── Token-level deep dive ─────────────────────────────────────────────────────
 
@@ -121,8 +145,8 @@ def token_level_report(log: List[Dict], tokenizer, top_n_steps: int = 3) -> None
     limited to top_n_steps for readability.
 
     Args:
-        log       : raw log list from a constraint processor.
-        tokenizer : the model's tokenizer (for decoding token IDs to strings).
+        log         : raw log list from a constraint processor.
+        tokenizer   : the model's tokenizer (for decoding token IDs to strings).
         top_n_steps : how many steps to display in detail.
     """
     if not log:
@@ -133,16 +157,22 @@ def token_level_report(log: List[Dict], tokenizer, top_n_steps: int = 3) -> None
     print(f"\n    Token-level detail (first {len(steps_to_show)} steps):")
 
     for entry in steps_to_show:
-        step  = entry["step"]
-        ctype = entry["type"]
-        tokens = entry.get("tokens", {})
+        step    = entry["step"]
+        ctype   = entry["type"]
+        tokens  = entry.get("tokens", {})
         pending = entry.get("pending_count", "—")
+        note    = entry.get("note", "")
 
-        print(f"\n    Step {step} [{ctype}]  pending_groups={pending}")
+        print(f"\n    Step {step} [{ctype}]  pending_groups={pending}"
+              + (f"  [{note}]" if note else ""))
+
         for tid, info in tokens.items():
-            word = tokenizer.decode([int(tid)], skip_special_tokens=True)
+            word      = tokenizer.decode([int(tid)], skip_special_tokens=True)
             raw_delta = info.get("delta", 0)
-            delta_str = "±inf" if abs(raw_delta) == 999 or raw_delta == float("inf") else f"{raw_delta:+.1f}"
+            delta_str = (
+                "±inf" if abs(raw_delta) == 999 or raw_delta == float("inf")
+                else f"{raw_delta:+.1f}"
+            )
             print(
                 f"      token_id={tid:<6}  surface='{word:<12}'  "
                 f"rank={info.get('rank', '?'):<6}  "

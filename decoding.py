@@ -11,6 +11,11 @@ Four modes:
   2. hard_exclusion()      — forbid specific words via logit masking
   3. hard_inclusion()      — require specific words via logit boosting
   4. soft_constrained()    — reward / penalise words with a scalar delta
+
+Fix #11: soft_constrained() now accepts BOTH reward_words and penalty_words
+in a single call and runs only one model.generate() pass.  The caller in
+main.py previously invoked it twice (once for penalty, once for reward),
+doubling inference time unnecessarily.
 """
 
 import torch
@@ -133,6 +138,11 @@ def soft_constrained(
     Nudge generation by adding a reward or penalty scalar to token logits.
     Unlike hard constraints, the model may still override the nudge if the
     constraint strongly conflicts with fluency.
+
+    Fix #11: Both reward_words and penalty_words are processed in a single
+    model.generate() call via one SoftConstraintProcessor instance.
+    The caller (main.py) now passes both lists together, halving the number
+    of generate() calls for the soft mode.
 
     Args:
         reward_words  : words (target language) to encourage.

@@ -14,6 +14,21 @@ from typing import List, Tuple
 import config
 
 
+# Fix #14: Remind the user to install sacremoses so MarianMT tokenisation
+# quality is not degraded.  We do this once at import time rather than
+# drowning every tokenizer load in the warning.
+try:
+    import sacremoses  # noqa: F401
+except ImportError:
+    import warnings
+    warnings.warn(
+        "sacremoses is not installed — MarianMT tokenisation may be lower quality.\n"
+        "  pip install sacremoses",
+        RuntimeWarning,
+        stacklevel=1,
+    )
+
+
 class MTModel:
     """
     Wrapper around a single MarianMT seq2seq model + tokenizer.
@@ -58,16 +73,36 @@ class MTModel:
         """
         Convert a list of surface-form words to their token ID(s).
 
-        MarianMT uses a SentencePiece vocabulary, so a single word may
-        map to multiple subword tokens.  We return every subword id for
-        each word so constraint logic can target all of them.
+        Fix #2: MarianMT / SentencePiece prepends a word-boundary marker
+        (▁, U+2581) when a word appears mid-sentence but NOT when encoded
+        in isolation.  Encoding a word in isolation therefore misses the
+        token ID that the model actually emits during generation, causing
+        hard-exclusion masks and inclusion boosts to silently fail.
 
-        Returns a list-of-lists: one inner list per input word.
+        We collect IDs for BOTH variants:
+          - bare encoding  (word in isolation, no leading space)
+          - spaced encoding (word with a leading space, which SPM maps to ▁word)
+
+        This ensures the processor targets the token the model will actually
+        produce, regardless of position in the sequence.
+
+        Returns a list-of-lists: one inner list per input word (deduplicated).
         """
         result = []
         for word in words:
-            # Encode without special tokens; strip leading space token artefacts
-            ids = self.tokenizer.encode(word, add_special_tokens=False)
+            id_set = set()
+
+            # Variant 1: encode the bare word
+            bare_ids = self.tokenizer.encode(word, add_special_tokens=False)
+            id_set.update(bare_ids)
+
+            # Variant 2: encode with a leading space so SPM sees it as
+            # a continuation token (▁word), which is what the decoder emits
+            # for most non-first-position words.
+            spaced_ids = self.tokenizer.encode(" " + word, add_special_tokens=False)
+            id_set.update(spaced_ids)
+
+            ids = list(id_set)
             if ids:
                 result.append(ids)
             else:

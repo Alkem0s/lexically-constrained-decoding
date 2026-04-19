@@ -7,7 +7,7 @@ Runs the full experiment for both EN→TR and TR→EN directions:
        a. Unconstrained baseline.
        b. Hard exclusion.
        c. Hard inclusion.
-       d. Soft penalty / reward.
+       d. Soft penalty + reward (single combined call — fix #11).
   3. Evaluate constraint satisfaction and BLEU vs baseline.
   4. Run interpretability analysis on each constraint log.
   5. Save all results to ./results/.
@@ -48,8 +48,8 @@ def set_seeds(seed: int = config.SEED):
 # Each entry is a dict:
 #   source          : source sentence (in source language)
 #   direction       : "EN→TR" or "TR→EN"
-#   forbidden_words : target-language words to EXCLUDE (hard & soft penalty)
-#   required_words  : target-language words to INCLUDE (hard & soft reward)
+#   forbidden_words : target-language words to EXCLUDE (hard exclusion & soft penalty)
+#   required_words  : target-language words to INCLUDE (hard inclusion & soft reward)
 #
 # Words are in the TARGET language so they can be directly mapped to token IDs.
 
@@ -144,7 +144,16 @@ TR_EN_CASES = [
 
 def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     """
-    Run all four decoding modes for one test case and return a SampleResult.
+    Run all decoding modes for one test case and return a SampleResult.
+
+    Fix #11: soft penalty and soft reward are now handled in ONE combined
+    soft_constrained() call that runs a single model.generate() pass, instead
+    of two separate calls that each ran a full generate().  The combined
+    translation is stored in both soft_penalty and soft_reward fields of the
+    result (they share the same output when both constraints are active).
+    If you need separate penalty-only and reward-only outputs for ablation,
+    call soft_constrained twice explicitly — but for the main pipeline one
+    combined run is correct and twice as fast.
     """
     src  = case["source"]
     dir_ = case["direction"]
@@ -173,38 +182,43 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     )
     result.hard_inclusion = incl_trans
 
-    # 4a. Soft penalty
-    sp_trans, sp_log = decoding.soft_constrained(
+    # 4. Soft — single combined call (fix #11)
+    soft_trans, soft_log = decoding.soft_constrained(
         model_wrapper, src,
         penalty_words = case.get("penalty_words", []),
+        reward_words  = case.get("reward_words",  []),
     )
-    result.soft_penalty = sp_trans
-
-    # 4b. Soft reward
-    sr_trans, sr_log = decoding.soft_constrained(
-        model_wrapper, src,
-        reward_words  = case.get("reward_words", []),
-    )
-    result.soft_reward = sr_trans
+    result.soft_penalty = soft_trans
+    result.soft_reward  = soft_trans   # same run; evaluated against both word lists
 
     # ── Interpretability ──────────────────────────────────────────────────────
+    raw_logs = {
+        "hard_excl" : excl_log,
+        "hard_incl" : incl_log,
+        "soft"      : soft_log,
+    }
     analyses = {
         "hard_excl" : interpretability.analyse_log(excl_log, "hard_exclusion"),
         "hard_incl" : interpretability.analyse_log(incl_log, "hard_inclusion"),
-        "soft_pen"  : interpretability.analyse_log(sp_log,   "soft_penalty"),
-        "soft_rew"  : interpretability.analyse_log(sr_log,   "soft_reward"),
+        "soft_pen"  : interpretability.analyse_log(soft_log, "soft_penalty"),
+        "soft_rew"  : interpretability.analyse_log(soft_log, "soft_reward"),
     }
-    interp_logs.append({"source": src, "direction": dir_, "analyses": analyses})
+    interp_logs.append({
+        "source"   : src,
+        "direction": dir_,
+        "analyses" : analyses,
+        "raw_logs" : raw_logs,   # retained for offline token_level_report
+    })
 
     # ── Evaluate ──────────────────────────────────────────────────────────────
     evaluation.evaluate_sample(result)
 
-    return result
+    return result, raw_logs
 
 
 # ── Direction runner ──────────────────────────────────────────────────────────
 
-def run_direction(model_wrapper, cases: List[Dict], direction_label: str) -> List[SampleResult]:
+def run_direction(model_wrapper, cases: List[Dict], direction_label: str):
     print(f"\n{'='*70}")
     print(f"  Direction: {direction_label}")
     print(f"{'='*70}")
@@ -213,10 +227,17 @@ def run_direction(model_wrapper, cases: List[Dict], direction_label: str) -> Lis
     interp_logs = []
 
     for case in tqdm(cases, desc=f"  {direction_label}"):
-        result = run_sample(model_wrapper, case, interp_logs)
+        result, raw_logs = run_sample(model_wrapper, case, interp_logs)
         evaluation.print_sample_result(result)
+
+        # Fix #13: pass raw logs and the model's tokenizer so
+        # compare_analyses() can call token_level_report() instead of
+        # silently skipping it.
         interpretability.compare_analyses(
-            {k: v for k, v in interp_logs[-1]["analyses"].items()}
+            analyses  = {k: v for k, v in interp_logs[-1]["analyses"].items()},
+            logs      = raw_logs,
+            tokenizer = model_wrapper.tokenizer,
+            top_n_steps = 2,
         )
         results.append(result)
 
@@ -241,6 +262,16 @@ def _serialise_result(r: SampleResult) -> Dict:
     }
 
 
+def _serialise_interp(entry: Dict) -> Dict:
+    """Strip the raw_logs tensor data before JSON serialisation."""
+    return {
+        "source"   : entry["source"],
+        "direction": entry["direction"],
+        "analyses" : entry["analyses"],
+        # raw_logs are kept in memory but not written to JSON (too verbose)
+    }
+
+
 def save_results(all_results: List[SampleResult], all_interp: List[Dict], run_id: str):
     os.makedirs(config.RESULTS_DIR, exist_ok=True)
 
@@ -253,7 +284,7 @@ def save_results(all_results: List[SampleResult], all_interp: List[Dict], run_id
     # Interpretability logs
     interp_path = os.path.join(config.RESULTS_DIR, f"interpretability_{run_id}.json")
     with open(interp_path, "w", encoding="utf-8") as f:
-        json.dump(all_interp, f, ensure_ascii=False, indent=2)
+        json.dump([_serialise_interp(e) for e in all_interp], f, ensure_ascii=False, indent=2)
     print(f"  Saved interpretability logs → {interp_path}")
 
 
@@ -267,6 +298,8 @@ def main():
     print(f"  Device   : {config.DEVICE}")
     if torch.cuda.is_available():
         print(f"  GPU      : {torch.cuda.get_device_name(0)}")
+    else:
+        print("  ⚠  No CUDA device detected — see config.py for reinstall instructions.")
     print("="*70)
 
     set_seeds()
@@ -284,7 +317,8 @@ def main():
 
     # Free VRAM before loading second model
     del en_tr_model
-    torch.cuda.empty_cache()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
     # ── TR → EN ───────────────────────────────────────────────────────────────
     print("\n[Step 2] Loading TR→EN model...")
@@ -295,7 +329,8 @@ def main():
     all_interp.extend(tr_en_interp)
 
     del tr_en_model
-    torch.cuda.empty_cache()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
     # ── Aggregate evaluation ──────────────────────────────────────────────────
     print("\n[Step 3] Aggregating results...")
