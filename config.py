@@ -9,6 +9,18 @@ import torch
 if torch.cuda.is_available():
     DEVICE = "cuda"
 else:
+    # Fix #1: Emit a clear warning so the user knows they are on CPU.
+    # If you have an RTX 4070, your PyTorch install is likely the CPU-only
+    # wheel.  Reinstall with CUDA 12.x support:
+    #   pip install torch --index-url https://download.pytorch.org/whl/cu121
+    import warnings
+    warnings.warn(
+        "CUDA is NOT available — running on CPU.  If you have an NVIDIA GPU, "
+        "reinstall PyTorch with CUDA support:\n"
+        "  pip install torch --index-url https://download.pytorch.org/whl/cu121",
+        RuntimeWarning,
+        stacklevel=1,
+    )
     DEVICE = "cpu"
 
 # ── Models ────────────────────────────────────────────────────────────────────
@@ -25,16 +37,16 @@ NUM_BEAMS       = 4      # beam width for constrained beam search
 NO_REPEAT_NGRAM = 3      # standard repetition penalty
 
 # ── Soft constraint strength ──────────────────────────────────────────────────
-# Fix #12: original ±8.0 was too weak for penalty (0% exclusion satisfaction)
-# and too strong / unguarded for reward (catastrophic repetition on some cases).
-# Penalty raised to -15.0 so it meaningfully suppresses high-confidence tokens.
-# Reward kept at 5.0; the "stop once satisfied" guard in SoftConstraintProcessor
-# prevents runaway repetition, so a moderate value is safe.
+# With full-vocabulary token coverage (all segmentations caught), a penalty of
+# -12 reliably suppresses forbidden words.  Reward stays at 5.0 with the
+# stop-once-satisfied guard preventing repetition.
 SOFT_REWARD_STRENGTH  =  5.0
-SOFT_PENALTY_STRENGTH = -15.0
+SOFT_PENALTY_STRENGTH = -12.0
 
 # ── Hard inclusion: logit boost applied each step until word appears ──────────
-HARD_INCLUSION_BOOST  = 20.0
+# Lowered from 20 → 15 because we now only boost whole-word tokens (high base
+# rank), so a smaller nudge is sufficient and causes less fluency disruption.
+HARD_INCLUSION_BOOST  = 15.0
 
 # ── Output ────────────────────────────────────────────────────────────────────
 RESULTS_DIR = "./results"

@@ -1,0 +1,165 @@
+{
+  "EN_TR": [
+    {
+      "source": "The cat sat on the mat and looked out the window.",
+      "direction": "EN→TR",
+      "forbidden_words": ["pencere"],
+      "required_words": ["kilim"],
+      "penalty_words": ["pencere"],
+      "reward_words": ["kilim"]
+    },
+    {
+      "source": "She opened the window to let in the fresh air.",
+      "direction": "EN→TR",
+      "forbidden_words": ["pencere"],
+      "required_words": ["ferah"],
+      "penalty_words": ["pencere"],
+      "reward_words": ["ferah"]
+    },
+    {
+      "source": "The doctor prescribed medicine and advised the patient to rest.",
+      "direction": "EN→TR",
+      "forbidden_words": ["doktor"],
+      "required_words": ["yazmak"],
+      "penalty_words": ["doktor"],
+      "reward_words": ["yazmak"]
+    },
+    {
+      "source": "Children love to play football in the park after school.",
+      "direction": "EN→TR",
+      "forbidden_words": ["futbol"],
+      "required_words": ["mektep"],
+      "penalty_words": ["futbol"],
+      "reward_words": ["mektep"]
+    },
+    {
+      "source": "Water is essential for life and health.",
+      "direction": "EN→TR",
+      "forbidden_words": ["saglik"],
+      "required_words": ["zorunlu"],
+      "penalty_words": ["saglik"],
+      "reward_words": ["zorunlu"]
+    },
+    {
+      "source": "The train arrived at the station exactly on time.",
+      "direction": "EN→TR",
+      "forbidden_words": ["tren"],
+      "required_words": ["dakik"],
+      "penalty_words": ["tren"],
+      "reward_words": ["dakik"]
+    },
+    {
+      "source": "She reads a book every evening before going to sleep.",
+      "direction": "EN→TR",
+      "forbidden_words": ["kitap"],
+      "required_words": ["aliskanlik"],
+      "penalty_words": ["kitap"],
+      "reward_words": ["aliskanlik"]
+    },
+    {
+      "source": "The economy grew significantly last year despite the difficulties.",
+      "direction": "EN→TR",
+      "forbidden_words": ["ekonomi"],
+      "required_words": ["sıkıntılar"],
+      "penalty_words": ["ekonomi"],
+      "reward_words": ["sıkıntılar"]
+    },
+    {
+      "source": "The police caught the thief who stole from the market.",
+      "direction": "EN→TR",
+      "required_words": ["bakkal"],
+      "penalty_words": ["polis", "hirsiz"],
+      "reward_words": ["bakkal"]
+    },
+    {
+      "source": "Music has the power to change a person's mood instantly.",
+      "direction": "EN→TR",
+      "forbidden_words": ["muzik"],
+      "required_words": ["aura"],
+      "penalty_words": ["muzik"],
+      "reward_words": ["aura"]
+    }
+  ],
+  "TR_EN": [
+    {
+      "source": "Kopek parkta kostu ve cok yoruldu.",
+      "direction": "TR→EN",
+      "forbidden_words": ["park"],
+      "required_words": ["field"],
+      "penalty_words": ["park"],
+      "reward_words": ["field"]
+    },
+    {
+      "source": "Annem her sabah kahve icer ve gazete okur.",
+      "direction": "TR→EN",
+      "forbidden_words": ["coffee"],
+      "required_words": ["magazine"],
+      "penalty_words": ["coffee"],
+      "reward_words": ["magazine"]
+    },
+    {
+      "source": "Hava bugun cok sicak, denize gidebiliriz.",
+      "direction": "TR→EN",
+      "forbidden_words": ["hot"],
+      "required_words": ["beach"],
+      "penalty_words": ["hot"],
+      "reward_words": ["beach"]
+    },
+    {
+      "source": "Cocuklar okuldan sonra futbol oynadi.",
+      "direction": "TR→EN",
+      "forbidden_words": ["football", "soccer"],
+      "required_words": ["gençler"],
+      "penalty_words": ["football", "soccer"],
+      "reward_words": ["gençler"]
+    },
+    {
+      "source": "Doktor hastaya ilac yazdi ve dinlenmesini soyledi.",
+      "direction": "TR→EN",
+      "forbidden_words": ["medicine", "medication"],
+      "required_words": ["recovery"],
+      "penalty_words": ["medicine", "medication"],
+      "reward_words": ["recovery"]
+    },
+    {
+      "source": "Ucak hava alanina gec indi ve yolcular bekledi.",
+      "direction": "TR→EN",
+      "forbidden_words": ["plane", "aircraft"],
+      "required_words": ["delay"],
+      "penalty_words": ["plane", "aircraft"],
+      "reward_words": ["delay"]
+    },
+    {
+      "source": "Ogrenciler sinavdan once cok calisti.",
+      "direction": "TR→EN",
+      "forbidden_words": ["exam", "test"],
+      "required_words": ["diligently"],
+      "penalty_words": ["exam", "test"],
+      "reward_words": ["diligently"]
+    },
+    {
+      "source": "Bu sehirde kis aylarinda kar yagar ve hava cok soguk olur.",
+      "direction": "TR→EN",
+      "forbidden_words": ["cold", "snow"],
+      "required_words": ["freezing"],
+      "penalty_words": ["cold", "snow"],
+      "reward_words": ["freezing"]
+    },
+    {
+      "source": "Fabrikada calisan isciler grev ilan etti.",
+      "direction": "TR→EN",
+      "forbidden_words": ["strike"],
+      "required_words": ["labor"],
+      "penalty_words": ["strike"],
+      "reward_words": ["labor"]
+    },
+    {
+      "source": "Denizalti okyanusun derinliklerinde sessizce ilerledi.",
+      "direction": "TR→EN",
+      "forbidden_words": ["submarine"],
+      "required_words": ["vessel"],
+      "penalty_words": ["submarine"],
+      "reward_words": ["vessel"]
+    }
+  ]
+}

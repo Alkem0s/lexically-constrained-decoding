@@ -69,54 +69,107 @@ class MTModel:
 
     # ── Token-ID utilities ────────────────────────────────────────────────────
 
+    def _build_vocab_surface_map(self):
+        """
+        Build and cache a mapping: token_id → decoded surface string (lowercased,
+        stripped of the SentencePiece boundary marker ▁).
+
+        This is computed once per model load and reused for all constraint lookups.
+        Scanning the full vocabulary (~60k tokens) takes ~50ms and is far more
+        reliable than trying to guess which encoding variant SPM will choose.
+        """
+        if hasattr(self, "_vocab_surface"):
+            return self._vocab_surface
+
+        vocab_size = self.tokenizer.vocab_size
+        surface_map = {}
+        for tid in range(vocab_size):
+            decoded = self.tokenizer.decode([tid], skip_special_tokens=True)
+            # Strip leading space / SPM boundary marker and lowercase
+            surface_map[tid] = decoded.strip().lower()
+        self._vocab_surface = surface_map
+        return surface_map
+
     def words_to_token_ids(self, words: List[str]) -> List[List[int]]:
         """
-        Convert a list of surface-form words to their token ID(s).
+        Convert a list of surface-form words to ALL token IDs that could
+        contribute to generating that word.
 
-        Fix #2: MarianMT / SentencePiece prepends a word-boundary marker
-        (▁, U+2581) when a word appears mid-sentence but NOT when encoded
-        in isolation.  Encoding a word in isolation therefore misses the
-        token ID that the model actually emits during generation, causing
-        hard-exclusion masks and inclusion boosts to silently fail.
+        Root-cause fix for hard/soft exclusion failures and inclusion garbling:
 
-        We collect IDs for BOTH variants:
-          - bare encoding  (word in isolation, no leading space)
-          - spaced encoding (word with a leading space, which SPM maps to ▁word)
+        SentencePiece has multiple valid segmentations of any word.  Simply
+        encoding a word in isolation (or with a leading space) only captures
+        ONE segmentation path.  The model can still emit the forbidden word via
+        a different subword split that was never masked.
 
-        This ensures the processor targets the token the model will actually
-        produce, regardless of position in the sequence.
+        Strategy — scan the entire vocabulary and collect every token whose
+        decoded surface:
+          a) IS a case-insensitive substring of the target word  → it could be
+             a subword piece that assembles into the word during generation.
+          b) CONTAINS the target word as a substring → it is the whole word or
+             a longer form (e.g. morphological suffix attached).
 
-        Returns a list-of-lists: one inner list per input word (deduplicated).
+        For EXCLUSION: we want set (a) ∪ (b) — mask any token that could
+        participate in spelling the forbidden word.
+
+        For INCLUSION: we want only set (b) — boost tokens whose surface already
+        contains the complete required word, so we never boost ambiguous subword
+        fragments that also appear in unrelated words (which caused "The hound",
+        "The dossier", "The cadets" instead of the intended words).
+
+        Both sets are returned together here; the caller (flat_token_ids vs
+        words_to_token_ids_strict) decides which subset to use.
+
+        Returns list-of-lists: one inner list per word, using the STRICT (b-only)
+        subset — safe for inclusion boosting.
         """
+        surface_map = self._build_vocab_surface_map()
         result = []
         for word in words:
-            id_set = set()
-
-            # Variant 1: encode the bare word
-            bare_ids = self.tokenizer.encode(word, add_special_tokens=False)
-            id_set.update(bare_ids)
-
-            # Variant 2: encode with a leading space so SPM sees it as
-            # a continuation token (▁word), which is what the decoder emits
-            # for most non-first-position words.
-            spaced_ids = self.tokenizer.encode(" " + word, add_special_tokens=False)
-            id_set.update(spaced_ids)
-
-            ids = list(id_set)
-            if ids:
-                result.append(ids)
+            word_lower = word.strip().lower()
+            # Strict set: token surface contains the full target word.
+            # Used for inclusion so we only boost tokens that ARE the word,
+            # not ambiguous fragments shared with other words.
+            strict_ids = [
+                tid for tid, surface in surface_map.items()
+                if word_lower in surface and surface  # surface must be non-empty
+            ]
+            if strict_ids:
+                result.append(strict_ids)
             else:
-                print(f"  Warning: '{word}' produced no token IDs — skipping.")
+                # Fallback: any token that is a substring piece of the word
+                fragment_ids = [
+                    tid for tid, surface in surface_map.items()
+                    if surface and surface in word_lower
+                ]
+                if fragment_ids:
+                    print(f"  [{word}] No whole-word tokens found; using {len(fragment_ids)} fragments.")
+                    result.append(fragment_ids)
+                else:
+                    print(f"  Warning: '{word}' produced no token IDs — skipping.")
         return result
 
     def flat_token_ids(self, words: List[str]) -> List[int]:
         """
-        Flatten words_to_token_ids into a single list of unique token IDs.
-        Useful for logit masking where we just need a set of IDs to suppress.
+        Return ALL token IDs that could spell any of the given words —
+        including subword fragments (substring pieces).
+
+        Used for EXCLUSION: we need to mask every token that could participate
+        in assembling the forbidden word under any segmentation, so we use the
+        broader (a) ∪ (b) set rather than the strict (b)-only set used for
+        inclusion.
         """
-        nested = self.words_to_token_ids(words)
-        flat   = [tid for sublist in nested for tid in sublist]
-        return list(set(flat))
+        surface_map = self._build_vocab_surface_map()
+        id_set = set()
+        for word in words:
+            word_lower = word.strip().lower()
+            for tid, surface in surface_map.items():
+                if not surface:
+                    continue
+                # Include if: token IS a part of the word, OR token CONTAINS word
+                if surface in word_lower or word_lower in surface:
+                    id_set.add(tid)
+        return list(id_set)
 
     # ── Encode / decode helpers ───────────────────────────────────────────────
 

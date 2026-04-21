@@ -217,14 +217,19 @@ class HardInclusionProcessor(LogitsProcessor):
         scores: torch.FloatTensor
     ) -> torch.FloatTensor:
 
-        # Fix #3: skip boosting at step 0 (only the forced BOS token exists).
-        # The model hasn't started generating real content yet; boosting here
-        # forces required subwords before the sentence, producing garbled output.
-        if self._step == 0:
+        # Fix #3 (extended): skip boosting until at least MIN_CONTENT_TOKENS
+        # real tokens have been generated.  Step 0 = BOS/language-tag only;
+        # step 1 immediately after still has no sentence context so the boost
+        # forces required subwords before the sentence structure can form.
+        # Waiting for ≥3 generated tokens gives the model enough context to
+        # place the required word naturally inside the sentence.
+        MIN_CONTENT_TOKENS = 3
+        current_len = input_ids.shape[1]   # includes the forced BOS token
+        if current_len <= MIN_CONTENT_TOKENS:
             self.log_store.append({
                 "step": self._step, "type": "inclusion",
                 "tokens": {}, "pending_count": len(self.pending),
-                "note": "boost skipped at step 0 (BOS position)",
+                "note": f"boost deferred (only {current_len} tokens generated so far)",
             })
             self._step += 1
             return scores

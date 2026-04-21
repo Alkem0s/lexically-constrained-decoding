@@ -24,6 +24,7 @@ import torch
 from datetime import datetime
 from typing import List, Dict
 from tqdm import tqdm
+import pathlib
 
 import config
 import model_loader
@@ -53,94 +54,44 @@ def set_seeds(seed: int = config.SEED):
 #
 # Words are in the TARGET language so they can be directly mapped to token IDs.
 
-EN_TR_CASES = [
-    {
-        "source"         : "The cat sat on the mat and looked out the window.",
-        "direction"      : "EN→TR",
-        "forbidden_words": ["pencere"],          # "window" in Turkish
-        "required_words" : ["kedi"],             # "cat" in Turkish
-        "penalty_words"  : ["pencere"],
-        "reward_words"   : ["kedi"],
-    },
-    {
-        "source"         : "I want to eat food at the restaurant tonight.",
-        "direction"      : "EN→TR",
-        "forbidden_words": ["restoran"],         # "restaurant"
-        "required_words" : ["yemek"],            # "food / meal"
-        "penalty_words"  : ["restoran"],
-        "reward_words"   : ["yemek"],
-    },
-    {
-        "source"         : "The student studied hard and passed the exam.",
-        "direction"      : "EN→TR",
-        "forbidden_words": ["sınav"],            # "exam"
-        "required_words" : ["öğrenci"],          # "student"
-        "penalty_words"  : ["sınav"],
-        "reward_words"   : ["öğrenci"],
-    },
-    {
-        "source"         : "Water is essential for life and health.",
-        "direction"      : "EN→TR",
-        "forbidden_words": ["hayat"],            # "life"
-        "required_words" : ["su"],               # "water"
-        "penalty_words"  : ["hayat"],
-        "reward_words"   : ["su"],
-    },
-    {
-        "source"         : "She read a book in the library all afternoon.",
-        "direction"      : "EN→TR",
-        "forbidden_words": ["kütüphane"],        # "library"
-        "required_words" : ["kitap"],            # "book"
-        "penalty_words"  : ["kütüphane"],
-        "reward_words"   : ["kitap"],
-    },
-]
-
-TR_EN_CASES = [
-    {
-        "source"         : "Köpek parkta koştu ve çok yoruldu.",
-        "direction"      : "TR→EN",
-        "forbidden_words": ["park"],             # same in English
-        "required_words" : ["dog"],
-        "penalty_words"  : ["park"],
-        "reward_words"   : ["dog"],
-    },
-    {
-        "source"         : "Annem her sabah kahve içer ve gazete okur.",
-        "direction"      : "TR→EN",
-        "forbidden_words": ["coffee"],
-        "required_words" : ["mother"],
-        "penalty_words"  : ["coffee"],
-        "reward_words"   : ["mother"],
-    },
-    {
-        "source"         : "Hava bugün çok sıcak, denize gidebiliriz.",
-        "direction"      : "TR→EN",
-        "forbidden_words": ["hot"],
-        "required_words" : ["sea"],
-        "penalty_words"  : ["hot"],
-        "reward_words"   : ["sea"],
-    },
-    {
-        "source"         : "Çocuklar okuldan sonra futbol oynadı.",
-        "direction"      : "TR→EN",
-        "forbidden_words": ["football"],
-        "required_words" : ["children"],
-        "penalty_words"  : ["football"],
-        "reward_words"   : ["children"],
-    },
-    {
-        "source"         : "Doktor hastaya ilaç yazdı ve dinlenmesini söyledi.",
-        "direction"      : "TR→EN",
-        "forbidden_words": ["medicine"],
-        "required_words" : ["doctor"],
-        "penalty_words"  : ["medicine"],
-        "reward_words"   : ["doctor"],
-    },
-]
-
-
 # ── Per-sample runner ─────────────────────────────────────────────────────────
+
+def load_test_cases(path: str = "test_cases.json") -> tuple:
+    """
+    Load EN_TR and TR_EN test cases from a JSON file.
+
+    The JSON schema is:
+      {
+        "EN_TR": [ { source, direction, forbidden_words, required_words,
+                     penalty_words, reward_words, comment? }, ... ],
+        "TR_EN": [ ... ]
+      }
+
+    Falls back to empty lists with a clear error message if the file is missing
+    or malformed so the rest of the pipeline can still run.
+    """
+    p = pathlib.Path(path)
+    if not p.exists():
+        print(f"[WARNING] test_cases.json not found at '{path}'. "
+              "Using empty case lists.")
+        return [], []
+
+    try:
+        with p.open(encoding="utf-8") as f:
+            data = json.load(f)
+    except json.JSONDecodeError as exc:
+        print(f"[ERROR] Could not parse '{path}': {exc}")
+        return [], []
+
+    en_tr = data.get("EN_TR", [])
+    tr_en = data.get("TR_EN", [])
+    print(f"  Loaded {len(en_tr)} EN→TR cases and {len(tr_en)} TR→EN cases "
+          f"from '{path}'")
+    return en_tr, tr_en
+
+
+EN_TR_CASES, TR_EN_CASES = load_test_cases()
+
 
 def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     """
@@ -311,11 +262,13 @@ def main():
     print("\n[Step 1] Loading EN→TR model...")
     en_tr_model = model_loader.load_en_tr()
 
-    en_tr_results, en_tr_interp = run_direction(en_tr_model, EN_TR_CASES, "EN→TR")
-    all_results.extend(en_tr_results)
-    all_interp.extend(en_tr_interp)
+    if EN_TR_CASES:
+        en_tr_results, en_tr_interp = run_direction(en_tr_model, EN_TR_CASES, "EN→TR")
+        all_results.extend(en_tr_results)
+        all_interp.extend(en_tr_interp)
+    else:
+        print("  [SKIP] No EN→TR cases loaded.")
 
-    # Free VRAM before loading second model
     del en_tr_model
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -324,9 +277,12 @@ def main():
     print("\n[Step 2] Loading TR→EN model...")
     tr_en_model = model_loader.load_tr_en()
 
-    tr_en_results, tr_en_interp = run_direction(tr_en_model, TR_EN_CASES, "TR→EN")
-    all_results.extend(tr_en_results)
-    all_interp.extend(tr_en_interp)
+    if TR_EN_CASES:
+        tr_en_results, tr_en_interp = run_direction(tr_en_model, TR_EN_CASES, "TR→EN")
+        all_results.extend(tr_en_results)
+        all_interp.extend(tr_en_interp)
+    else:
+        print("  [SKIP] No TR→EN cases loaded.")
 
     del tr_en_model
     if torch.cuda.is_available():
