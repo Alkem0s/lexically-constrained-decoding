@@ -4,80 +4,81 @@
       "source": "The cat sat on the mat and looked out the window.",
       "direction": "EN→TR",
       "forbidden_words": ["pencere"],
-      "required_words": ["kilim"],
+      "required_words": ["halı"],
       "penalty_words": ["pencere"],
-      "reward_words": ["kilim"]
+      "reward_words": ["halı"]
     },
     {
       "source": "She opened the window to let in the fresh air.",
       "direction": "EN→TR",
       "forbidden_words": ["pencere"],
-      "required_words": ["ferah"],
+      "required_words": ["hava"],
       "penalty_words": ["pencere"],
-      "reward_words": ["ferah"]
+      "reward_words": ["hava"]
     },
     {
       "source": "The doctor prescribed medicine and advised the patient to rest.",
       "direction": "EN→TR",
       "forbidden_words": ["doktor"],
-      "required_words": ["yazmak"],
+      "required_words": ["hekim"],
       "penalty_words": ["doktor"],
-      "reward_words": ["yazmak"]
+      "reward_words": ["hekim"]
     },
     {
       "source": "Children love to play football in the park after school.",
       "direction": "EN→TR",
       "forbidden_words": ["futbol"],
-      "required_words": ["mektep"],
+      "required_words": ["top"],
       "penalty_words": ["futbol"],
-      "reward_words": ["mektep"]
+      "reward_words": ["top"]
     },
     {
       "source": "Water is essential for life and health.",
       "direction": "EN→TR",
-      "forbidden_words": ["saglik"],
-      "required_words": ["zorunlu"],
-      "penalty_words": ["saglik"],
-      "reward_words": ["zorunlu"]
+      "forbidden_words": ["sağlık"],
+      "required_words": ["yaşam"],
+      "penalty_words": ["sağlık"],
+      "reward_words": ["yaşam"]
     },
     {
       "source": "The train arrived at the station exactly on time.",
       "direction": "EN→TR",
       "forbidden_words": ["tren"],
-      "required_words": ["dakik"],
+      "required_words": ["istasyon"],
       "penalty_words": ["tren"],
-      "reward_words": ["dakik"]
+      "reward_words": ["istasyon"]
     },
     {
       "source": "She reads a book every evening before going to sleep.",
       "direction": "EN→TR",
       "forbidden_words": ["kitap"],
-      "required_words": ["aliskanlik"],
+      "required_words": ["okumak"],
       "penalty_words": ["kitap"],
-      "reward_words": ["aliskanlik"]
+      "reward_words": ["okumak"]
     },
     {
       "source": "The economy grew significantly last year despite the difficulties.",
       "direction": "EN→TR",
       "forbidden_words": ["ekonomi"],
-      "required_words": ["sıkıntılar"],
+      "required_words": ["büyüme"],
       "penalty_words": ["ekonomi"],
-      "reward_words": ["sıkıntılar"]
+      "reward_words": ["büyüme"]
     },
     {
       "source": "The police caught the thief who stole from the market.",
       "direction": "EN→TR",
-      "required_words": ["bakkal"],
-      "penalty_words": ["polis", "hirsiz"],
-      "reward_words": ["bakkal"]
+      "forbidden_words": [],
+      "required_words": ["çarşı"],
+      "penalty_words": ["hırsız"],
+      "reward_words": ["çarşı"]
     },
     {
       "source": "Music has the power to change a person's mood instantly.",
       "direction": "EN→TR",
-      "forbidden_words": ["muzik"],
-      "required_words": ["aura"],
-      "penalty_words": ["muzik"],
-      "reward_words": ["aura"]
+      "forbidden_words": ["müzik"],
+      "required_words": ["ruh"],
+      "penalty_words": ["müzik"],
+      "reward_words": ["ruh"]
     }
   ],
   "TR_EN": [
@@ -93,9 +94,9 @@
       "source": "Annem her sabah kahve icer ve gazete okur.",
       "direction": "TR→EN",
       "forbidden_words": ["coffee"],
-      "required_words": ["magazine"],
+      "required_words": ["newspaper"],
       "penalty_words": ["coffee"],
-      "reward_words": ["magazine"]
+      "reward_words": ["newspaper"]
     },
     {
       "source": "Hava bugun cok sicak, denize gidebiliriz.",
@@ -109,17 +110,17 @@
       "source": "Cocuklar okuldan sonra futbol oynadi.",
       "direction": "TR→EN",
       "forbidden_words": ["football", "soccer"],
-      "required_words": ["gençler"],
+      "required_words": ["played"],
       "penalty_words": ["football", "soccer"],
-      "reward_words": ["gençler"]
+      "reward_words": ["played"]
     },
     {
       "source": "Doktor hastaya ilac yazdi ve dinlenmesini soyledi.",
       "direction": "TR→EN",
       "forbidden_words": ["medicine", "medication"],
-      "required_words": ["recovery"],
+      "required_words": ["rest"],
       "penalty_words": ["medicine", "medication"],
-      "reward_words": ["recovery"]
+      "reward_words": ["rest"]
     },
     {
       "source": "Ucak hava alanina gec indi ve yolcular bekledi.",
@@ -133,9 +134,9 @@
       "source": "Ogrenciler sinavdan once cok calisti.",
       "direction": "TR→EN",
       "forbidden_words": ["exam", "test"],
-      "required_words": ["diligently"],
+      "required_words": ["studied"],
       "penalty_words": ["exam", "test"],
-      "reward_words": ["diligently"]
+      "reward_words": ["studied"]
     },
     {
       "source": "Bu sehirde kis aylarinda kar yagar ve hava cok soguk olur.",
@@ -149,9 +150,9 @@
       "source": "Fabrikada calisan isciler grev ilan etti.",
       "direction": "TR→EN",
       "forbidden_words": ["strike"],
-      "required_words": ["labor"],
+      "required_words": ["workers"],
       "penalty_words": ["strike"],
-      "reward_words": ["labor"]
+      "reward_words": ["workers"]
     },
     {
       "source": "Denizalti okyanusun derinliklerinde sessizce ilerledi.",

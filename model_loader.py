@@ -158,17 +158,38 @@ class MTModel:
         in assembling the forbidden word under any segmentation, so we use the
         broader (a) ∪ (b) set rather than the strict (b)-only set used for
         inclusion.
+
+        Guard: if more than MAX_EXCLUSION_IDS tokens are collected for a single
+        word, the word is likely a very short string whose characters appear in
+        hundreds of unrelated tokens. In that case we fall back to whole-word
+        tokens only (set b) to avoid over-masking that hurts fluency.
         """
+        MAX_EXCLUSION_IDS = 200
         surface_map = self._build_vocab_surface_map()
         id_set = set()
         for word in words:
             word_lower = word.strip().lower()
-            for tid, surface in surface_map.items():
-                if not surface:
-                    continue
-                # Include if: token IS a part of the word, OR token CONTAINS word
-                if surface in word_lower or word_lower in surface:
-                    id_set.add(tid)
+            broad_ids = [
+                tid for tid, surface in surface_map.items()
+                if surface and (surface in word_lower or word_lower in surface)
+            ]
+            if len(broad_ids) > MAX_EXCLUSION_IDS:
+                # Fall back to whole-word only to avoid over-masking
+                strict_ids = [
+                    tid for tid, surface in surface_map.items()
+                    if surface and word_lower in surface
+                ]
+                import warnings
+                warnings.warn(
+                    f"  [flat_token_ids] '{word}' matched {len(broad_ids)} tokens "
+                    f"(>{MAX_EXCLUSION_IDS}); falling back to {len(strict_ids)} "
+                    f"whole-word tokens to avoid over-masking.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                id_set.update(strict_ids)
+            else:
+                id_set.update(broad_ids)
         return list(id_set)
 
     # ── Encode / decode helpers ───────────────────────────────────────────────

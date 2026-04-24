@@ -41,8 +41,11 @@ class SampleResult:
     # Per-mode translations
     hard_exclusion  : str = ""
     hard_inclusion  : str = ""
-    soft_penalty    : str = ""
-    soft_reward     : str = ""
+    hard_combined   : str = ""             # simultaneous exclusion + inclusion
+
+    soft_penalty    : str = ""             # penalty only (isolated)
+    soft_reward     : str = ""             # reward only (isolated)
+    soft_combined   : str = ""            # simultaneous penalty + reward
 
     # Constraint specs
     forbidden_words : List[str] = field(default_factory=list)
@@ -127,12 +130,7 @@ def evaluate_sample(result: SampleResult) -> Dict:
     if result.hard_exclusion and result.forbidden_words:
         sat  = satisfaction_exclusion(result.hard_exclusion, result.forbidden_words)
         bleu = compute_bleu(result.hard_exclusion, baseline)
-
-        # Fix #7: flag the case where the constraint was violated but the output
-        # is identical to baseline (BLEU=100 + satisfied=False is contradictory
-        # at a glance; the flag makes it unambiguous in logs and aggregate).
         violated_at_baseline = (not sat["overall"]) and (bleu is not None and bleu >= 99.9)
-
         metrics["hard_exclusion"] = {
             "satisfaction"              : sat,
             "bleu_vs_baseline"          : bleu,
@@ -149,7 +147,26 @@ def evaluate_sample(result: SampleResult) -> Dict:
             "length_ratio"     : length_ratio(result.hard_inclusion, baseline),
         }
 
-    # ── Soft penalty ──────────────────────────────────────────────────────────
+    # ── Hard combined (exclusion + inclusion simultaneously) ──────────────────
+    if result.hard_combined and (result.forbidden_words or result.required_words):
+        excl_sat = (
+            satisfaction_exclusion(result.hard_combined, result.forbidden_words)
+            if result.forbidden_words else {"overall": True, "details": {}}
+        )
+        incl_sat = (
+            satisfaction_inclusion(result.hard_combined, result.required_words)
+            if result.required_words else {"overall": True, "details": {}}
+        )
+        bleu = compute_bleu(result.hard_combined, baseline)
+        metrics["hard_combined"] = {
+            "exclusion_satisfaction"    : excl_sat,
+            "inclusion_satisfaction"    : incl_sat,
+            "overall_satisfaction"      : excl_sat["overall"] and incl_sat["overall"],
+            "bleu_vs_baseline"          : bleu,
+            "length_ratio"              : length_ratio(result.hard_combined, baseline),
+        }
+
+    # ── Soft penalty (isolated — no reward active) ────────────────────────────
     if result.soft_penalty and result.penalty_words:
         sat  = satisfaction_exclusion(result.soft_penalty, result.penalty_words)
         bleu = compute_bleu(result.soft_penalty, baseline)
@@ -161,13 +178,34 @@ def evaluate_sample(result: SampleResult) -> Dict:
             "constraint_violated_at_baseline": violated_at_baseline,
         }
 
-    # ── Soft reward ───────────────────────────────────────────────────────────
+    # ── Soft reward (isolated — no penalty active) ────────────────────────────
     if result.soft_reward and result.reward_words:
         sat = satisfaction_inclusion(result.soft_reward, result.reward_words)
         metrics["soft_reward"] = {
             "satisfaction"     : sat,
             "bleu_vs_baseline" : compute_bleu(result.soft_reward, baseline),
             "length_ratio"     : length_ratio(result.soft_reward, baseline),
+        }
+
+    # ── Soft combined (penalty + reward simultaneously) ───────────────────────
+    if result.soft_combined and (result.penalty_words or result.reward_words):
+        pen_sat = (
+            satisfaction_exclusion(result.soft_combined, result.penalty_words)
+            if result.penalty_words else {"overall": True, "details": {}}
+        )
+        rew_sat = (
+            satisfaction_inclusion(result.soft_combined, result.reward_words)
+            if result.reward_words else {"overall": True, "details": {}}
+        )
+        bleu = compute_bleu(result.soft_combined, baseline)
+        violated_at_baseline = (not pen_sat["overall"]) and (bleu is not None and bleu >= 99.9)
+        metrics["soft_combined"] = {
+            "penalty_satisfaction"      : pen_sat,
+            "reward_satisfaction"       : rew_sat,
+            "overall_satisfaction"      : pen_sat["overall"] and rew_sat["overall"],
+            "bleu_vs_baseline"          : bleu,
+            "length_ratio"              : length_ratio(result.soft_combined, baseline),
+            "constraint_violated_at_baseline": violated_at_baseline,
         }
 
     result.metrics = metrics
@@ -181,10 +219,18 @@ def aggregate_results(results: List[SampleResult]) -> Dict:
     Compute aggregate metrics across all samples.
     Returns a dict: mode → {avg_satisfaction, avg_bleu, avg_length_ratio,
                              n_violated_at_baseline}.
+
+    For combined modes (hard_combined, soft_combined) overall_satisfaction is
+    used (both sub-constraints must pass).
     """
     agg = {}
 
-    for mode in ["hard_exclusion", "hard_inclusion", "soft_penalty", "soft_reward"]:
+    # Modes that use a single "satisfaction.overall" key
+    simple_modes = ["hard_exclusion", "hard_inclusion", "soft_penalty", "soft_reward"]
+    # Combined modes that use "overall_satisfaction" key
+    combined_modes = ["hard_combined", "soft_combined"]
+
+    for mode in simple_modes:
         sats, bleus, ratios = [], [], []
         n_violated_at_baseline = 0
         for r in results:
@@ -192,6 +238,32 @@ def aggregate_results(results: List[SampleResult]) -> Dict:
             if m is None:
                 continue
             sats.append(float(m["satisfaction"]["overall"]))
+            if m["bleu_vs_baseline"] is not None:
+                bleus.append(m["bleu_vs_baseline"])
+            if m["length_ratio"] is not None:
+                ratios.append(m["length_ratio"])
+            if m.get("constraint_violated_at_baseline"):
+                n_violated_at_baseline += 1
+
+        if not sats:
+            continue
+
+        agg[mode] = {
+            "n_samples"               : len(sats),
+            "avg_satisfaction"        : round(sum(sats) / len(sats), 3),
+            "avg_bleu_vs_base"        : round(sum(bleus) / len(bleus), 2) if bleus else None,
+            "avg_length_ratio"        : round(sum(ratios) / len(ratios), 3) if ratios else None,
+            "n_violated_at_baseline"  : n_violated_at_baseline,
+        }
+
+    for mode in combined_modes:
+        sats, bleus, ratios = [], [], []
+        n_violated_at_baseline = 0
+        for r in results:
+            m = r.metrics.get(mode)
+            if m is None:
+                continue
+            sats.append(float(m["overall_satisfaction"]))
             if m["bleu_vs_baseline"] is not None:
                 bleus.append(m["bleu_vs_baseline"])
             if m["length_ratio"] is not None:
@@ -223,22 +295,36 @@ def print_sample_result(result: SampleResult) -> None:
     rows = [
         ("Hard Exclusion" , result.hard_exclusion , "hard_exclusion"),
         ("Hard Inclusion" , result.hard_inclusion , "hard_inclusion"),
+        ("Hard Combined"  , result.hard_combined  , "hard_combined"),
         ("Soft Penalty"   , result.soft_penalty   , "soft_penalty"),
         ("Soft Reward"    , result.soft_reward    , "soft_reward"),
+        ("Soft Combined"  , result.soft_combined  , "soft_combined"),
     ]
 
     for label, translation, mode_key in rows:
         if not translation:
             continue
         m = result.metrics.get(mode_key, {})
-        sat_val   = m.get("satisfaction", {}).get("overall", "—")
-        bleu_val  = m.get("bleu_vs_baseline", "—")
-        lr_val    = m.get("length_ratio", "—")
-        viol_flag = "  ⚠ violated at baseline" if m.get("constraint_violated_at_baseline") else ""
-        print(
-            f"  {label:<18}: {translation}\n"
-            f"    ↳ satisfied={sat_val}  bleu_vs_base={bleu_val}  len_ratio={lr_val}{viol_flag}"
-        )
+
+        # Combined modes expose overall_satisfaction + sub-satisfaction dicts
+        if mode_key in ("hard_combined", "soft_combined"):
+            overall   = m.get("overall_satisfaction", "—")
+            bleu_val  = m.get("bleu_vs_baseline", "—")
+            lr_val    = m.get("length_ratio", "—")
+            viol_flag = "  ⚠ violated at baseline" if m.get("constraint_violated_at_baseline") else ""
+            print(
+                f"  {label:<18}: {translation}\n"
+                f"    ↳ overall_satisfied={overall}  bleu_vs_base={bleu_val}  len_ratio={lr_val}{viol_flag}"
+            )
+        else:
+            sat_val   = m.get("satisfaction", {}).get("overall", "—")
+            bleu_val  = m.get("bleu_vs_baseline", "—")
+            lr_val    = m.get("length_ratio", "—")
+            viol_flag = "  ⚠ violated at baseline" if m.get("constraint_violated_at_baseline") else ""
+            print(
+                f"  {label:<18}: {translation}\n"
+                f"    ↳ satisfied={sat_val}  bleu_vs_base={bleu_val}  len_ratio={lr_val}{viol_flag}"
+            )
 
 
 def print_aggregate(agg: Dict) -> None:

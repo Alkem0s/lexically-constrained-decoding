@@ -97,14 +97,14 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     """
     Run all decoding modes for one test case and return a SampleResult.
 
-    Fix #11: soft penalty and soft reward are now handled in ONE combined
-    soft_constrained() call that runs a single model.generate() pass, instead
-    of two separate calls that each ran a full generate().  The combined
-    translation is stored in both soft_penalty and soft_reward fields of the
-    result (they share the same output when both constraints are active).
-    If you need separate penalty-only and reward-only outputs for ablation,
-    call soft_constrained twice explicitly — but for the main pipeline one
-    combined run is correct and twice as fast.
+    Modes run:
+      - unconstrained baseline
+      - hard_exclusion  (isolated)
+      - hard_inclusion  (isolated)
+      - hard_combined   (exclusion + inclusion simultaneously)
+      - soft_penalty    (isolated — penalty only, no reward)
+      - soft_reward     (isolated — reward only, no penalty)
+      - soft_combined   (penalty + reward simultaneously)
     """
     src  = case["source"]
     dir_ = case["direction"]
@@ -121,44 +121,72 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     # 1. Unconstrained baseline
     result.unconstrained, _ = decoding.unconstrained(model_wrapper, src)
 
-    # 2. Hard exclusion
+    # 2. Hard exclusion (isolated)
     excl_trans, excl_log = decoding.hard_exclusion(
         model_wrapper, src, case.get("forbidden_words", [])
     )
     result.hard_exclusion = excl_trans
 
-    # 3. Hard inclusion
+    # 3. Hard inclusion (isolated)
     incl_trans, incl_log = decoding.hard_inclusion(
         model_wrapper, src, case.get("required_words", [])
     )
     result.hard_inclusion = incl_trans
 
-    # 4. Soft — single combined call (fix #11)
-    soft_trans, soft_log = decoding.soft_constrained(
+    # 4. Hard combined (exclusion + inclusion simultaneously)
+    hcomb_trans, hcomb_excl_log, hcomb_incl_log = decoding.combined_hard(
+        model_wrapper, src,
+        forbidden_words = case.get("forbidden_words", []),
+        required_words  = case.get("required_words",  []),
+    )
+    result.hard_combined = hcomb_trans
+
+    # 5. Soft penalty only (isolated)
+    spen_trans, spen_log = decoding.soft_penalty_only(
+        model_wrapper, src,
+        penalty_words = case.get("penalty_words", []),
+    )
+    result.soft_penalty = spen_trans
+
+    # 6. Soft reward only (isolated)
+    srew_trans, srew_log = decoding.soft_reward_only(
+        model_wrapper, src,
+        reward_words = case.get("reward_words", []),
+    )
+    result.soft_reward = srew_trans
+
+    # 7. Soft combined (penalty + reward simultaneously)
+    scomb_trans, scomb_log = decoding.combined_soft(
         model_wrapper, src,
         penalty_words = case.get("penalty_words", []),
         reward_words  = case.get("reward_words",  []),
     )
-    result.soft_penalty = soft_trans
-    result.soft_reward  = soft_trans   # same run; evaluated against both word lists
+    result.soft_combined = scomb_trans
 
     # ── Interpretability ──────────────────────────────────────────────────────
     raw_logs = {
-        "hard_excl" : excl_log,
-        "hard_incl" : incl_log,
-        "soft"      : soft_log,
+        "hard_excl"       : excl_log,
+        "hard_incl"       : incl_log,
+        "hard_comb_excl"  : hcomb_excl_log,
+        "hard_comb_incl"  : hcomb_incl_log,
+        "soft_pen"        : spen_log,
+        "soft_rew"        : srew_log,
+        "soft_comb"       : scomb_log,
     }
     analyses = {
-        "hard_excl" : interpretability.analyse_log(excl_log, "hard_exclusion"),
-        "hard_incl" : interpretability.analyse_log(incl_log, "hard_inclusion"),
-        "soft_pen"  : interpretability.analyse_log(soft_log, "soft_penalty"),
-        "soft_rew"  : interpretability.analyse_log(soft_log, "soft_reward"),
+        "hard_excl"      : interpretability.analyse_log(excl_log,       "hard_exclusion"),
+        "hard_incl"      : interpretability.analyse_log(incl_log,       "hard_inclusion"),
+        "hard_comb_excl" : interpretability.analyse_log(hcomb_excl_log, "hard_combined_excl"),
+        "hard_comb_incl" : interpretability.analyse_log(hcomb_incl_log, "hard_combined_incl"),
+        "soft_pen"       : interpretability.analyse_log(spen_log,       "soft_penalty"),
+        "soft_rew"       : interpretability.analyse_log(srew_log,       "soft_reward"),
+        "soft_comb"      : interpretability.analyse_log(scomb_log,      "soft_combined"),
     }
     interp_logs.append({
         "source"   : src,
         "direction": dir_,
         "analyses" : analyses,
-        "raw_logs" : raw_logs,   # retained for offline token_level_report
+        "raw_logs" : raw_logs,
     })
 
     # ── Evaluate ──────────────────────────────────────────────────────────────
@@ -205,10 +233,14 @@ def _serialise_result(r: SampleResult) -> Dict:
         "unconstrained"  : r.unconstrained,
         "hard_exclusion" : r.hard_exclusion,
         "hard_inclusion" : r.hard_inclusion,
+        "hard_combined"  : r.hard_combined,
         "soft_penalty"   : r.soft_penalty,
         "soft_reward"    : r.soft_reward,
+        "soft_combined"  : r.soft_combined,
         "forbidden_words": r.forbidden_words,
         "required_words" : r.required_words,
+        "penalty_words"  : r.penalty_words,
+        "reward_words"   : r.reward_words,
         "metrics"        : r.metrics,
     }
 
