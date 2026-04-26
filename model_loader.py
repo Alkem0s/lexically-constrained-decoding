@@ -69,6 +69,11 @@ class MTModel:
 
     # ── Token-ID utilities ────────────────────────────────────────────────────
 
+    @staticmethod
+    def _turkish_lower(s: str) -> str:
+        """Python's str.lower() mishandles Turkish İ/I. Apply correct mapping first."""
+        return s.replace('İ', 'i').replace('I', 'ı').lower()
+
     def _build_vocab_surface_map(self):
         """
         Build and cache a mapping: token_id → decoded surface string (lowercased,
@@ -86,98 +91,105 @@ class MTModel:
         for tid in range(vocab_size):
             decoded = self.tokenizer.decode([tid], skip_special_tokens=True)
             # Strip leading space / SPM boundary marker and lowercase
-            surface_map[tid] = decoded.strip().lower()
+            surface_map[tid] = self._turkish_lower(decoded.lstrip(" ").strip())
         self._vocab_surface = surface_map
         return surface_map
 
-    def words_to_token_ids(self, words: List[str]) -> List[List[int]]:
-        """
-        Convert a list of surface-form words to ALL token IDs that could
-        contribute to generating that word.
-
-        Root-cause fix for hard/soft exclusion failures and inclusion garbling:
-
-        SentencePiece has multiple valid segmentations of any word.  Simply
-        encoding a word in isolation (or with a leading space) only captures
-        ONE segmentation path.  The model can still emit the forbidden word via
-        a different subword split that was never masked.
-
-        Strategy — scan the entire vocabulary and collect every token whose
-        decoded surface:
-          a) IS a case-insensitive substring of the target word  → it could be
-             a subword piece that assembles into the word during generation.
-          b) CONTAINS the target word as a substring → it is the whole word or
-             a longer form (e.g. morphological suffix attached).
-
-        For EXCLUSION: we want set (a) ∪ (b) — mask any token that could
-        participate in spelling the forbidden word.
-
-        For INCLUSION: we want only set (b) — boost tokens whose surface already
-        contains the complete required word, so we never boost ambiguous subword
-        fragments that also appear in unrelated words (which caused "The hound",
-        "The dossier", "The cadets" instead of the intended words).
-
-        Both sets are returned together here; the caller (flat_token_ids vs
-        words_to_token_ids_strict) decides which subset to use.
-
-        Returns list-of-lists: one inner list per word, using the STRICT (b-only)
-        subset — safe for inclusion boosting.
-        """
+    def words_to_token_ids(self, words):
         surface_map = self._build_vocab_surface_map()
         result = []
         for word in words:
             word_lower = word.strip().lower()
-            # Strict set: token surface contains the full target word.
-            # Used for inclusion so we only boost tokens that ARE the word,
-            # not ambiguous fragments shared with other words.
-            strict_ids = [
-                tid for tid, surface in surface_map.items()
-                if word_lower in surface and surface  # surface must be non-empty
-            ]
+            strict_ids = [tid for tid, surface in surface_map.items()
+                        if surface and surface.startswith(word_lower)]
+            strict_ids = self.filter_ambiguous_tokens(strict_ids, word_lower, surface_map)
+
             if strict_ids:
                 result.append(strict_ids)
             else:
-                # Fallback: any token that is a substring piece of the word
-                fragment_ids = [
-                    tid for tid, surface in surface_map.items()
-                    if surface and surface in word_lower
-                ]
-                if fragment_ids:
-                    print(f"  [{word}] No whole-word tokens found; using {len(fragment_ids)} fragments.")
-                    result.append(fragment_ids)
+                # prefix-trim fallback
+                for trim_len in range(len(word_lower)-1, max(2, len(word_lower)-4), -1):
+                    prefix = word_lower[:trim_len]
+                    prefix_ids = [tid for tid, surface in surface_map.items()
+                                if surface and surface.startswith(prefix)]
+                    if prefix_ids:
+                        print(f"  [{word}] Using {len(prefix_ids)} prefix-trimmed tokens ('{prefix}').")
+                        result.append(prefix_ids)
+                        break
                 else:
-                    print(f"  Warning: '{word}' produced no token IDs — skipping.")
+                    fragment_ids = [tid for tid, surface in surface_map.items()
+                                    if surface and surface in word_lower]
+                    if fragment_ids:
+                        result.append(fragment_ids)
+                    else:
+                        print(f"  Warning: '{word}' produced no token IDs — skipping.")
         return result
+    
+    def words_to_sequences(self, words: List[str]) -> List[List[int]]:
+        """
+        Tokenize each required word into its exact, ordered sequence of subword IDs.
+        Used by the sequence-aware HardInclusionProcessor.
+        """
+        sequences = []
+        for word in words:
+            # SentencePiece requires a leading space to treat this as a new word,
+            # otherwise it generates suffix tokens that the LM will reject.
+            prefix_word = word if word.startswith(" ") else " " + word
+            seq = self.tokenizer(prefix_word, add_special_tokens=False).input_ids
+            
+            if seq:
+                sequences.append(seq)
+            else:
+                print(f"  Warning: '{word}' produced no token IDs — skipping.")
+        return sequences
+    
+    # After building strict_ids by prefix, filter out tokens that
+    # could lead to a word other than the target:
+    @staticmethod
+    def filter_ambiguous_tokens(strict_ids, word_lower, surface_map):
+        """Remove tokens whose surface is a prefix of words OTHER than target."""
+        safe_ids = []
+        for tid in strict_ids:
+            surface = surface_map[tid]
+            # Accept if surface == exact target, or is a suffix that only leads to target
+            other_words = [s for s in surface_map.values() 
+               if s.startswith(surface) 
+               and not s.startswith(word_lower)
+               and len(s) <= len(word_lower) + 3]  # only short alternatives, not arbitrary suffixes
+            if not other_words:
+                safe_ids.append(tid)
+        return safe_ids if safe_ids else strict_ids  # fallback to all if filtering removes everything
 
     def flat_token_ids(self, words: List[str]) -> List[int]:
         """
-        Return ALL token IDs that could spell any of the given words —
-        including subword fragments (substring pieces).
-
-        Used for EXCLUSION: we need to mask every token that could participate
-        in assembling the forbidden word under any segmentation, so we use the
-        broader (a) ∪ (b) set rather than the strict (b)-only set used for
-        inclusion.
-
-        Guard: if more than MAX_EXCLUSION_IDS tokens are collected for a single
-        word, the word is likely a very short string whose characters appear in
-        hundreds of unrelated tokens. In that case we fall back to whole-word
-        tokens only (set b) to avoid over-masking that hurts fluency.
+        Return ALL token IDs that could spell any of the given words.
         """
         MAX_EXCLUSION_IDS = 200
         surface_map = self._build_vocab_surface_map()
         id_set = set()
         for word in words:
             word_lower = word.strip().lower()
+            
+            # FIX: English "e-drop" heuristic (strike -> strik)
+            # This allows us to catch "striking", "strikes", etc.
+            stem = word_lower[:-1] if word_lower.endswith('e') else word_lower
+            
             broad_ids = [
                 tid for tid, surface in surface_map.items()
-                if surface and (surface in word_lower or word_lower in surface)
+                if surface and (
+                    # THE FIX: Only ban fragments if they are at least 3 characters long.
+                    # This prevents banning single letters (like 's' or 'e') that the 
+                    # inclusion processor desperately needs to build other words.
+                    (len(surface) >= 3 and surface in word_lower)
+                    or surface.startswith(stem)    # token starts with the stem
+                    or word_lower in surface       # word is embedded in token (e.g. "plane" in "airplane")
+                )
             ]
+            
             if len(broad_ids) > MAX_EXCLUSION_IDS:
-                # Fall back to whole-word only to avoid over-masking
                 strict_ids = [
                     tid for tid, surface in surface_map.items()
-                    if surface and word_lower in surface
+                    if surface and surface.startswith(word_lower)
                 ]
                 import warnings
                 warnings.warn(

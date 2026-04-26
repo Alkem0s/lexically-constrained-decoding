@@ -245,6 +245,25 @@ def _serialise_result(r: SampleResult) -> Dict:
     }
 
 
+def _serialise_debug_result(r: SampleResult) -> Dict:
+    """Convert SampleResult to a shorter JSON dict without metrics for debugging."""
+    return {
+        "source"         : r.source,
+        "direction"      : r.direction,
+        "unconstrained"  : r.unconstrained,
+        "hard_exclusion" : r.hard_exclusion,
+        "hard_inclusion" : r.hard_inclusion,
+        "hard_combined"  : r.hard_combined,
+        "soft_penalty"   : r.soft_penalty,
+        "soft_reward"    : r.soft_reward,
+        "soft_combined"  : r.soft_combined,
+        "forbidden_words": r.forbidden_words,
+        "required_words" : r.required_words,
+        "penalty_words"  : r.penalty_words,
+        "reward_words"   : r.reward_words,
+    }
+
+
 def _serialise_interp(entry: Dict) -> Dict:
     """Strip the raw_logs tensor data before JSON serialisation."""
     return {
@@ -263,6 +282,12 @@ def save_results(all_results: List[SampleResult], all_interp: List[Dict], run_id
     with open(trans_path, "w", encoding="utf-8") as f:
         json.dump([_serialise_result(r) for r in all_results], f, ensure_ascii=False, indent=2)
     print(f"\n  Saved translation results → {trans_path}")
+
+    # Shorter debug results
+    debug_path = os.path.join(config.RESULTS_DIR, f"debug_results_{run_id}.json")
+    with open(debug_path, "w", encoding="utf-8") as f:
+        json.dump([_serialise_debug_result(r) for r in all_results], f, ensure_ascii=False, indent=2)
+    print(f"  Saved debug results → {debug_path}")
 
     # Interpretability logs
     interp_path = os.path.join(config.RESULTS_DIR, f"interpretability_{run_id}.json")

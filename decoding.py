@@ -32,13 +32,23 @@ from constraints import (
 
 # ── Shared helpers ────────────────────────────────────────────────────────────
 
+import re
+
+def _turkish_lower(s: str) -> str:
+    return s.replace('İ', 'i').replace('I', 'ı').lower()
+
 def _word_satisfied(translation: str, word: str) -> bool:
-    """Case-insensitive substring check (mirrors evaluation._contains_word)."""
-    return word.lower() in translation.lower()
+    """
+    Turkish-aware word presence check — exactly mirrors evaluation._contains_word
+    so that escalation triggers fire on the same violations the evaluator catches.
+    """
+    word_lower = _turkish_lower(word)
+    stem = word_lower[:-1] if word_lower.endswith('e') else word_lower
+    pattern = r'(^|\W)' + re.escape(stem)
+    return bool(re.search(pattern, _turkish_lower(translation)))
 
 
 def _missing_words(translation: str, words: List[str]) -> List[str]:
-    """Return words from `words` that are absent from `translation`."""
     return [w for w in words if not _word_satisfied(translation, w)]
 
 
@@ -142,49 +152,38 @@ def hard_inclusion(
     model_wrapper  : MTModel,
     source_text    : str,
     required_words : List[str],
+    _force_hard    : bool = False,      # ← new: skip soft gate when True
 ) -> Tuple[str, List[Dict]]:
     """
-    Require specific words to appear in the output by boosting their logits
-    every step until they are generated.
-
-    When words_to_token_ids() fell back to fragment tokens for a word, the
-    boost is raised to HARD_INCLUSION_BOOST * 1.5 (rounded) to compensate for
-    the boost spreading across more token IDs.
-
-    Adaptive min_content_tokens:
-        The boost deferral window is computed from source length so that very
-        short sentences (≤6 source tokens) get a deferral of 1 instead of the
-        default 3, giving the boost more opportunity to fire early.
-
-    Args:
-        required_words: surface-form words in the TARGET language.
-    Returns:
-        (translation, log)
+    Require specific words via logit boosting.
+    Soft-first gate: attempt soft reward first; escalate to hard boosting only
+    for words the soft reward cannot place.
+    Set _force_hard=True when calling from soft_reward_only to break the
+    mutual recursion cycle.
     """
-    token_groups = model_wrapper.words_to_token_ids(required_words)
-    if not token_groups:
-        print("  [hard_inclusion] No valid token IDs found for required words.")
+    # ── Soft-first gate (skipped when called from soft_reward_only) ───────────
+    if not _force_hard:
+        soft_trans, soft_log = soft_reward_only(model_wrapper, source_text, required_words)
+        still_missing = _missing_words(soft_trans, required_words)
+        if not still_missing:
+            print(f"  [hard_inclusion] soft-first gate satisfied all words — skipping hard boost.")
+            return soft_trans, soft_log
+        print(f"  [hard_inclusion] soft-first gate failed for {still_missing} — applying hard boost.")
+        required_words = still_missing   # only hard-boost the stubborn words
+
+    # ── Hard boosting ─────────────────────────────────────────────────────────
+    token_sequences = model_wrapper.words_to_sequences(required_words)
+    if not token_sequences:
+        print("  [hard_inclusion] No valid token sequences found — returning unconstrained.")
         return unconstrained(model_wrapper, source_text)
 
-    # Adaptive boost: if any group is large (fragment fallback), use a
-    # stronger boost so it can compete against the spread of tokens.
-    FRAGMENT_THRESHOLD = 50
-    max_group_size = max(len(g) for g in token_groups)
-    boost = config.HARD_INCLUSION_BOOST
-    if max_group_size > FRAGMENT_THRESHOLD:
-        boost = round(config.HARD_INCLUSION_BOOST * 1.5)
-        print(f"  [hard_inclusion] Largest token group has {max_group_size} IDs "
-              f"(fragment fallback) — raising boost to {boost}.")
-
-    # Adaptive deferral: shorter sources → smaller window so the boost fires
-    # earlier and has more decoding steps to enforce the required word.
     src_len            = model_wrapper.encode(source_text)["input_ids"].shape[1]
     min_content_tokens = max(1, min(3, src_len // 4))
 
     log       = []
     processor = HardInclusionProcessor(
-        token_groups,
-        boost              = boost,
+        token_sequences,
+        boost              = config.HARD_INCLUSION_BOOST,
         log_store          = log,
         min_content_tokens = min_content_tokens,
     )
@@ -192,48 +191,25 @@ def hard_inclusion(
     translation = model_wrapper.decode(outputs)
     return translation, log
 
-
-# ── 3b. Combined Hard (exclusion + inclusion simultaneously) ─────────────────
-
 def combined_hard(
     model_wrapper  : MTModel,
     source_text    : str,
     forbidden_words: List[str],
     required_words : List[str],
 ) -> Tuple[str, List[Dict], List[Dict]]:
-    """
-    Apply hard exclusion and hard inclusion simultaneously, with a reranking
-    pre-pass to recover fluency.
+    
+    forbidden_ids   = model_wrapper.flat_token_ids(forbidden_words)
+    token_sequences = model_wrapper.words_to_sequences(required_words)
 
-    Strategy (two-phase):
-      Phase 1 — Reranking:
-        Generate COMBINED_HARD_RERANK_BEAMS candidates with the exclusion
-        processor only.  Among those, pick the first candidate that already
-        satisfies all required words.  Because only the exclusion constraint is
-        active, beam search can find its most fluent path freely — so if the
-        model naturally produces the required word, this candidate will have
-        higher BLEU than the simultaneous-constraint output.
-
-      Phase 2 — Simultaneous fallback:
-        If no reranking candidate satisfies inclusion, fall back to the original
-        simultaneous exclusion + inclusion mode.  This guarantees the constraint
-        is always enforced.
-
-    Returns:
-        (translation, excl_log, incl_log)
-    """
-    forbidden_ids = model_wrapper.flat_token_ids(forbidden_words)
-    token_groups  = model_wrapper.words_to_token_ids(required_words)
-
-    if not forbidden_ids and not token_groups:
+    if not forbidden_ids and not token_sequences:
         t, _ = unconstrained(model_wrapper, source_text)
         return t, [], []
 
     excl_log = []
     incl_log = []
 
-    # ── Phase 1: Reranking (only when both constraint types are present) ──────
-    if forbidden_ids and token_groups:
+    # ── Phase 1: Reranking ────────────────────────────────────────────────────
+    if forbidden_ids and token_sequences:
         phase1_excl_log = []
         excl_proc       = HardExclusionProcessor(forbidden_ids, log_store=phase1_excl_log)
         candidates      = _generate_multi(
@@ -243,7 +219,6 @@ def combined_hard(
         required_lower = [w.lower() for w in required_words]
         for cand in candidates:
             if all(req in cand.lower() for req in required_lower):
-                # Found a fluent candidate that satisfies both constraints.
                 incl_log.append({
                     "step": 0, "type": "inclusion",
                     "tokens": {}, "pending_count": 0,
@@ -256,12 +231,12 @@ def combined_hard(
 
     # ── Phase 2: Simultaneous fallback ────────────────────────────────────────
     processors = []
-    if token_groups:
+    if token_sequences:
         src_len            = model_wrapper.encode(source_text)["input_ids"].shape[1]
         min_content_tokens = max(1, min(3, src_len // 4))
         processors.append(
             HardInclusionProcessor(
-                token_groups,
+                token_sequences, 
                 log_store          = incl_log,
                 min_content_tokens = min_content_tokens,
             )
@@ -271,6 +246,7 @@ def combined_hard(
 
     outputs     = _generate(model_wrapper, source_text, processors=processors)
     translation = model_wrapper.decode(outputs)
+    
     return translation, excl_log, incl_log
 
 
@@ -293,11 +269,11 @@ def soft_penalty_only(
 
     log       = []
     processor = SoftConstraintProcessor(
-        reward_ids  = [],
-        penalty_ids = penalty_ids,
-        reward_val  = 0.0,
-        penalty_val = penalty_val,
-        log_store   = log,
+        reward_token_groups = [],  # Updated argument name to match the new processor
+        penalty_ids         = penalty_ids,
+        reward_val          = 0.0,
+        penalty_val         = penalty_val,
+        log_store           = log,
     )
     outputs     = _generate(model_wrapper, source_text, processors=[processor])
     translation = model_wrapper.decode(outputs)
@@ -312,47 +288,153 @@ def soft_reward_only(
 ) -> Tuple[str, List[Dict]]:
     """
     Reward specific words only — no penalty component.
-
-    Soft-then-hard cascade:
-        After the soft-reward generate() pass, check whether every reward word
-        appears in the output.  For any word still missing, retry with
-        hard_inclusion() as an automatic escalation.  This preserves the
-        "try soft first" semantics while guaranteeing satisfaction when the
-        model's natural distribution is too strong to be nudged softly.
-        A flag is appended to the log so interpretability analysis can detect
-        which samples required escalation.
+    Escalation ladder: soft reward → boosted soft reward → hard inclusion.
+    _force_hard=True is passed to hard_inclusion to prevent mutual recursion
+    with the soft-first gate in hard_inclusion().
     """
-    reward_ids = model_wrapper.flat_token_ids(reward_words or [])
-    if not reward_ids:
+    reward_groups = model_wrapper.words_to_token_ids(reward_words or [])
+    if not reward_groups:
         print("  [soft_reward_only] No valid token IDs — running unconstrained.")
         return unconstrained(model_wrapper, source_text)
 
+    # ── Tier 1: standard soft reward ─────────────────────────────────────────
     log       = []
     processor = SoftConstraintProcessor(
-        reward_ids  = reward_ids,
-        penalty_ids = [],
-        reward_val  = reward_val,
-        penalty_val = 0.0,
-        log_store   = log,
+        reward_token_groups = reward_groups,
+        penalty_ids         = [],
+        reward_val          = reward_val,
+        penalty_val         = 0.0,
+        log_store           = log,
     )
     outputs     = _generate(model_wrapper, source_text, processors=[processor])
     translation = model_wrapper.decode(outputs)
 
-    # ── Soft-then-hard cascade ────────────────────────────────────────────────
+    # ── Tier 2: boosted soft reward ───────────────────────────────────────────
     missing = _missing_words(translation, reward_words or [])
     if missing:
         print(f"  [soft_reward_only] soft reward failed for {missing} — "
+              f"retrying with boosted reward (tier 2).")
+        boost_groups = model_wrapper.words_to_token_ids(missing)
+        boost_log    = []
+        boost_proc   = SoftConstraintProcessor(
+            reward_token_groups = boost_groups,
+            penalty_ids         = [],
+            reward_val          = config.SOFT_REWARD_MAX,
+            penalty_val         = 0.0,
+            log_store           = boost_log,
+        )
+        boost_outputs = _generate(model_wrapper, source_text, processors=[boost_proc])
+        boost_trans   = model_wrapper.decode(boost_outputs)
+        still_missing = _missing_words(boost_trans, missing)
+
+        if not still_missing:
+            log.append({"escalated": "soft_boost", "missing_words": missing})
+            return boost_trans, log
+
+        # ── Tier 3: hard inclusion — _force_hard=True breaks mutual recursion ─
+        print(f"  [soft_reward_only] boosted reward still failed for {still_missing} — "
               f"escalating to hard inclusion.")
-        hard_trans, hard_log = hard_inclusion(model_wrapper, source_text, missing)
+        hard_trans, hard_log = hard_inclusion(
+            model_wrapper, source_text, still_missing, _force_hard=True
+        )
         log.append({
-            "escalated"     : True,
-            "missing_words" : missing,
-            "hard_log_steps": len(hard_log),
+            "escalated"      : "hard_inclusion",
+            "missing_words"  : still_missing,
+            "hard_log_steps" : len(hard_log),
         })
         return hard_trans, log
 
     return translation, log
 
+
+def soft_constrained(
+    model_wrapper : MTModel,
+    source_text   : str,
+    reward_words  : Optional[List[str]] = None,
+    penalty_words : Optional[List[str]] = None,
+    reward_val    : float = config.SOFT_REWARD_STRENGTH,
+    penalty_val   : float = config.SOFT_PENALTY_STRENGTH,
+) -> Tuple[str, List[Dict]]:
+    reward_groups = model_wrapper.words_to_token_ids(reward_words or [])
+    penalty_ids   = model_wrapper.flat_token_ids(penalty_words or [])
+    print(f"  [soft_constrained] reward_groups={[len(g) for g in reward_groups]}, penalty_ids={len(penalty_ids)}")
+
+    if not reward_groups and not penalty_ids:
+        print("  [soft_constrained] No valid token IDs — running unconstrained.")
+        return unconstrained(model_wrapper, source_text)
+
+    log       = []
+    processor = SoftConstraintProcessor(
+        reward_token_groups = reward_groups,
+        penalty_ids         = penalty_ids,
+        reward_val          = reward_val,
+        penalty_val         = penalty_val,
+        log_store           = log,
+    )
+    outputs     = _generate(model_wrapper, source_text, processors=[processor])
+    translation = model_wrapper.decode(outputs)
+
+    # ── Check penalty satisfaction — escalate to hard exclusion if soft failed ─
+    # soft_penalty can fail silently: if the forbidden word still appears after
+    # the -12 nudge, there is no existing fallback, causing soft_combined to
+    # report 0.95 satisfaction.  We add one here.
+    if penalty_words:
+        still_forbidden = [w for w in penalty_words if _word_satisfied(translation, w)]
+        if still_forbidden:
+            print(f"  [soft_constrained] soft penalty failed for {still_forbidden} — "
+                  f"retrying with hard exclusion.")
+            hard_excl_ids = model_wrapper.flat_token_ids(still_forbidden)
+            retry_log     = []
+            retry_processors = [
+                HardExclusionProcessor(hard_excl_ids, log_store=retry_log),
+            ]
+            # Preserve any reward processor if reward words are still needed
+            if reward_groups:
+                still_missing = _missing_words(translation, reward_words or [])
+                if still_missing:
+                    retry_reward_groups = model_wrapper.words_to_token_ids(still_missing)
+                    retry_processors.append(SoftConstraintProcessor(
+                        reward_token_groups = retry_reward_groups,
+                        penalty_ids         = [],
+                        reward_val          = config.SOFT_REWARD_MAX,
+                        penalty_val         = 0.0,
+                        log_store           = retry_log,
+                    ))
+            retry_outputs = _generate(model_wrapper, source_text, processors=retry_processors)
+            translation   = model_wrapper.decode(retry_outputs)
+            log.append({
+                "escalated"      : "hard_exclusion",
+                "still_forbidden": still_forbidden,
+                "retry_log_steps": len(retry_log),
+            })
+
+    # ── Check reward satisfaction — cascade as before ─────────────────────────
+    if reward_words:
+        missing = _missing_words(translation, reward_words)
+        if missing:
+            print(f"  [soft_constrained] soft reward failed for {missing} — "
+                  f"retrying with boosted reward before hard fallback.")
+            retry_groups = model_wrapper.words_to_token_ids(missing)
+            retry_log    = []
+            retry_proc   = SoftConstraintProcessor(
+                reward_token_groups = retry_groups,
+                penalty_ids         = model_wrapper.flat_token_ids(penalty_words or []),
+                reward_val          = config.SOFT_REWARD_MAX,
+                penalty_val         = penalty_val,
+                log_store           = retry_log,
+            )
+            retry_outputs = _generate(model_wrapper, source_text, processors=[retry_proc])
+            retry_trans   = model_wrapper.decode(retry_outputs)
+            still_missing = _missing_words(retry_trans, missing)
+            if not still_missing:
+                log.append({"escalated": "soft_boost", "missing_words": missing})
+                return retry_trans, log
+            hard_trans, hard_log = hard_inclusion(model_wrapper, source_text, still_missing)
+            log.append({"escalated": "hard_inclusion", "missing_words": still_missing,
+                        "hard_log_steps": len(hard_log)})
+            return hard_trans, log
+
+    return translation, log
 
 def combined_soft(
     model_wrapper : MTModel,
@@ -377,67 +459,3 @@ def combined_soft(
         reward_val    = reward_val,
         penalty_val   = penalty_val,
     )
-
-
-def soft_constrained(
-    model_wrapper : MTModel,
-    source_text   : str,
-    reward_words  : Optional[List[str]] = None,
-    penalty_words : Optional[List[str]] = None,
-    reward_val    : float = config.SOFT_REWARD_STRENGTH,
-    penalty_val   : float = config.SOFT_PENALTY_STRENGTH,
-) -> Tuple[str, List[Dict]]:
-    """
-    Nudge generation by adding a reward or penalty scalar to token logits.
-    Unlike hard constraints, the model may still override the nudge if the
-    constraint strongly conflicts with fluency.
-
-    Fix #11: Both reward_words and penalty_words are processed in a single
-    model.generate() call via one SoftConstraintProcessor instance.
-
-    Soft-then-hard cascade (reward component):
-        After the combined generate() pass, if any reward word is still missing
-        from the output, those words are retried with hard_inclusion() while the
-        penalty constraint remains satisfied (the penalty was active during the
-        first pass and any cascade pass uses only the missing reward words as
-        the inclusion target).  A log entry flags the escalation.
-
-    Args:
-        reward_words  : words (target language) to encourage.
-        penalty_words : words (target language) to discourage.
-    Returns:
-        (translation, log)
-    """
-    reward_ids  = model_wrapper.flat_token_ids(reward_words  or [])
-    penalty_ids = model_wrapper.flat_token_ids(penalty_words or [])
-
-    if not reward_ids and not penalty_ids:
-        print("  [soft_constrained] No valid token IDs — running unconstrained.")
-        return unconstrained(model_wrapper, source_text)
-
-    log       = []
-    processor = SoftConstraintProcessor(
-        reward_ids  = reward_ids,
-        penalty_ids = penalty_ids,
-        reward_val  = reward_val,
-        penalty_val = penalty_val,
-        log_store   = log,
-    )
-    outputs     = _generate(model_wrapper, source_text, processors=[processor])
-    translation = model_wrapper.decode(outputs)
-
-    # ── Soft-then-hard cascade (reward words only) ────────────────────────────
-    if reward_words:
-        missing = _missing_words(translation, reward_words)
-        if missing:
-            print(f"  [soft_constrained] soft reward failed for {missing} — "
-                  f"escalating to hard inclusion.")
-            hard_trans, hard_log = hard_inclusion(model_wrapper, source_text, missing)
-            log.append({
-                "escalated"     : True,
-                "missing_words" : missing,
-                "hard_log_steps": len(hard_log),
-            })
-            return hard_trans, log
-
-    return translation, log

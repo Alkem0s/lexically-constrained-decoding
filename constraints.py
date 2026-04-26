@@ -68,56 +68,22 @@ class SoftConstraintProcessor(LogitsProcessor):
     Add a reward (positive) or penalty (negative) to specified token logits at
     every decoding step.
 
-    Fix #4 / #8: reward tokens are only boosted while still *pending* (not yet
-    appeared in any beam's output).  Once a reward token is generated the boost
-    stops, preventing runaway repetition.
-
-    Penalty tokens are suppressed every step — consistent with the semantics of
-    "do not use this word at all".
-
-    NEW — Curriculum reward escalation:
-        The reward is not a fixed scalar but grows each step the word remains
-        unsatisfied:
-            effective_reward = min(max_reward,
-                                   reward_val * (1 + curriculum_rate * n))
-        where n = number of steps during which pending rewards were active.
-        With defaults (reward_val=5, rate=0.3, max=15) the reward hits its cap
-        at step 7, matching HARD_INCLUSION_BOOST so the soft reward becomes
-        hard-like for words the model persistently ignores.
-
-    NEW — Sequential penalty -> re-normalise -> reward:
-        When both penalty and reward are active in the same step, applying them
-        additively can cause the penalty to suppress probability mass that the
-        reward is trying to build — the two constraints partially cancel.
-        Instead we now:
-          1. Apply the penalty to push forbidden tokens down.
-          2. Re-normalise the distribution (log-softmax over vocab dim) so the
-             remaining mass is redistributed across non-penalised tokens.
-          3. Apply the escalated reward on top of the re-normalised scores.
-        This ensures the reward operates on a clean post-penalty distribution
-        with no cancellation artefacts.
-
-    Args:
-        reward_ids      : token IDs to reward (nudge toward inclusion).
-        penalty_ids     : token IDs to penalise (nudge toward exclusion).
-        reward_val      : base scalar for reward (grows via curriculum).
-        penalty_val     : scalar for penalty (typically negative, fixed).
-        curriculum_rate : per-step growth factor for the reward.
-        max_reward      : absolute cap on the escalated reward.
-        log_store       : mutable list for per-step interpretability logs.
+    Updated to group reward tokens: instead of a flat list of fragments, it 
+    accepts list-of-lists (groups). Once ANY token from a group appears in 
+    the output, the entire group is marked satisfied and the reward stops.
     """
 
     def __init__(
         self,
-        reward_ids      : List[int],
-        penalty_ids     : List[int],
-        reward_val      : float = config.SOFT_REWARD_STRENGTH,
-        penalty_val     : float = config.SOFT_PENALTY_STRENGTH,
-        curriculum_rate : float = config.SOFT_REWARD_CURRICULUM_RATE,
-        max_reward      : float = config.SOFT_REWARD_MAX,
-        log_store       : List[Dict] = None,
+        reward_token_groups : List[List[int]],
+        penalty_ids         : List[int],
+        reward_val          : float = config.SOFT_REWARD_STRENGTH,
+        penalty_val         : float = config.SOFT_PENALTY_STRENGTH,
+        curriculum_rate     : float = config.SOFT_REWARD_CURRICULUM_RATE,
+        max_reward          : float = config.SOFT_REWARD_MAX,
+        log_store           : List[Dict] = None,
     ):
-        self.reward_ids      = torch.tensor(reward_ids,  dtype=torch.long) if reward_ids  else None
+        self.pending_rewards = {i: ids for i, ids in enumerate(reward_token_groups)} if reward_token_groups else {}
         self.penalty_ids     = torch.tensor(penalty_ids, dtype=torch.long) if penalty_ids else None
         self.reward_val      = reward_val
         self.penalty_val     = penalty_val
@@ -125,20 +91,19 @@ class SoftConstraintProcessor(LogitsProcessor):
         self.max_reward      = max_reward
         self.log_store       = log_store if log_store is not None else []
         self._step           = 0
-
-        # Fix #4/#8: track which reward IDs are still unsatisfied.
-        self._pending_reward_ids: Set[int] = set(reward_ids) if reward_ids else set()
-        # Curriculum counter: increments only while any reward is pending.
-        self._reward_steps_active: int = 0
+        self._reward_steps_active = 0
 
     def _update_pending_rewards(self, input_ids: torch.LongTensor):
         """
-        Remove reward IDs that have already appeared in ANY beam's output.
-        input_ids shape: (num_beams, seq_len)
+        Remove reward groups whose token has appeared in ANY beam's generated output.
         """
-        # Fix #9 (for soft reward): check all beams, not just beam 0.
-        generated = set(input_ids.reshape(-1).tolist())
-        self._pending_reward_ids -= generated
+        generated_set = set(input_ids.reshape(-1).tolist())
+        satisfied = [
+            idx for idx, ids in self.pending_rewards.items()
+            if generated_set.intersection(ids)
+        ]
+        for idx in satisfied:
+            del self.pending_rewards[idx]
 
     def _effective_reward(self) -> float:
         """Curriculum-scaled reward for the current active step."""
@@ -153,7 +118,6 @@ class SoftConstraintProcessor(LogitsProcessor):
         scores: torch.FloatTensor
     ) -> torch.FloatTensor:
 
-        # Update which reward tokens have already been generated.
         self._update_pending_rewards(input_ids)
 
         logits   = scores[0]
@@ -176,17 +140,20 @@ class SoftConstraintProcessor(LogitsProcessor):
                 }
             scores[:, ids] += self.penalty_val
 
+        # Gather currently pending reward IDs
+        pending_ids = set()
+        for ids in self.pending_rewards.values():
+            pending_ids.update(ids)
+
         # ── Step 2: Re-normalise (only when both constraints are active) ───────
-        # After penalty shifts the distribution, re-normalise so the reward
-        # operates on a clean post-penalty baseline with no cancellation.
-        if self.penalty_ids is not None and self._pending_reward_ids:
+        if self.penalty_ids is not None and pending_ids:
             scores = scores - torch.logsumexp(scores, dim=-1, keepdim=True)
 
         # ── Step 3: Curriculum reward (only for tokens not yet generated) ──────
-        if self.reward_ids is not None and self._pending_reward_ids:
+        if pending_ids:
             eff_reward     = self._effective_reward()
             pending_tensor = torch.tensor(
-                list(self._pending_reward_ids), dtype=torch.long, device=scores.device
+                list(pending_ids), dtype=torch.long, device=scores.device
             )
             for tid in pending_tensor.tolist():
                 step_log["tokens"][tid] = {
@@ -199,7 +166,6 @@ class SoftConstraintProcessor(LogitsProcessor):
                     "mode"                : "reward",
                 }
             scores[:, pending_tensor] += eff_reward
-            # Curriculum counter only advances while there are pending rewards.
             self._reward_steps_active += 1
 
         self.log_store.append(step_log)
@@ -210,57 +176,37 @@ class SoftConstraintProcessor(LogitsProcessor):
 # ── 3. Hard Inclusion ─────────────────────────────────────────────────────────
 
 class HardInclusionProcessor(LogitsProcessor):
-    """
-    Guarantee that each required word appears at least once by boosting its
-    token IDs every step until the word has been generated.
-
-    Strategy:
-      - Maintain a set of *pending* required token groups.
-      - Each group is a list of subword IDs for one required word
-        (we consider the word 'satisfied' if ANY of its subword IDs appear).
-      - While pending, add HARD_INCLUSION_BOOST to those token logits.
-      - Once generated, remove from pending.
-
-    Fix #3: Do NOT boost at step 0 (decoder start token position).  The
-    decoder's first real decision is step 1 after the forced BOS/language tag.
-    Boosting at step 0 injects a required subword before the sentence begins,
-    producing garbled prefixes like "di.Kedi …".
-
-    Fix #9: Satisfied-check inspects ALL beams (not just beam 0) so a word
-    generated on any beam correctly stops being boosted.
-
-    Args:
-        required_token_groups : list-of-lists from MTModel.words_to_token_ids()
-        boost                 : logit boost to apply.
-        log_store             : mutable interpretability log.
-    """
-
     def __init__(
         self,
-        required_token_groups : List[List[int]],
-        boost                 : float = config.HARD_INCLUSION_BOOST,
-        log_store             : List[Dict] = None,
-        min_content_tokens    : int = 3,
+        required_token_sequences : List[List[int]],
+        boost                    : float = config.HARD_INCLUSION_BOOST,
+        log_store                : List[Dict] = None,
+        min_content_tokens       : int = 3,
     ):
-        self.pending              = {i: ids for i, ids in enumerate(required_token_groups)}
+        self.pending              = {i: seq for i, seq in enumerate(required_token_sequences)}
         self.boost                = boost
         self.log_store            = log_store if log_store is not None else []
         self._step                = 0
         self.min_content_tokens   = min_content_tokens
 
     def _update_pending(self, input_ids: torch.LongTensor):
-        """
-        Remove groups whose token has appeared in ANY beam's generated output.
+        num_beams = input_ids.shape[0]
+        satisfied = []
 
-        Fix #9: input_ids shape is (num_beams, seq_len).  We flatten across
-        all beams so a word generated on beam k (even if not beam 0) is marked
-        satisfied and no longer boosted.
-        """
-        generated_set = set(input_ids.reshape(-1).tolist())
-        satisfied = [
-            idx for idx, ids in self.pending.items()
-            if generated_set.intersection(ids)
-        ]
+        for word_idx, seq in self.pending.items():
+            seq_len = len(seq)
+            for b in range(num_beams):
+                beam_list = input_ids[b].tolist()
+                found = False
+                for i in range(len(beam_list) - seq_len + 1):
+                    if beam_list[i:i+seq_len] == seq:
+                        found = True
+                        break
+                
+                if found:
+                    satisfied.append(word_idx)
+                    break 
+
         for idx in satisfied:
             del self.pending[idx]
 
@@ -270,11 +216,7 @@ class HardInclusionProcessor(LogitsProcessor):
         scores: torch.FloatTensor
     ) -> torch.FloatTensor:
 
-        # Fix #3 (extended): skip boosting until at least min_content_tokens
-        # real tokens have been generated.  The threshold is computed adaptively
-        # from the source length by the caller (decoding.hard_inclusion) so that
-        # short sentences do not defer the boost too long.
-        current_len = input_ids.shape[1]   # includes the forced BOS token
+        current_len = input_ids.shape[1]
         if current_len <= self.min_content_tokens:
             self.log_store.append({
                 "step": self._step, "type": "inclusion",
@@ -284,27 +226,48 @@ class HardInclusionProcessor(LogitsProcessor):
             self._step += 1
             return scores
 
-        # Update which required words have already been generated.
         self._update_pending(input_ids)
 
-        logits   = scores[0]
+        logits   = scores[0].clone() 
         probs    = torch.softmax(logits, dim=-1)
         step_log = {
             "step": self._step, "type": "inclusion",
             "tokens": {}, "pending_count": len(self.pending),
         }
 
-        for word_idx, ids in self.pending.items():
-            id_tensor = torch.tensor(ids, dtype=torch.long, device=scores.device)
-            for tid in ids:
-                step_log["tokens"][tid] = {
-                    "logit"      : logits[tid].item(),
-                    "prob"       : probs[tid].item(),
-                    "rank"       : int((logits > logits[tid]).sum().item()) + 1,
-                    "delta"      : self.boost,
-                    "word_group" : word_idx,
-                }
-            scores[:, id_tensor] += self.boost
+        num_beams = input_ids.shape[0]
+
+        for word_idx, seq in self.pending.items():
+            seq_len = len(seq)
+            
+            for b in range(num_beams):
+                beam_list = input_ids[b].tolist()
+                target_token = seq[0] 
+                is_continuation = False
+                
+                max_prefix_len = min(seq_len - 1, current_len)
+                for prefix_len in range(max_prefix_len, 0, -1):
+                    if beam_list[-prefix_len:] == seq[:prefix_len]:
+                        target_token = seq[prefix_len] 
+                        is_continuation = True
+                        break
+                
+                escalated_boost = min(
+                    self.boost * 2,
+                    self.boost + (max(0, self._step - 5) * 1.5)
+                )
+                applied_boost = 1000.0 if is_continuation else escalated_boost
+                scores[b, target_token] += applied_boost
+
+                if b == 0:
+                    step_log["tokens"][target_token] = {
+                        "logit"           : logits[target_token].item(),
+                        "prob"            : probs[target_token].item(),
+                        "rank"            : int((logits > logits[target_token]).sum().item()) + 1,
+                        "delta"           : applied_boost,
+                        "word_group"      : word_idx,
+                        "is_continuation" : is_continuation
+                    }
 
         self.log_store.append(step_log)
         self._step += 1

@@ -52,9 +52,9 @@
       "source": "She reads a book every evening before going to sleep.",
       "direction": "EN→TR",
       "forbidden_words": ["kitap"],
-      "required_words": ["okumak"],
+      "required_words": ["okur"],
       "penalty_words": ["kitap"],
-      "reward_words": ["okumak"]
+      "reward_words": ["okur"]
     },
     {
       "source": "The economy grew significantly last year despite the difficulties.",
@@ -68,9 +68,9 @@
       "source": "The police caught the thief who stole from the market.",
       "direction": "EN→TR",
       "forbidden_words": [],
-      "required_words": ["çarşı"],
+      "required_words": ["pazar"],
       "penalty_words": ["hırsız"],
-      "reward_words": ["çarşı"]
+      "reward_words": ["pazar"]
     },
     {
       "source": "Music has the power to change a person's mood instantly.",
@@ -83,7 +83,7 @@
   ],
   "TR_EN": [
     {
-      "source": "Kopek parkta kostu ve cok yoruldu.",
+      "source": "Köpek parkta koştu ve çok yoruldu.",
       "direction": "TR→EN",
       "forbidden_words": ["park"],
       "required_words": ["field"],
@@ -91,7 +91,7 @@
       "reward_words": ["field"]
     },
     {
-      "source": "Annem her sabah kahve icer ve gazete okur.",
+      "source": "Annem her sabah kahve içer ve gazete okur.",
       "direction": "TR→EN",
       "forbidden_words": ["coffee"],
       "required_words": ["newspaper"],
@@ -99,7 +99,7 @@
       "reward_words": ["newspaper"]
     },
     {
-      "source": "Hava bugun cok sicak, denize gidebiliriz.",
+      "source": "Hava bugun çok sıcak, denize gidebiliriz.",
       "direction": "TR→EN",
       "forbidden_words": ["hot"],
       "required_words": ["beach"],
@@ -107,7 +107,7 @@
       "reward_words": ["beach"]
     },
     {
-      "source": "Cocuklar okuldan sonra futbol oynadi.",
+      "source": "Çocuklar okuldan sonra futbol oynadı.",
       "direction": "TR→EN",
       "forbidden_words": ["football", "soccer"],
       "required_words": ["played"],
@@ -115,7 +115,7 @@
       "reward_words": ["played"]
     },
     {
-      "source": "Doktor hastaya ilac yazdi ve dinlenmesini soyledi.",
+      "source": "Doktor hastaya ilaç yazdı ve dinlenmesini söyledi.",
       "direction": "TR→EN",
       "forbidden_words": ["medicine", "medication"],
       "required_words": ["rest"],
@@ -123,7 +123,7 @@
       "reward_words": ["rest"]
     },
     {
-      "source": "Ucak hava alanina gec indi ve yolcular bekledi.",
+      "source": "Uçak hava alanına geç indi ve yolcular bekledi.",
       "direction": "TR→EN",
       "forbidden_words": ["plane", "aircraft"],
       "required_words": ["delay"],
@@ -131,15 +131,15 @@
       "reward_words": ["delay"]
     },
     {
-      "source": "Ogrenciler sinavdan once cok calisti.",
+      "source": "Ögrenciler sınavdan önce çok çalıştı.",
       "direction": "TR→EN",
       "forbidden_words": ["exam", "test"],
-      "required_words": ["studied"],
+      "required_words": ["diligent"],
       "penalty_words": ["exam", "test"],
-      "reward_words": ["studied"]
+      "reward_words": ["diligent"]
     },
     {
-      "source": "Bu sehirde kis aylarinda kar yagar ve hava cok soguk olur.",
+      "source": "Bu şehirde kış aylarında kar yağar ve hava çok soğuk olur.",
       "direction": "TR→EN",
       "forbidden_words": ["cold", "snow"],
       "required_words": ["freezing"],
@@ -147,7 +147,7 @@
       "reward_words": ["freezing"]
     },
     {
-      "source": "Fabrikada calisan isciler grev ilan etti.",
+      "source": "Fabrikada çalışan işciler grev ilan etti.",
       "direction": "TR→EN",
       "forbidden_words": ["strike"],
       "required_words": ["workers"],
@@ -155,7 +155,7 @@
       "reward_words": ["workers"]
     },
     {
-      "source": "Denizalti okyanusun derinliklerinde sessizce ilerledi.",
+      "source": "Denizaltı okyanusun derinliklerinde sessizce ilerledi.",
       "direction": "TR→EN",
       "forbidden_words": ["submarine"],
       "required_words": ["vessel"],

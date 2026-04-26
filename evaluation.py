@@ -59,14 +59,17 @@ class SampleResult:
 
 # ── Constraint satisfaction ────────────────────────────────────────────────────
 
-def _contains_word(text: str, word: str) -> bool:
-    """
-    Check if `word` appears in `text` (case-insensitive, substring match).
-    For Turkish we use a simple case-fold rather than regex word boundaries
-    because Turkish morphology can attach suffixes.
-    """
-    return word.lower() in text.lower()
+import re
 
+def _turkish_lower(s: str) -> str:
+    """Python's str.lower() mishandles Turkish İ/I. Apply correct mapping first."""
+    return s.replace('İ', 'i').replace('I', 'ı').lower()
+
+def _contains_word(text: str, word: str) -> bool:
+    word_lower = _turkish_lower(word)
+    stem = word_lower[:-1] if word_lower.endswith('e') else word_lower
+    pattern = r'(^|\W)' + re.escape(stem)
+    return bool(re.search(pattern, _turkish_lower(text)))
 
 def satisfaction_exclusion(translation: str, forbidden_words: List[str]) -> Dict:
     """Return per-word and overall exclusion satisfaction."""
