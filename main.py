@@ -6,11 +6,16 @@ Runs the full experiment for both EN→TR and TR→EN directions:
   2. For each test sentence + constraint pair:
        a. Unconstrained baseline.
        b. Hard exclusion.
-       c. Hard inclusion.
-       d. Soft penalty + reward (single combined call — fix #11).
-  3. Evaluate constraint satisfaction and BLEU vs baseline.
-  4. Run interpretability analysis on each constraint log.
-  5. Save all results to ./results/.
+       c. Hard inclusion       (soft-first gate, hard fallback if needed).
+       d. Hard inclusion abl.  (ablation: pure HardInclusionProcessor, no soft gate).
+       e. Hard combined        (simultaneous exclusion + inclusion).
+       f. Soft penalty only    (pure soft, no escalation).
+       g. Soft reward only     (soft with escalation ladder).
+       h. Soft combined        (pure soft: single pass, no hard fallback).
+  3. Compute per-sample escalation counts from the returned logs.
+  4. Evaluate constraint satisfaction and BLEU vs baseline.
+  5. Run interpretability analysis on each constraint log.
+  6. Save all results to ./results/.
 
 Usage:
     python main.py
@@ -31,7 +36,7 @@ import model_loader
 import decoding
 import interpretability
 import evaluation
-from evaluation import SampleResult
+from evaluation import SampleResult, count_escalations
 
 
 # ── Reproducibility ───────────────────────────────────────────────────────────
@@ -44,17 +49,7 @@ def set_seeds(seed: int = config.SEED):
         torch.cuda.manual_seed_all(seed)
 
 
-# ── Test cases ─────────────────────────────────────────────────────────────────
-#
-# Each entry is a dict:
-#   source          : source sentence (in source language)
-#   direction       : "EN→TR" or "TR→EN"
-#   forbidden_words : target-language words to EXCLUDE (hard exclusion & soft penalty)
-#   required_words  : target-language words to INCLUDE (hard inclusion & soft reward)
-#
-# Words are in the TARGET language so they can be directly mapped to token IDs.
-
-# ── Per-sample runner ─────────────────────────────────────────────────────────
+# ── Test case loading ──────────────────────────────────────────────────────────
 
 def load_test_cases(path: str = "test_cases.json") -> tuple:
     """
@@ -93,18 +88,24 @@ def load_test_cases(path: str = "test_cases.json") -> tuple:
 EN_TR_CASES, TR_EN_CASES = load_test_cases()
 
 
-def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
+# ── Per-sample runner ─────────────────────────────────────────────────────────
+
+def run_sample(model_wrapper, case: Dict, interp_logs: List) -> tuple:
     """
-    Run all decoding modes for one test case and return a SampleResult.
+    Run all decoding modes for one test case and return (SampleResult, raw_logs).
 
     Modes run:
       - unconstrained baseline
-      - hard_exclusion  (isolated)
-      - hard_inclusion  (isolated)
-      - hard_combined   (exclusion + inclusion simultaneously)
-      - soft_penalty    (isolated — penalty only, no reward)
-      - soft_reward     (isolated — reward only, no penalty)
-      - soft_combined   (penalty + reward simultaneously)
+      - hard_exclusion      (isolated)
+      - hard_inclusion      (soft-first gate, hard fallback for stubborn words)
+      - hard_inclusion_abl  (ablation: _force_hard=True, bypasses soft gate)
+      - hard_combined       (exclusion + inclusion simultaneously)
+      - soft_penalty        (isolated, pure soft — no escalation)
+      - soft_reward         (isolated, with escalation ladder)
+      - soft_combined       (pure soft combined — no hard fallback)
+
+    After all decoding, escalation counts are computed from the returned logs
+    and stored on result.escalation_counts so evaluate_sample can surface them.
     """
     src  = case["source"]
     dir_ = case["direction"]
@@ -127,13 +128,19 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     )
     result.hard_exclusion = excl_trans
 
-    # 3. Hard inclusion (isolated)
+    # 3. Hard inclusion — production mode (soft-first gate)
     incl_trans, incl_log = decoding.hard_inclusion(
         model_wrapper, src, case.get("required_words", [])
     )
     result.hard_inclusion = incl_trans
 
-    # 4. Hard combined (exclusion + inclusion simultaneously)
+    # 4. Hard inclusion ablation — bypasses soft gate entirely for fair comparison
+    hincl_abl_trans, hincl_abl_log = decoding.hard_inclusion(
+        model_wrapper, src, case.get("required_words", []), _force_hard=True
+    )
+    result.hard_inclusion_ablation = hincl_abl_trans
+
+    # 5. Hard combined (exclusion + inclusion simultaneously)
     hcomb_trans, hcomb_excl_log, hcomb_incl_log = decoding.combined_hard(
         model_wrapper, src,
         forbidden_words = case.get("forbidden_words", []),
@@ -141,21 +148,21 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     )
     result.hard_combined = hcomb_trans
 
-    # 5. Soft penalty only (isolated)
+    # 6. Soft penalty only (isolated, pure soft — no escalation)
     spen_trans, spen_log = decoding.soft_penalty_only(
         model_wrapper, src,
         penalty_words = case.get("penalty_words", []),
     )
     result.soft_penalty = spen_trans
 
-    # 6. Soft reward only (isolated)
+    # 7. Soft reward only (isolated, with escalation ladder)
     srew_trans, srew_log = decoding.soft_reward_only(
         model_wrapper, src,
         reward_words = case.get("reward_words", []),
     )
     result.soft_reward = srew_trans
 
-    # 7. Soft combined (penalty + reward simultaneously)
+    # 8. Soft combined — pure soft, no hard fallback (see combined_soft docstring)
     scomb_trans, scomb_log = decoding.combined_soft(
         model_wrapper, src,
         penalty_words = case.get("penalty_words", []),
@@ -163,10 +170,33 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     )
     result.soft_combined = scomb_trans
 
+    # ── Escalation counting ───────────────────────────────────────────────────
+    # Count how many tier-2/tier-3 fallback events appear in each mode's log.
+    # Stored on result so evaluate_sample can surface them in per-mode metrics.
+    esc: Dict[str, int] = {}
+    simple_mode_logs = [
+        ("hard_exclusion",          excl_log),
+        ("hard_inclusion",          incl_log),
+        ("hard_inclusion_ablation", hincl_abl_log),
+        ("soft_penalty",            spen_log),
+        ("soft_reward",             srew_log),
+        ("soft_combined",           scomb_log),
+    ]
+    for mode_name, log in simple_mode_logs:
+        n = count_escalations(log)
+        if n > 0:
+            esc[mode_name] = n
+    # combined_hard draws from two logs
+    hcomb_esc = count_escalations(hcomb_excl_log) + count_escalations(hcomb_incl_log)
+    if hcomb_esc > 0:
+        esc["hard_combined"] = hcomb_esc
+    result.escalation_counts = esc
+
     # ── Interpretability ──────────────────────────────────────────────────────
     raw_logs = {
         "hard_excl"       : excl_log,
         "hard_incl"       : incl_log,
+        "hard_incl_abl"   : hincl_abl_log,
         "hard_comb_excl"  : hcomb_excl_log,
         "hard_comb_incl"  : hcomb_incl_log,
         "soft_pen"        : spen_log,
@@ -176,6 +206,7 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> SampleResult:
     analyses = {
         "hard_excl"      : interpretability.analyse_log(excl_log,       "hard_exclusion"),
         "hard_incl"      : interpretability.analyse_log(incl_log,       "hard_inclusion"),
+        "hard_incl_abl"  : interpretability.analyse_log(hincl_abl_log,  "hard_inclusion_ablation"),
         "hard_comb_excl" : interpretability.analyse_log(hcomb_excl_log, "hard_combined_excl"),
         "hard_comb_incl" : interpretability.analyse_log(hcomb_incl_log, "hard_combined_incl"),
         "soft_pen"       : interpretability.analyse_log(spen_log,       "soft_penalty"),
@@ -213,9 +244,9 @@ def run_direction(model_wrapper, cases: List[Dict], direction_label: str):
         # compare_analyses() can call token_level_report() instead of
         # silently skipping it.
         interpretability.compare_analyses(
-            analyses  = {k: v for k, v in interp_logs[-1]["analyses"].items()},
-            logs      = raw_logs,
-            tokenizer = model_wrapper.tokenizer,
+            analyses    = {k: v for k, v in interp_logs[-1]["analyses"].items()},
+            logs        = raw_logs,
+            tokenizer   = model_wrapper.tokenizer,
             top_n_steps = 2,
         )
         results.append(result)
@@ -228,39 +259,43 @@ def run_direction(model_wrapper, cases: List[Dict], direction_label: str):
 def _serialise_result(r: SampleResult) -> Dict:
     """Convert SampleResult to a JSON-serialisable dict."""
     return {
-        "source"         : r.source,
-        "direction"      : r.direction,
-        "unconstrained"  : r.unconstrained,
-        "hard_exclusion" : r.hard_exclusion,
-        "hard_inclusion" : r.hard_inclusion,
-        "hard_combined"  : r.hard_combined,
-        "soft_penalty"   : r.soft_penalty,
-        "soft_reward"    : r.soft_reward,
-        "soft_combined"  : r.soft_combined,
-        "forbidden_words": r.forbidden_words,
-        "required_words" : r.required_words,
-        "penalty_words"  : r.penalty_words,
-        "reward_words"   : r.reward_words,
-        "metrics"        : r.metrics,
+        "source"                  : r.source,
+        "direction"               : r.direction,
+        "unconstrained"           : r.unconstrained,
+        "hard_exclusion"          : r.hard_exclusion,
+        "hard_inclusion"          : r.hard_inclusion,
+        "hard_inclusion_ablation" : r.hard_inclusion_ablation,
+        "hard_combined"           : r.hard_combined,
+        "soft_penalty"            : r.soft_penalty,
+        "soft_reward"             : r.soft_reward,
+        "soft_combined"           : r.soft_combined,
+        "forbidden_words"         : r.forbidden_words,
+        "required_words"          : r.required_words,
+        "penalty_words"           : r.penalty_words,
+        "reward_words"            : r.reward_words,
+        "escalation_counts"       : r.escalation_counts,
+        "metrics"                 : r.metrics,
     }
 
 
 def _serialise_debug_result(r: SampleResult) -> Dict:
     """Convert SampleResult to a shorter JSON dict without metrics for debugging."""
     return {
-        "source"         : r.source,
-        "direction"      : r.direction,
-        "unconstrained"  : r.unconstrained,
-        "hard_exclusion" : r.hard_exclusion,
-        "hard_inclusion" : r.hard_inclusion,
-        "hard_combined"  : r.hard_combined,
-        "soft_penalty"   : r.soft_penalty,
-        "soft_reward"    : r.soft_reward,
-        "soft_combined"  : r.soft_combined,
-        "forbidden_words": r.forbidden_words,
-        "required_words" : r.required_words,
-        "penalty_words"  : r.penalty_words,
-        "reward_words"   : r.reward_words,
+        "source"                  : r.source,
+        "direction"               : r.direction,
+        "unconstrained"           : r.unconstrained,
+        "hard_exclusion"          : r.hard_exclusion,
+        "hard_inclusion"          : r.hard_inclusion,
+        "hard_inclusion_ablation" : r.hard_inclusion_ablation,
+        "hard_combined"           : r.hard_combined,
+        "soft_penalty"            : r.soft_penalty,
+        "soft_reward"             : r.soft_reward,
+        "soft_combined"           : r.soft_combined,
+        "forbidden_words"         : r.forbidden_words,
+        "required_words"          : r.required_words,
+        "penalty_words"           : r.penalty_words,
+        "reward_words"            : r.reward_words,
+        "escalation_counts"       : r.escalation_counts,
     }
 
 

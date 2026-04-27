@@ -1,34 +1,12 @@
-"""
-constraints.py — HuggingFace LogitsProcessor implementations for all three
-constraint types described in the project spec.
-
-  1. HardExclusionProcessor  — logit masking (-inf) for forbidden tokens
-  2. SoftConstraintProcessor — additive reward/penalty for specified tokens
-  3. HardInclusionProcessor  — logit boosting until required words appear
-
-All processors log the *original* logit values before intervention so
-interpretability.py can reconstruct what the model originally preferred.
-"""
-
 import torch
 from transformers import LogitsProcessor
-from typing import List, Dict, Set
+from typing import List, Dict
 import config
 
 
 # ── 1. Hard Exclusion ─────────────────────────────────────────────────────────
 
 class HardExclusionProcessor(LogitsProcessor):
-    """
-    Set the logit of every forbidden token to -inf before sampling.
-    This guarantees those tokens can never be selected.
-
-    Args:
-        forbidden_ids : flat list of token IDs to suppress.
-        log_store     : mutable list; each step appends a dict with
-                        the original logit of each forbidden token.
-    """
-
     def __init__(self, forbidden_ids: List[int], log_store: List[Dict]):
         self.forbidden_ids = torch.tensor(forbidden_ids, dtype=torch.long)
         self.log_store     = log_store
@@ -40,8 +18,6 @@ class HardExclusionProcessor(LogitsProcessor):
         scores: torch.FloatTensor
     ) -> torch.FloatTensor:
 
-        # Fix #10: log beam-0 pre-intervention values (beam 0 is representative;
-        # all beams get the same mask so the delta is identical across beams).
         logits   = scores[0]
         probs    = torch.softmax(logits, dim=-1)
         original = {}
@@ -50,12 +26,11 @@ class HardExclusionProcessor(LogitsProcessor):
                 "logit" : logits[tid].item(),
                 "prob"  : probs[tid].item(),
                 "rank"  : int((logits > logits[tid]).sum().item()) + 1,
-                "delta" : float("inf"),   # magnitude = ∞ (hard mask)
+                "delta" : float("inf"), 
             }
         self.log_store.append({"step": self._step, "type": "exclusion", "tokens": original})
         self._step += 1
 
-        # ── Apply mask across ALL beams ───────────────────────────────────────
         ids = self.forbidden_ids.to(scores.device)
         scores[:, ids] = float("-inf")
         return scores
@@ -64,15 +39,6 @@ class HardExclusionProcessor(LogitsProcessor):
 # ── 2. Soft Constraint ────────────────────────────────────────────────────────
 
 class SoftConstraintProcessor(LogitsProcessor):
-    """
-    Add a reward (positive) or penalty (negative) to specified token logits at
-    every decoding step.
-
-    Updated to group reward tokens: instead of a flat list of fragments, it 
-    accepts list-of-lists (groups). Once ANY token from a group appears in 
-    the output, the entire group is marked satisfied and the reward stops.
-    """
-
     def __init__(
         self,
         reward_token_groups : List[List[int]],
@@ -94,9 +60,6 @@ class SoftConstraintProcessor(LogitsProcessor):
         self._reward_steps_active = 0
 
     def _update_pending_rewards(self, input_ids: torch.LongTensor):
-        """
-        Remove reward groups whose token has appeared in ANY beam's generated output.
-        """
         generated_set = set(input_ids.reshape(-1).tolist())
         satisfied = [
             idx for idx, ids in self.pending_rewards.items()
@@ -106,7 +69,6 @@ class SoftConstraintProcessor(LogitsProcessor):
             del self.pending_rewards[idx]
 
     def _effective_reward(self) -> float:
-        """Curriculum-scaled reward for the current active step."""
         return min(
             self.max_reward,
             self.reward_val * (1.0 + self.curriculum_rate * self._reward_steps_active),
@@ -127,7 +89,7 @@ class SoftConstraintProcessor(LogitsProcessor):
             "reward_steps_active": self._reward_steps_active,
         }
 
-        # ── Step 1: Penalty (fixed, applied before re-normalisation) ──────────
+        # Step 1: Penalty
         if self.penalty_ids is not None:
             ids = self.penalty_ids.to(scores.device)
             for tid in ids.tolist():
@@ -140,16 +102,11 @@ class SoftConstraintProcessor(LogitsProcessor):
                 }
             scores[:, ids] += self.penalty_val
 
-        # Gather currently pending reward IDs
+        # Step 2: Curriculum reward
         pending_ids = set()
         for ids in self.pending_rewards.values():
             pending_ids.update(ids)
 
-        # ── Step 2: Re-normalise (only when both constraints are active) ───────
-        if self.penalty_ids is not None and pending_ids:
-            scores = scores - torch.logsumexp(scores, dim=-1, keepdim=True)
-
-        # ── Step 3: Curriculum reward (only for tokens not yet generated) ──────
         if pending_ids:
             eff_reward     = self._effective_reward()
             pending_tensor = torch.tensor(
@@ -179,36 +136,21 @@ class HardInclusionProcessor(LogitsProcessor):
     def __init__(
         self,
         required_token_sequences : List[List[int]],
+        src_len                  : int,
+        eos_token_id             : int,
+        boundary_mask            : torch.Tensor,
         boost                    : float = config.HARD_INCLUSION_BOOST,
         log_store                : List[Dict] = None,
         min_content_tokens       : int = 3,
     ):
-        self.pending              = {i: seq for i, seq in enumerate(required_token_sequences)}
+        self.master_sequences     = {i: seq for i, seq in enumerate(required_token_sequences)}
+        self.src_len              = src_len
+        self.eos_token_id         = eos_token_id
+        self.boundary_mask        = boundary_mask
         self.boost                = boost
         self.log_store            = log_store if log_store is not None else []
         self._step                = 0
         self.min_content_tokens   = min_content_tokens
-
-    def _update_pending(self, input_ids: torch.LongTensor):
-        num_beams = input_ids.shape[0]
-        satisfied = []
-
-        for word_idx, seq in self.pending.items():
-            seq_len = len(seq)
-            for b in range(num_beams):
-                beam_list = input_ids[b].tolist()
-                found = False
-                for i in range(len(beam_list) - seq_len + 1):
-                    if beam_list[i:i+seq_len] == seq:
-                        found = True
-                        break
-                
-                if found:
-                    satisfied.append(word_idx)
-                    break 
-
-        for idx in satisfied:
-            del self.pending[idx]
 
     def __call__(
         self,
@@ -217,31 +159,70 @@ class HardInclusionProcessor(LogitsProcessor):
     ) -> torch.FloatTensor:
 
         current_len = input_ids.shape[1]
+        num_beams   = input_ids.shape[0]
+
         if current_len <= self.min_content_tokens:
             self.log_store.append({
                 "step": self._step, "type": "inclusion",
-                "tokens": {}, "pending_count": len(self.pending),
+                "tokens": {}, "pending_count": len(self.master_sequences),
                 "note": f"boost deferred (only {current_len} tokens generated so far)",
             })
             self._step += 1
             return scores
 
-        self._update_pending(input_ids)
-
         logits   = scores[0].clone() 
         probs    = torch.softmax(logits, dim=-1)
         step_log = {
             "step": self._step, "type": "inclusion",
-            "tokens": {}, "pending_count": len(self.pending),
+            "tokens": {}, "pending_count": 0,
         }
 
-        num_beams = input_ids.shape[0]
+        target_len = max(1, self.src_len // 2)
+        progress_ratio = min(1.0, current_len / target_len)
+        dynamic_boost = 5.0 + (progress_ratio * (self.boost - 5.0))
 
-        for word_idx, seq in self.pending.items():
-            seq_len = len(seq)
+        min_pending = 999
+
+        for b in range(num_beams):
+            beam_list = input_ids[b].tolist()
+            pending_for_beam = {}
+            just_completed_any = False
             
-            for b in range(num_beams):
-                beam_list = input_ids[b].tolist()
+            # Determine what THIS specific beam is missing
+            for word_idx, seq in self.master_sequences.items():
+                seq_len = len(seq)
+                found = False
+                
+                # Check if it was JUST completed at the very end of the beam
+                if len(beam_list) >= seq_len and beam_list[-seq_len:] == seq:
+                    found = True
+                    just_completed_any = True
+                else:
+                    # Check if it was completed earlier
+                    for i in range(len(beam_list) - seq_len):
+                        if beam_list[i:i+seq_len] == seq:
+                            found = True
+                            break
+                            
+                if not found:
+                    pending_for_beam[word_idx] = seq
+
+            min_pending = min(min_pending, len(pending_for_beam))
+
+            # ── NEW: Morphological Escape Prevention ──────────────────────
+            # If a word was just completed, violently reject any suffix token.
+            # The model MUST choose a boundary (space, punctuation, eos).
+            if just_completed_any and self.boundary_mask is not None:
+                scores[b, ~self.boundary_mask] = float("-inf")
+            # ──────────────────────────────────────────────────────────────
+                
+            # Apply EOS mask ONLY if this specific beam is still missing words
+            if pending_for_beam and self.eos_token_id is not None:
+                scores[b, self.eos_token_id] = float("-inf")
+
+            # Apply logit boost ONLY for this specific beam's missing words
+            for word_idx, seq in pending_for_beam.items():
+                seq_len = len(seq)
                 target_token = seq[0] 
                 is_continuation = False
                 
@@ -252,11 +233,7 @@ class HardInclusionProcessor(LogitsProcessor):
                         is_continuation = True
                         break
                 
-                escalated_boost = min(
-                    self.boost * 2,
-                    self.boost + (max(0, self._step - 5) * 1.5)
-                )
-                applied_boost = 1000.0 if is_continuation else escalated_boost
+                applied_boost = 1000.0 if is_continuation else dynamic_boost
                 scores[b, target_token] += applied_boost
 
                 if b == 0:
@@ -269,6 +246,7 @@ class HardInclusionProcessor(LogitsProcessor):
                         "is_continuation" : is_continuation
                     }
 
+        step_log["pending_count"] = min_pending if min_pending != 999 else 0
         self.log_store.append(step_log)
         self._step += 1
         return scores

@@ -125,6 +125,35 @@ class MTModel:
                         print(f"  Warning: '{word}' produced no token IDs — skipping.")
         return result
     
+    def get_boundary_mask(self) -> torch.Tensor:
+        """
+        Create a boolean mask of all tokens that represent a word boundary.
+        In SentencePiece, these are tokens starting with ' ' (U+2581), 
+        punctuation, or special tokens like <eos>.
+        """
+        if hasattr(self, "_boundary_mask"):
+            return self._boundary_mask
+            
+        vocab_size = self.tokenizer.vocab_size
+        mask = torch.zeros(vocab_size, dtype=torch.bool)
+        
+        for tid in range(vocab_size):
+            tok = self.tokenizer.convert_ids_to_tokens(tid)
+            # Handle special tokens
+            if tid in [self.tokenizer.eos_token_id, self.tokenizer.pad_token_id, self.tokenizer.unk_token_id]:
+                mask[tid] = True
+                continue
+                
+            # SentencePiece boundary marker is ' ' (U+2581)
+            if tok.startswith('\u2581') or tok.startswith(' '):
+                mask[tid] = True
+            # Punctuation / non-alphanumeric (e.g. '.', ',', '!', '-', etc.)
+            elif not any(c.isalnum() for c in tok):
+                mask[tid] = True
+                
+        self._boundary_mask = mask
+        return mask
+
     def words_to_sequences(self, words: List[str]) -> List[List[int]]:
         """
         Tokenize each required word into its exact, ordered sequence of subword IDs.
@@ -132,8 +161,6 @@ class MTModel:
         """
         sequences = []
         for word in words:
-            # SentencePiece requires a leading space to treat this as a new word,
-            # otherwise it generates suffix tokens that the LM will reject.
             prefix_word = word if word.startswith(" ") else " " + word
             seq = self.tokenizer(prefix_word, add_special_tokens=False).input_ids
             
