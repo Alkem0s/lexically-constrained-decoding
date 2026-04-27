@@ -9,10 +9,6 @@ import torch
 if torch.cuda.is_available():
     DEVICE = "cuda"
 else:
-    # Fix #1: Emit a clear warning so the user knows they are on CPU.
-    # If you have an RTX 4070, your PyTorch install is likely the CPU-only
-    # wheel.  Reinstall with CUDA 12.x support:
-    #   pip install torch --index-url https://download.pytorch.org/whl/cu121
     import warnings
     warnings.warn(
         "CUDA is NOT available — running on CPU.  If you have an NVIDIA GPU, "
@@ -24,52 +20,50 @@ else:
     DEVICE = "cpu"
 
 # ── Models ────────────────────────────────────────────────────────────────────
-# Helsinki-NLP MarianMT models for EN↔TR
 EN_TR_MODEL_NAME = "Helsinki-NLP/opus-mt-tc-big-en-tr"
 TR_EN_MODEL_NAME = "Helsinki-NLP/opus-mt-tc-big-tr-en"
 
-EN_TR_MODEL_PATH = "models/opus-mt-en-tr"   # local cache dir
+EN_TR_MODEL_PATH = "models/opus-mt-en-tr"
 TR_EN_MODEL_PATH = "models/opus-mt-tr-en"
 
 # ── Generation hyperparameters ────────────────────────────────────────────────
 MAX_LENGTH      = 128
-NUM_BEAMS       = 16      # beam width for constrained beam search
-NO_REPEAT_NGRAM = 3      # standard repetition penalty
+NUM_BEAMS       = 16
+NO_REPEAT_NGRAM = 3
 
 # ── Soft constraint strength ──────────────────────────────────────────────────
-# With full-vocabulary token coverage (all segmentations caught), a penalty of
-# -12 reliably suppresses forbidden words.  Reward starts at 5.0 and escalates
-# via a curriculum schedule (see SOFT_REWARD_CURRICULUM_RATE) so that if the
-# model ignores the nudge in early steps, the boost grows until it matches
-# HARD_INCLUSION_BOOST by ~step 7.
-SOFT_REWARD_STRENGTH  =  5.0
+SOFT_REWARD_STRENGTH  =  4.0
 SOFT_PENALTY_STRENGTH = -12.0
-# Deep anchor: Starts well below the max logit so it doesn't force a greedy win on Step 1.
-# It relies on the curriculum (eff_reward) to slowly push it above the water line over multiple steps.
-ANCHOR_OFFSET = -10.0            
-# Gentle tip-the-scales boost if the model ALREADY wants to use the token organically
+ANCHOR_OFFSET = -5.0            
 CONTEXTUAL_NUDGE = 2.0 
 
 # ── Curriculum reward escalation ─────────────────────────────────────────────
-# Effective reward at step n (while word is still pending):
-#   effective = min(SOFT_REWARD_MAX, SOFT_REWARD_STRENGTH * (1 + RATE * n))
-# With RATE=0.3 and STRENGTH=5.0, the cap of 15.0 is reached at step 7,
-# matching HARD_INCLUSION_BOOST so the soft reward gracefully becomes hard-like
-# for words the model persistently ignores.
 SOFT_REWARD_CURRICULUM_RATE = 0.25
-SOFT_REWARD_MAX             = 30.0
+SOFT_REWARD_MAX             = 12.0
 
 # ── Hard inclusion: logit boost applied each step until word appears ──────────
-# Lowered from 20 → 15 because we now only boost whole-word tokens (high base
-# rank), so a smaller nudge is sufficient and causes less fluency disruption.
 HARD_INCLUSION_BOOST  = 15.0
-SUFFIX_PENALTY = -6.0
+SUFFIX_PENALTY_EN = -15.0
+SUFFIX_PENALTY_TR =   0.0
 READINESS_THRESHOLD = 200
 
+# ── Hard Inclusion Dynamic Anchoring (HPO Search Space) ──────────────────────
+# Tokens to skip before applying any pressure (prevents front-loading)
+HARD_INCL_EARLY_TOKENS = 3         # Suggested HPO range: [1, 5]
+
+# The rank threshold where the word is considered a "natural fit"
+HARD_INCL_SWEET_RANK   = 100       # Suggested HPO range: [10, 500]
+
+# The logit buffer granted when the word falls in the sweet spot
+HARD_INCL_SWEET_BUFFER = 5.0       # Suggested HPO range: [1.0, 15.0]
+
+# Starting offset from max_logit at 0% sentence completion
+HARD_INCL_ANCHOR_START = -4.0      # Suggested HPO range: [-10.0, -1.0]
+
+# Total logit climb from 0% to 100% completion
+HARD_INCL_ANCHOR_RANGE = 5.0       # Suggested HPO range: [2.0, 10.0]
+
 # ── Combined-hard reranking ───────────────────────────────────────────────────
-# Number of beam candidates to generate (exclusion-only pass) for the reranking
-# phase of combined_hard().  A larger pool gives more chances to find a
-# candidate that naturally satisfies inclusion; 8 = 2× the default beam width.
 COMBINED_HARD_RERANK_BEAMS = 16
 
 # ── Output ────────────────────────────────────────────────────────────────────

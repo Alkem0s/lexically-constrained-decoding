@@ -154,21 +154,24 @@ class MTModel:
         self._boundary_mask = mask
         return mask
 
-    def words_to_sequences(self, words: List[str]) -> List[List[int]]:
-        """
-        Tokenize each required word into its exact, ordered sequence of subword IDs.
-        Used by the sequence-aware HardInclusionProcessor.
-        """
-        sequences = []
+    def words_to_sequences(self, words: List[str]) -> List[List[List[int]]]:
+        word_groups = []
         for word in words:
-            prefix_word = word if word.startswith(" ") else " " + word
-            seq = self.tokenizer(prefix_word, add_special_tokens=False).input_ids
-            
-            if seq:
-                sequences.append(seq)
-            else:
-                print(f"  Warning: '{word}' produced no token IDs — skipping.")
-        return sequences
+            # Allow full words in different positional casings
+            variants = [
+                " " + word.lower(),      # Mid-sentence
+                " " + word.capitalize(), # Title Case
+                word.capitalize(),       # Start of sentence (no leading space)
+                word.lower()             # Fallback
+            ]
+            group = []
+            for variant in variants:
+                seq = self.tokenizer(variant, add_special_tokens=False).input_ids
+                if seq and seq not in group:
+                    group.append(seq)
+            if group:
+                word_groups.append(group)
+        return word_groups
     
     def words_to_stem_sequences(self, words: List[str]) -> List[List[int]]:
         """
@@ -190,22 +193,21 @@ class MTModel:
                 print(f"  Warning: stem of '{word}' produced no token IDs — skipping.")
         return sequences
     
-    # After building strict_ids by prefix, filter out tokens that
-    # could lead to a word other than the target:
     @staticmethod
     def filter_ambiguous_tokens(strict_ids, word_lower, surface_map):
         """Remove tokens whose surface is a prefix of words OTHER than target."""
         safe_ids = []
         for tid in strict_ids:
             surface = surface_map[tid]
-            # Accept if surface == exact target, or is a suffix that only leads to target
-            other_words = [s for s in surface_map.values() 
-               if s.startswith(surface) 
-               and not s.startswith(word_lower)
-               and len(s) <= len(word_lower) + 3]  # only short alternatives, not arbitrary suffixes
+            other_words = [
+                s for s in surface_map.values() 
+                if s.startswith(surface) 
+                and not s.startswith(word_lower)
+                and len(s) <= len(word_lower) + 2  
+            ]
             if not other_words:
                 safe_ids.append(tid)
-        return safe_ids if safe_ids else strict_ids  # fallback to all if filtering removes everything
+        return safe_ids if safe_ids else strict_ids
 
     def flat_token_ids(self, words: List[str]) -> List[int]:
         """

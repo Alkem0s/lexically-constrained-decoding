@@ -67,10 +67,10 @@
     {
       "source": "The police caught the thief who stole from the market.",
       "direction": "EN→TR",
-      "forbidden_words": [],
-      "required_words": ["pazar"],
+      "forbidden_words": ["hırsız"],
+      "required_words": ["tutuklamak"],
       "penalty_words": ["hırsız"],
-      "reward_words": ["pazar"]
+      "reward_words": ["tutuklamak"]
     },
     {
       "source": "Music has the power to change a person's mood instantly.",
@@ -126,9 +126,9 @@
       "source": "Uçak hava alanına geç indi ve yolcular bekledi.",
       "direction": "TR→EN",
       "forbidden_words": ["plane", "aircraft"],
-      "required_words": ["delay"],
+      "required_words": ["delayed"],
       "penalty_words": ["plane", "aircraft"],
-      "reward_words": ["delay"]
+      "reward_words": ["delayed"]
     },
     {
       "source": "Ögrenciler sınavdan önce çok çalıştı.",

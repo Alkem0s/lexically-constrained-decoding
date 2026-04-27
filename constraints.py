@@ -110,7 +110,9 @@ class SoftConstraintProcessor(LogitsProcessor):
             pending_ids.update(ids)
 
         if pending_ids:
-            eff_reward     = self._effective_reward()
+            is_early = self._step <= 3
+            eff_reward = 0.0 if is_early else self._effective_reward()
+            
             pending_tensor = torch.tensor(
                 list(pending_ids), dtype=torch.long, device=scores.device
             )
@@ -119,7 +121,7 @@ class SoftConstraintProcessor(LogitsProcessor):
                 for tid in pending_tensor.tolist():
                     current_logit = scores[b, tid].item()
                     
-                    # The baseline is the max logit shifted down, plus the growing curriculum reward
+                    # Baseline incorporates the silenced or active curriculum reward
                     target_baseline = max_logits[b, 0].item() + config.ANCHOR_OFFSET + eff_reward
                     
                     if current_logit < target_baseline:
@@ -153,7 +155,7 @@ class SoftConstraintProcessor(LogitsProcessor):
 class HardInclusionProcessor(LogitsProcessor):
     def __init__(
         self,
-        required_token_sequences : List[List[int]],
+        required_token_sequences : List[List[List[int]]],
         src_len                  : int,
         eos_token_id             : int,
         boundary_mask            : torch.Tensor,
@@ -210,23 +212,37 @@ class HardInclusionProcessor(LogitsProcessor):
             just_completed_any = False
             
             # Determine what THIS specific beam is missing
-            for word_idx, seq in self.master_sequences.items():
-                seq_len = len(seq)
+            for word_idx, variant_group in self.master_sequences.items():
                 found = False
                 
-                if len(beam_list) >= seq_len and beam_list[-seq_len:] == seq:
-                    found = True
-                    just_completed_any = True
-                else:
-                    for i in range(len(beam_list) - seq_len):
-                        if beam_list[i:i+seq_len] == seq:
-                            found = True
-                            break
+                # Check if ANY of the casing variants exist in the generated text
+                for seq in variant_group:
+                    seq_len = len(seq)
+                    if len(beam_list) >= seq_len and beam_list[-seq_len:] == seq:
+                        found = True
+                        just_completed_any = True
+                        break
+                    else:
+                        for i in range(len(beam_list) - seq_len):
+                            if beam_list[i:i+seq_len] == seq:
+                                found = True
+                                break
+                    if found:
+                        break
                             
                 if not found:
-                    pending_for_beam[word_idx] = seq
+                    # If missing, target the first variant (usually mid-sentence lowercase)
+                    pending_for_beam[word_idx] = variant_group[0]
 
             min_pending = min(min_pending, len(pending_for_beam))
+
+            # --- Babbling Escape Hatch ---
+            is_babbling = (current_len > self.src_len * 1.5)
+            
+            if pending_for_beam and self.eos_token_id is not None:
+                if not is_babbling:
+                    # Only block EOS if it hasn't completely lost its mind yet
+                    scores[b, self.eos_token_id] -= 50.0
 
             # Morphological Escape Prevention 
             if just_completed_any and self.boundary_mask is not None:
@@ -234,7 +250,7 @@ class HardInclusionProcessor(LogitsProcessor):
                 scores[b, non_boundary] += config.SUFFIX_PENALTY
                 
             if pending_for_beam and self.eos_token_id is not None:
-                scores[b, self.eos_token_id] = float("-inf")
+                scores[b, self.eos_token_id] -= 50.0
 
             for word_idx, seq in pending_for_beam.items():
                 seq_len = len(seq)
@@ -253,20 +269,25 @@ class HardInclusionProcessor(LogitsProcessor):
                 target_logit = beam_logits[target_token].item()
                 target_rank  = int((beam_logits > target_logit).sum().item()) + 1
                 
-                # Desperation Checks:
-                # 1. Is the natural top choice EOS? (Model is finished and trapped)
-                # 2. Is it babbling? (Generated text is 20% longer than source text)
-                eos_logit = beam_logits[self.eos_token_id].item() if self.eos_token_id is not None else float('-inf')
-                is_trying_to_end = (eos_logit >= beam_logits.max().item() - 0.5)
-                is_babbling = (current_len > self.src_len * 1.2)
-                
                 if is_continuation:
-                    applied_boost = 1000.0
+                    applied_boost = 50.0 
                 else:
-                    if target_rank <= config.READINESS_THRESHOLD or is_trying_to_end or is_babbling:
-                        applied_boost = dynamic_boost
+                    is_early = current_len <= config.HARD_INCL_EARLY_TOKENS
+                    
+                    if is_early:
+                        applied_boost = 0.0
+                    elif target_rank <= config.HARD_INCL_SWEET_RANK:
+                        applied_boost = config.HARD_INCL_SWEET_BUFFER
                     else:
-                        applied_boost = 1.5
+                        progress_multiplier = min(1.0, current_len / max(1, self.src_len * 0.8))
+                        max_logit = beam_logits.max().item()
+                        
+                        target_anchor = max_logit + config.HARD_INCL_ANCHOR_START + (config.HARD_INCL_ANCHOR_RANGE * progress_multiplier)
+                        
+                        if target_logit < target_anchor:
+                            applied_boost = target_anchor - target_logit
+                        else:
+                            applied_boost = 0.0
                 
                 scores[b, target_token] += applied_boost
 
@@ -278,7 +299,7 @@ class HardInclusionProcessor(LogitsProcessor):
                         "delta"           : applied_boost,
                         "word_group"      : word_idx,
                         "is_continuation" : is_continuation,
-                        "desperation"     : is_trying_to_end or is_babbling
+                        "desperation"     : is_babbling
                     }
 
         step_log["pending_count"] = min_pending if min_pending != 999 else 0
