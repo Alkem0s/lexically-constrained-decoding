@@ -33,7 +33,7 @@ TR_EN_MODEL_PATH = "models/opus-mt-tr-en"
 
 # ── Generation hyperparameters ────────────────────────────────────────────────
 MAX_LENGTH      = 128
-NUM_BEAMS       = 4      # beam width for constrained beam search
+NUM_BEAMS       = 16      # beam width for constrained beam search
 NO_REPEAT_NGRAM = 3      # standard repetition penalty
 
 # ── Soft constraint strength ──────────────────────────────────────────────────
@@ -44,6 +44,11 @@ NO_REPEAT_NGRAM = 3      # standard repetition penalty
 # HARD_INCLUSION_BOOST by ~step 7.
 SOFT_REWARD_STRENGTH  =  5.0
 SOFT_PENALTY_STRENGTH = -12.0
+# Deep anchor: Starts well below the max logit so it doesn't force a greedy win on Step 1.
+# It relies on the curriculum (eff_reward) to slowly push it above the water line over multiple steps.
+ANCHOR_OFFSET = -10.0            
+# Gentle tip-the-scales boost if the model ALREADY wants to use the token organically
+CONTEXTUAL_NUDGE = 2.0 
 
 # ── Curriculum reward escalation ─────────────────────────────────────────────
 # Effective reward at step n (while word is still pending):
@@ -51,19 +56,21 @@ SOFT_PENALTY_STRENGTH = -12.0
 # With RATE=0.3 and STRENGTH=5.0, the cap of 15.0 is reached at step 7,
 # matching HARD_INCLUSION_BOOST so the soft reward gracefully becomes hard-like
 # for words the model persistently ignores.
-SOFT_REWARD_CURRICULUM_RATE = 0.15
+SOFT_REWARD_CURRICULUM_RATE = 0.25
 SOFT_REWARD_MAX             = 30.0
 
 # ── Hard inclusion: logit boost applied each step until word appears ──────────
 # Lowered from 20 → 15 because we now only boost whole-word tokens (high base
 # rank), so a smaller nudge is sufficient and causes less fluency disruption.
 HARD_INCLUSION_BOOST  = 15.0
+SUFFIX_PENALTY = -6.0
+READINESS_THRESHOLD = 200
 
 # ── Combined-hard reranking ───────────────────────────────────────────────────
 # Number of beam candidates to generate (exclusion-only pass) for the reranking
 # phase of combined_hard().  A larger pool gives more chances to find a
 # candidate that naturally satisfies inclusion; 8 = 2× the default beam width.
-COMBINED_HARD_RERANK_BEAMS = 128
+COMBINED_HARD_RERANK_BEAMS = 16
 
 # ── Output ────────────────────────────────────────────────────────────────────
 RESULTS_DIR = "./results"

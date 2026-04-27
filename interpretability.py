@@ -87,6 +87,7 @@ def compare_analyses(
     logs      : Optional[Dict[str, List[Dict]]] = None,
     tokenizer = None,
     top_n_steps: int = 3,
+    log_file: str = "results/deep_dive.log"
 ) -> None:
     """
     Pretty-print a side-by-side comparison of interpretability metrics
@@ -94,13 +95,14 @@ def compare_analyses(
 
     Fix #13: If `logs` and `tokenizer` are provided, the previously dead
     token_level_report() is called here for each mode, surfacing per-step
-    token detail inline rather than being silently omitted.
+    token detail by saving it to a log file instead of cluttering the console.
 
     Args:
         analyses   : dict mapping mode_name → analyse_log() output
         logs       : dict mapping mode_name → raw log list (optional)
         tokenizer  : model tokenizer for decoding token IDs (optional)
         top_n_steps: how many steps to show in the token-level detail
+        log_file   : filepath to write the deep dive results to
     """
     print("\n  ┌─ Interpretability Summary " + "─" * 52)
 
@@ -128,33 +130,40 @@ def compare_analyses(
 
     print("  └" + "─" * 80)
 
-    # Fix #13: emit token-level detail when the caller provides raw logs +
-    # a tokenizer.  This was previously unreachable dead code.
+    # Output token-level detail to a file when the caller provides raw logs + tokenizer.
     if logs is not None and tokenizer is not None:
-        for mode, log in logs.items():
-            if log:
-                print(f"\n  ── Token-level detail: {mode} ──")
-                token_level_report(log, tokenizer, top_n_steps=top_n_steps)
+        with open(log_file, "w", encoding="utf-8") as f:
+            for mode, log in logs.items():
+                if log:
+                    print(f"\n  ── Token-level detail: {mode} ──", file=f)
+                    token_level_report(log, tokenizer, top_n_steps=top_n_steps, file_obj=f)
+        
+        print(f"\n  [!] Detailed token-level deep dive saved to: {log_file}")
 
 
 # ── Token-level deep dive ─────────────────────────────────────────────────────
 
-def token_level_report(log: List[Dict], tokenizer, top_n_steps: int = 3) -> None:
+def token_level_report(log: List[Dict], tokenizer, top_n_steps: int = 3, file_obj=None) -> None:
     """
     Print a detailed step-by-step view of what happened to constrained tokens,
-    limited to top_n_steps for readability.
+    limited to top_n_steps for readability, directly to a file object.
 
     Args:
         log         : raw log list from a constraint processor.
         tokenizer   : the model's tokenizer (for decoding token IDs to strings).
         top_n_steps : how many steps to display in detail.
+        file_obj    : The file object to write to (defaults to sys.stdout if None)
     """
+    import sys
+    if file_obj is None:
+        file_obj = sys.stdout
+
     if not log:
-        print("    (no constraint log to display)")
+        print("    (no constraint log to display)", file=file_obj)
         return
 
     steps_to_show = log[:top_n_steps]
-    print(f"\n    Token-level detail (first {len(steps_to_show)} steps):")
+    print(f"\n    Token-level detail (first {len(steps_to_show)} steps):", file=file_obj)
 
     for entry in steps_to_show:
         step    = entry["step"]
@@ -164,7 +173,7 @@ def token_level_report(log: List[Dict], tokenizer, top_n_steps: int = 3) -> None
         note    = entry.get("note", "")
 
         print(f"\n    Step {step} [{ctype}]  pending_groups={pending}"
-              + (f"  [{note}]" if note else ""))
+              + (f"  [{note}]" if note else ""), file=file_obj)
 
         for tid, info in tokens.items():
             word      = tokenizer.decode([int(tid)], skip_special_tokens=True)
@@ -178,5 +187,6 @@ def token_level_report(log: List[Dict], tokenizer, top_n_steps: int = 3) -> None
                 f"rank={info.get('rank', '?'):<6}  "
                 f"prob={info.get('prob', 0):.4f}  "
                 f"logit={info.get('logit', 0):+.3f}  "
-                f"delta={delta_str}"
+                f"delta={delta_str}",
+                file=file_obj
             )

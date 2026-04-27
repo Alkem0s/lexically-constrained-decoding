@@ -84,12 +84,14 @@ class SoftConstraintProcessor(LogitsProcessor):
 
         logits   = scores[0]
         probs    = torch.softmax(logits, dim=-1)
+        max_logits = scores.max(dim=-1, keepdim=True).values
+
         step_log = {
             "step": self._step, "type": "soft", "tokens": {},
             "reward_steps_active": self._reward_steps_active,
         }
 
-        # Step 1: Penalty
+        # Step 1: Penalty (as now)
         if self.penalty_ids is not None:
             ids = self.penalty_ids.to(scores.device)
             for tid in ids.tolist():
@@ -102,7 +104,7 @@ class SoftConstraintProcessor(LogitsProcessor):
                 }
             scores[:, ids] += self.penalty_val
 
-        # Step 2: Curriculum reward
+        # Step 2: Reward via Curriculum Anchoring
         pending_ids = set()
         for ids in self.pending_rewards.values():
             pending_ids.update(ids)
@@ -112,17 +114,33 @@ class SoftConstraintProcessor(LogitsProcessor):
             pending_tensor = torch.tensor(
                 list(pending_ids), dtype=torch.long, device=scores.device
             )
-            for tid in pending_tensor.tolist():
-                step_log["tokens"][tid] = {
-                    "logit"               : logits[tid].item(),
-                    "prob"                : probs[tid].item(),
-                    "rank"                : int((logits > logits[tid]).sum().item()) + 1,
-                    "delta"               : eff_reward,
-                    "delta_base"          : self.reward_val,
-                    "reward_steps_active" : self._reward_steps_active,
-                    "mode"                : "reward",
-                }
-            scores[:, pending_tensor] += eff_reward
+
+            for b in range(scores.shape[0]):
+                for tid in pending_tensor.tolist():
+                    current_logit = scores[b, tid].item()
+                    
+                    # The baseline is the max logit shifted down, plus the growing curriculum reward
+                    target_baseline = max_logits[b, 0].item() + config.ANCHOR_OFFSET + eff_reward
+                    
+                    if current_logit < target_baseline:
+                        # The token is buried: Pull it exactly to the curriculum baseline
+                        scores[b, tid] = target_baseline
+                        delta_applied = target_baseline - current_logit
+                    else:
+                        # The token is already highly probable organically: Just nudge it to win
+                        scores[b, tid] += config.CONTEXTUAL_NUDGE
+                        delta_applied = config.CONTEXTUAL_NUDGE
+                    
+                    step_log["tokens"][tid] = {
+                        "logit"               : scores[b, tid].item(),
+                        "prob"                : probs[tid].item(),
+                        "rank"                : int((logits > logits[tid]).sum().item()) + 1,
+                        "delta"               : delta_applied,
+                        "delta_base"          : self.reward_val,
+                        "reward_steps_active" : self._reward_steps_active,
+                        "mode"                : "reward (curriculum)",
+                    }
+
             self._reward_steps_active += 1
 
         self.log_store.append(step_log)
@@ -170,8 +188,11 @@ class HardInclusionProcessor(LogitsProcessor):
             self._step += 1
             return scores
 
-        logits   = scores[0].clone() 
-        probs    = torch.softmax(logits, dim=-1)
+        # FIX: Keep a pristine copy of all beams' scores to accurately check 
+        # the model's true natural intent before we apply masks.
+        original_scores = scores.clone() 
+        probs = torch.softmax(original_scores, dim=-1)
+
         step_log = {
             "step": self._step, "type": "inclusion",
             "tokens": {}, "pending_count": 0,
@@ -193,12 +214,10 @@ class HardInclusionProcessor(LogitsProcessor):
                 seq_len = len(seq)
                 found = False
                 
-                # Check if it was JUST completed at the very end of the beam
                 if len(beam_list) >= seq_len and beam_list[-seq_len:] == seq:
                     found = True
                     just_completed_any = True
                 else:
-                    # Check if it was completed earlier
                     for i in range(len(beam_list) - seq_len):
                         if beam_list[i:i+seq_len] == seq:
                             found = True
@@ -209,18 +228,14 @@ class HardInclusionProcessor(LogitsProcessor):
 
             min_pending = min(min_pending, len(pending_for_beam))
 
-            # ── NEW: Morphological Escape Prevention ──────────────────────
-            # If a word was just completed, violently reject any suffix token.
-            # The model MUST choose a boundary (space, punctuation, eos).
+            # Morphological Escape Prevention 
             if just_completed_any and self.boundary_mask is not None:
-                scores[b, ~self.boundary_mask] = float("-inf")
-            # ──────────────────────────────────────────────────────────────
+                non_boundary = ~self.boundary_mask.to(scores.device)
+                scores[b, non_boundary] += config.SUFFIX_PENALTY
                 
-            # Apply EOS mask ONLY if this specific beam is still missing words
             if pending_for_beam and self.eos_token_id is not None:
                 scores[b, self.eos_token_id] = float("-inf")
 
-            # Apply logit boost ONLY for this specific beam's missing words
             for word_idx, seq in pending_for_beam.items():
                 seq_len = len(seq)
                 target_token = seq[0] 
@@ -233,17 +248,37 @@ class HardInclusionProcessor(LogitsProcessor):
                         is_continuation = True
                         break
                 
-                applied_boost = 1000.0 if is_continuation else dynamic_boost
+                # ── Robust Context-Aware Logic ──
+                beam_logits  = original_scores[b]
+                target_logit = beam_logits[target_token].item()
+                target_rank  = int((beam_logits > target_logit).sum().item()) + 1
+                
+                # Desperation Checks:
+                # 1. Is the natural top choice EOS? (Model is finished and trapped)
+                # 2. Is it babbling? (Generated text is 20% longer than source text)
+                eos_logit = beam_logits[self.eos_token_id].item() if self.eos_token_id is not None else float('-inf')
+                is_trying_to_end = (eos_logit >= beam_logits.max().item() - 0.5)
+                is_babbling = (current_len > self.src_len * 1.2)
+                
+                if is_continuation:
+                    applied_boost = 1000.0
+                else:
+                    if target_rank <= config.READINESS_THRESHOLD or is_trying_to_end or is_babbling:
+                        applied_boost = dynamic_boost
+                    else:
+                        applied_boost = 1.5
+                
                 scores[b, target_token] += applied_boost
 
                 if b == 0:
                     step_log["tokens"][target_token] = {
-                        "logit"           : logits[target_token].item(),
-                        "prob"            : probs[target_token].item(),
-                        "rank"            : int((logits > logits[target_token]).sum().item()) + 1,
+                        "logit"           : target_logit,
+                        "prob"            : probs[b, target_token].item(),
+                        "rank"            : target_rank,
                         "delta"           : applied_boost,
                         "word_group"      : word_idx,
-                        "is_continuation" : is_continuation
+                        "is_continuation" : is_continuation,
+                        "desperation"     : is_trying_to_end or is_babbling
                     }
 
         step_log["pending_count"] = min_pending if min_pending != 999 else 0

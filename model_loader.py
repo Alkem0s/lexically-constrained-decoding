@@ -170,6 +170,26 @@ class MTModel:
                 print(f"  Warning: '{word}' produced no token IDs — skipping.")
         return sequences
     
+    def words_to_stem_sequences(self, words: List[str]) -> List[List[int]]:
+        """
+        Like words_to_sequences but tokenises only the consonant stem,
+        allowing the model to attach Turkish case/possessive suffixes freely.
+        """
+        sequences = []
+        for word in words:
+            # Simple stem: strip final vowel if word ends in one
+            # (covers halı→hal, hava→hav, etc.)
+            stem = word
+            if word and word[-1] in 'aeıioöuü' and len(word) > 2:
+                stem = word[:-1]
+            prefix_stem = " " + stem
+            seq = self.tokenizer(prefix_stem, add_special_tokens=False).input_ids
+            if seq:
+                sequences.append(seq)
+            else:
+                print(f"  Warning: stem of '{word}' produced no token IDs — skipping.")
+        return sequences
+    
     # After building strict_ids by prefix, filter out tokens that
     # could lead to a word other than the target:
     @staticmethod
