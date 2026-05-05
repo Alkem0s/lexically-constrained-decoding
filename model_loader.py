@@ -94,36 +94,6 @@ class MTModel:
             surface_map[tid] = self._turkish_lower(decoded.lstrip(" ").strip())
         self._vocab_surface = surface_map
         return surface_map
-
-    def words_to_token_ids(self, words):
-        surface_map = self._build_vocab_surface_map()
-        result = []
-        for word in words:
-            word_lower = word.strip().lower()
-            strict_ids = [tid for tid, surface in surface_map.items()
-                        if surface and surface.startswith(word_lower)]
-            strict_ids = self.filter_ambiguous_tokens(strict_ids, word_lower, surface_map)
-
-            if strict_ids:
-                result.append(strict_ids)
-            else:
-                # prefix-trim fallback
-                for trim_len in range(len(word_lower)-1, max(2, len(word_lower)-4), -1):
-                    prefix = word_lower[:trim_len]
-                    prefix_ids = [tid for tid, surface in surface_map.items()
-                                if surface and surface.startswith(prefix)]
-                    if prefix_ids:
-                        print(f"  [{word}] Using {len(prefix_ids)} prefix-trimmed tokens ('{prefix}').")
-                        result.append(prefix_ids)
-                        break
-                else:
-                    fragment_ids = [tid for tid, surface in surface_map.items()
-                                    if surface and surface in word_lower]
-                    if fragment_ids:
-                        result.append(fragment_ids)
-                    else:
-                        print(f"  Warning: '{word}' produced no token IDs — skipping.")
-        return result
     
     def get_boundary_mask(self) -> torch.Tensor:
         """
@@ -153,22 +123,115 @@ class MTModel:
                 
         self._boundary_mask = mask
         return mask
+    
+    @staticmethod
+    def expand_turkish_word(word: str) -> List[str]:
+        """Generates valid Turkish surface forms using 2-Way and 4-Way Vowel Harmony."""
+        word = word.lower()
+        vowels = "aeıioöuü"
+        last_vowel = next((c for c in reversed(word) if c in vowels), 'a')
+        
+        is_front = last_vowel in "eiöü"
+        is_rounded = last_vowel in "ouöü"
+        
+        a_vowel = "e" if is_front else "a"
+        if is_front and not is_rounded: i_vowel = "i"
+        elif is_front and is_rounded: i_vowel = "ü"
+        elif not is_front and not is_rounded: i_vowel = "ı"
+        else: i_vowel = "u"
+        
+        ends_with_vowel = word[-1] in vowels
+        ends_with_voiceless = word[-1] in "fstkçşhp"
+        
+        # USE A LIST so the uninflected root word is ALWAYS index 0
+        variants_list = [word]
+        suffixes = []
+        
+        lar = "ler" if is_front else "lar"
+        suffixes.append(lar)
+        
+        y_buffer = "y" if ends_with_vowel else ""
+        suffixes.append(f"{y_buffer}{a_vowel}")  
+        suffixes.append(f"{y_buffer}{i_vowel}")  
+        
+        d_cons = "t" if ends_with_voiceless else "d"
+        suffixes.append(f"{d_cons}{a_vowel}")    
+        suffixes.append(f"{d_cons}{a_vowel}n")   
+        
+        n_buffer = "n" if ends_with_vowel else ""
+        suffixes.append(f"{n_buffer}{i_vowel}n") 
+        
+        if ends_with_vowel:
+            suffixes.extend(["m", "n", f"s{i_vowel}"])
+        else:
+            suffixes.extend([f"{i_vowel}m", f"{i_vowel}n", f"{i_vowel}"])
+            
+        for suf in suffixes:
+            variants_list.append(word + suf)
+            
+        # Deduplicate while preserving order
+        seen = set()
+        ordered_variants = []
+        for v in variants_list:
+            if v not in seen:
+                ordered_variants.append(v)
+                seen.add(v)
+                
+        return ordered_variants
 
-    def words_to_sequences(self, words: List[str]) -> List[List[List[int]]]:
+    def words_to_token_ids(self, words: List[str], expand_tr: bool = False) -> List[List[int]]:
+        """Maps words to token IDs, used by Soft Constraints."""
+        surface_map = self._build_vocab_surface_map()
+        word_groups = []
+        
+        for word in words:
+            # Expand forms if translating to Turkish
+            surface_forms = self.expand_turkish_word(word) if expand_tr else [word]
+            
+            id_set = set()
+            for form in surface_forms:
+                word_lower = form.strip().lower()
+                
+                # Strict matching against the pre-built surface_map
+                strict_ids = [tid for tid, surface in surface_map.items()
+                              if surface and surface.startswith(word_lower)]
+                strict_ids = self.filter_ambiguous_tokens(strict_ids, word_lower, surface_map)
+                
+                if strict_ids:
+                    id_set.update(strict_ids)
+                else:
+                    # Fragment fallback
+                    fragment_ids = [tid for tid, surface in surface_map.items()
+                                    if surface and surface in word_lower]
+                    if fragment_ids:
+                        id_set.update(fragment_ids)
+            
+            if id_set:
+                word_groups.append(list(id_set))
+            else:
+                print(f"  Warning: '{word}' produced no token IDs — skipping.")
+                
+        return word_groups
+
+    def words_to_sequences(self, words: List[str], expand_tr: bool = False) -> List[List[List[int]]]:
+        """Maps words to continuous token sequences, used by Hard Constraints."""
         word_groups = []
         for word in words:
-            # Allow full words in different positional casings
-            variants = [
-                " " + word.lower(),      # Mid-sentence
-                " " + word.capitalize(), # Title Case
-                word.capitalize(),       # Start of sentence (no leading space)
-                word.lower()             # Fallback
-            ]
+            # Expand forms if translating to Turkish
+            surface_forms = self.expand_turkish_word(word) if expand_tr else [word]
+            
             group = []
-            for variant in variants:
-                seq = self.tokenizer(variant, add_special_tokens=False).input_ids
-                if seq and seq not in group:
-                    group.append(seq)
+            for form in surface_forms:
+                variants = [
+                    " " + form.lower(),
+                    " " + form.capitalize(),
+                    form.capitalize(),
+                    form.lower()
+                ]
+                for variant in variants:
+                    seq = self.tokenizer(variant, add_special_tokens=False).input_ids
+                    if seq and seq not in group:
+                        group.append(seq)
             if group:
                 word_groups.append(group)
         return word_groups

@@ -3,164 +3,244 @@
     {
       "source": "The cat sat on the mat and looked out the window.",
       "direction": "EN→TR",
-      "forbidden_words": ["pencere"],
-      "required_words": ["halı"],
+      "forbidden_words": ["pencere", "kedi"],
+      "required_words": ["halı", "manzara"],
       "penalty_words": ["pencere"],
       "reward_words": ["halı"]
     },
     {
-      "source": "She opened the window to let in the fresh air.",
+      "source": "Artificial intelligence is transforming the global economy at an unprecedented pace.",
       "direction": "EN→TR",
-      "forbidden_words": ["pencere"],
-      "required_words": ["hava"],
-      "penalty_words": ["pencere"],
-      "reward_words": ["hava"]
+      "forbidden_words": ["ekonomi"],
+      "required_words": ["yapay zeka", "dönüşüm"],
+      "penalty_words": ["ekonomi"],
+      "reward_words": ["yapay zeka"]
     },
     {
-      "source": "The doctor prescribed medicine and advised the patient to rest.",
+      "source": "The doctor advised the patient to exercise regularly and eat healthy food.",
       "direction": "EN→TR",
-      "forbidden_words": ["doktor"],
-      "required_words": ["hekim"],
+      "forbidden_words": ["doktor", "yemek"],
+      "required_words": ["hekim", "beslenme"],
       "penalty_words": ["doktor"],
       "reward_words": ["hekim"]
     },
     {
-      "source": "Children love to play football in the park after school.",
+      "source": "Climate change is causing extreme weather events across the world.",
       "direction": "EN→TR",
-      "forbidden_words": ["futbol"],
-      "required_words": ["top"],
-      "penalty_words": ["futbol"],
-      "reward_words": ["top"]
+      "forbidden_words": ["hava"],
+      "required_words": ["iklim değişikliği", "küresel"],
+      "penalty_words": ["hava"],
+      "reward_words": ["iklim değişikliği"]
     },
     {
-      "source": "Water is essential for life and health.",
+      "source": "The software engineer fixed the bug in the production environment.",
       "direction": "EN→TR",
-      "forbidden_words": ["sağlık"],
-      "required_words": ["yaşam"],
-      "penalty_words": ["sağlık"],
-      "reward_words": ["yaşam"]
+      "forbidden_words": ["hata"],
+      "required_words": ["yazılım mühendisi", "çözmek"],
+      "penalty_words": ["hata"],
+      "reward_words": ["yazılım mühendisi"]
     },
     {
-      "source": "The train arrived at the station exactly on time.",
+      "source": "The train arrived at the station exactly on time, despite the heavy snow.",
       "direction": "EN→TR",
-      "forbidden_words": ["tren"],
-      "required_words": ["istasyon"],
+      "forbidden_words": ["tren", "istasyon"],
+      "required_words": ["vakit", "kar yağışı"],
       "penalty_words": ["tren"],
-      "reward_words": ["istasyon"]
+      "reward_words": ["kar yağışı"]
     },
     {
-      "source": "She reads a book every evening before going to sleep.",
+      "source": "She reads a book every evening before going to sleep to relax.",
       "direction": "EN→TR",
-      "forbidden_words": ["kitap"],
-      "required_words": ["okur"],
+      "forbidden_words": ["kitap", "oku"],
+      "required_words": ["eser", "dinlenmek"],
       "penalty_words": ["kitap"],
-      "reward_words": ["okur"]
+      "reward_words": ["eser"]
     },
     {
-      "source": "The economy grew significantly last year despite the difficulties.",
-      "direction": "EN→TR",
-      "forbidden_words": ["ekonomi"],
-      "required_words": ["büyüme"],
-      "penalty_words": ["ekonomi"],
-      "reward_words": ["büyüme"]
-    },
-    {
-      "source": "The police caught the thief who stole from the market.",
-      "direction": "EN→TR",
-      "forbidden_words": ["hırsız"],
-      "required_words": ["tutuklamak"],
-      "penalty_words": ["hırsız"],
-      "reward_words": ["tutuklamak"]
-    },
-    {
-      "source": "Music has the power to change a person's mood instantly.",
+      "source": "Music has the power to change a person's mood instantly and improve focus.",
       "direction": "EN→TR",
       "forbidden_words": ["müzik"],
-      "required_words": ["ruh"],
+      "required_words": ["ezgi", "ruh hali", "odaklanma"],
       "penalty_words": ["müzik"],
-      "reward_words": ["ruh"]
+      "reward_words": ["ruh hali"]
+    },
+    {
+      "source": "The government announced a new policy to support small businesses.",
+      "direction": "EN→TR",
+      "forbidden_words": ["yeni", "destek"],
+      "required_words": ["hükümet", "politika", "teşvik"],
+      "penalty_words": ["yeni"],
+      "reward_words": ["teşvik"]
+    },
+    {
+      "source": "The international space station is orbiting Earth at a high velocity.",
+      "direction": "EN→TR",
+      "forbidden_words": ["dünya"],
+      "required_words": ["uzay istasyonu", "yörünge", "hız"],
+      "penalty_words": ["dünya"],
+      "reward_words": ["uzay istasyonu"]
+    },
+    {
+      "source": "Learning a new language opens up many opportunities for career growth.",
+      "direction": "EN→TR",
+      "forbidden_words": ["dil", "yeni"],
+      "required_words": ["lisan", "kariyer", "fırsat"],
+      "penalty_words": ["dil"],
+      "reward_words": ["lisan"]
+    },
+    {
+      "source": "The detective searched for clues to solve the mysterious disappearance.",
+      "direction": "EN→TR",
+      "forbidden_words": ["polis", "bulmak"],
+      "required_words": ["dedektif", "ipucu", "gizemli"],
+      "penalty_words": ["polis"],
+      "reward_words": ["dedektif"]
+    },
+    {
+      "source": "Water is essential for life, health, and sustainable agriculture.",
+      "direction": "EN→TR",
+      "forbidden_words": ["su", "yaşam"],
+      "required_words": ["hayat", "sağlık", "tarım"],
+      "penalty_words": ["su"],
+      "reward_words": ["hayat"]
+    },
+    {
+      "source": "The primary goal of the project is to increase user engagement.",
+      "direction": "EN→TR",
+      "forbidden_words": ["hedef"],
+      "required_words": ["amaç", "kullanıcı", "etkileşim"],
+      "penalty_words": ["hedef"],
+      "reward_words": ["etkileşim"]
+    },
+    {
+      "source": "Ancient civilizations built massive structures that still stand today.",
+      "direction": "EN→TR",
+      "forbidden_words": ["eski", "yapı"],
+      "required_words": ["antik", "uygarlık", "mimari"],
+      "penalty_words": ["eski"],
+      "reward_words": ["antik"]
     }
   ],
   "TR_EN": [
     {
       "source": "Köpek parkta koştu ve çok yoruldu.",
       "direction": "TR→EN",
-      "forbidden_words": ["park"],
-      "required_words": ["field"],
-      "penalty_words": ["park"],
-      "reward_words": ["field"]
+      "forbidden_words": ["dog", "park"],
+      "required_words": ["canine", "field", "exhausted"],
+      "penalty_words": ["dog"],
+      "reward_words": ["canine"]
     },
     {
-      "source": "Annem her sabah kahve içer ve gazete okur.",
+      "source": "Yapay zeka teknolojileri iş dünyasını kökten değiştiriyor.",
       "direction": "TR→EN",
-      "forbidden_words": ["coffee"],
-      "required_words": ["newspaper"],
-      "penalty_words": ["coffee"],
-      "reward_words": ["newspaper"]
+      "forbidden_words": ["change", "world"],
+      "required_words": ["artificial intelligence", "transforming", "corporate"],
+      "penalty_words": ["change"],
+      "reward_words": ["artificial intelligence"]
     },
     {
-      "source": "Hava bugun çok sıcak, denize gidebiliriz.",
+      "source": "Hava bugün çok sıcak, denize gidebiliriz.",
       "direction": "TR→EN",
-      "forbidden_words": ["hot"],
-      "required_words": ["beach"],
+      "forbidden_words": ["hot", "sea"],
+      "required_words": ["scorching", "beach", "ocean"],
       "penalty_words": ["hot"],
-      "reward_words": ["beach"]
-    },
-    {
-      "source": "Çocuklar okuldan sonra futbol oynadı.",
-      "direction": "TR→EN",
-      "forbidden_words": ["football", "soccer"],
-      "required_words": ["played"],
-      "penalty_words": ["football", "soccer"],
-      "reward_words": ["played"]
+      "reward_words": ["scorching"]
     },
     {
       "source": "Doktor hastaya ilaç yazdı ve dinlenmesini söyledi.",
       "direction": "TR→EN",
-      "forbidden_words": ["medicine", "medication"],
-      "required_words": ["rest"],
-      "penalty_words": ["medicine", "medication"],
-      "reward_words": ["rest"]
+      "forbidden_words": ["doctor", "medicine"],
+      "required_words": ["physician", "prescription", "recovery"],
+      "penalty_words": ["doctor"],
+      "reward_words": ["physician"]
     },
     {
       "source": "Uçak hava alanına geç indi ve yolcular bekledi.",
       "direction": "TR→EN",
-      "forbidden_words": ["plane", "aircraft"],
-      "required_words": ["delayed"],
-      "penalty_words": ["plane", "aircraft"],
-      "reward_words": ["delayed"]
-    },
-    {
-      "source": "Ögrenciler sınavdan önce çok çalıştı.",
-      "direction": "TR→EN",
-      "forbidden_words": ["exam", "test"],
-      "required_words": ["diligent"],
-      "penalty_words": ["exam", "test"],
-      "reward_words": ["diligent"]
+      "forbidden_words": ["plane", "airport"],
+      "required_words": ["aircraft", "terminal", "delayed"],
+      "penalty_words": ["plane"],
+      "reward_words": ["aircraft"]
     },
     {
       "source": "Bu şehirde kış aylarında kar yağar ve hava çok soğuk olur.",
       "direction": "TR→EN",
       "forbidden_words": ["cold", "snow"],
-      "required_words": ["freezing"],
-      "penalty_words": ["cold", "snow"],
+      "required_words": ["freezing", "precipitation", "wintertime"],
+      "penalty_words": ["cold"],
       "reward_words": ["freezing"]
     },
     {
-      "source": "Fabrikada çalışan işciler grev ilan etti.",
+      "source": "Yazılım geliştiriciler yeni projeye odaklanmak için toplandı.",
       "direction": "TR→EN",
-      "forbidden_words": ["strike"],
-      "required_words": ["workers"],
-      "penalty_words": ["strike"],
-      "reward_words": ["workers"]
+      "forbidden_words": ["software", "project"],
+      "required_words": ["developer", "initiative", "concentrate"],
+      "penalty_words": ["software"],
+      "reward_words": ["developer"]
+    },
+    {
+      "source": "Müzik ruhun gıdasıdır ve stresi azaltır.",
+      "direction": "TR→EN",
+      "forbidden_words": ["music", "food"],
+      "required_words": ["melody", "nourishment", "relieve"],
+      "penalty_words": ["music"],
+      "reward_words": ["melody"]
+    },
+    {
+      "source": "Güneş enerjisi çevre dostu bir çözüm sunuyor.",
+      "direction": "TR→EN",
+      "forbidden_words": ["sun", "green"],
+      "required_words": ["solar energy", "sustainable", "environmentally friendly"],
+      "penalty_words": ["sun"],
+      "reward_words": ["solar energy"]
     },
     {
       "source": "Denizaltı okyanusun derinliklerinde sessizce ilerledi.",
       "direction": "TR→EN",
-      "forbidden_words": ["submarine"],
-      "required_words": ["vessel"],
+      "forbidden_words": ["submarine", "deep"],
+      "required_words": ["vessel", "abyss", "stealthily"],
       "penalty_words": ["submarine"],
       "reward_words": ["vessel"]
+    },
+    {
+      "source": "Enflasyon oranları geçen yıla göre düşüş gösterdi.",
+      "direction": "TR→EN",
+      "forbidden_words": ["down", "year"],
+      "required_words": ["inflation", "decrease", "annual"],
+      "penalty_words": ["down"],
+      "reward_words": ["inflation"]
+    },
+    {
+      "source": "Eğitim sistemi gençlerin yeteneklerini keşfetmesini sağlamalıdır.",
+      "direction": "TR→EN",
+      "forbidden_words": ["school", "new"],
+      "required_words": ["education system", "potential", "identify"],
+      "penalty_words": ["school"],
+      "reward_words": ["education system"]
+    },
+    {
+      "source": "Fabrikadaki işçiler daha iyi çalışma koşulları talep etti.",
+      "direction": "TR→EN",
+      "forbidden_words": ["work", "good"],
+      "required_words": ["laborers", "conditions", "improved"],
+      "penalty_words": ["work"],
+      "reward_words": ["laborers"]
+    },
+    {
+      "source": "Modern mimari, estetik ve işlevselliği birleştirir.",
+      "direction": "TR→EN",
+      "forbidden_words": ["modern", "beautiful"],
+      "required_words": ["contemporary", "aesthetics", "functionality"],
+      "penalty_words": ["modern"],
+      "reward_words": ["contemporary"]
+    },
+    {
+      "source": "Uzay keşfi, insanlığın sınırlarını genişletmektedir.",
+      "direction": "TR→EN",
+      "forbidden_words": ["space", "human"],
+      "required_words": ["exploration", "mankind", "boundaries"],
+      "penalty_words": ["space"],
+      "reward_words": ["exploration"]
     }
   ]
 }

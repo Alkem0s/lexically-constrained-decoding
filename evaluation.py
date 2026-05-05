@@ -78,26 +78,29 @@ def _turkish_lower(s: str) -> str:
     """Python's str.lower() mishandles Turkish İ/I. Apply correct mapping first."""
     return s.replace('İ', 'i').replace('I', 'ı').lower()
 
-def _contains_word(text: str, word: str) -> bool:
+def _contains_word(text: str, word: str, is_tr_target: bool = False) -> bool:
     word_lower = _turkish_lower(word)
-    pattern = r'(^|\W)' + re.escape(word_lower) + r'(?=\W|$)'
+    if is_tr_target:
+        # Match the word boundary before, but allow valid Turkish letters after!
+        pattern = r'(^|\W)' + re.escape(word_lower) + r'[a-zçğıöşü]*'
+    else:
+        pattern = r'(^|\W)' + re.escape(word_lower) + r'(?=\W|$)'
     return bool(re.search(pattern, _turkish_lower(text)))
 
-def satisfaction_exclusion(translation: str, forbidden_words: List[str]) -> Dict:
+def satisfaction_exclusion(translation: str, forbidden_words: List[str], is_tr_target: bool = False) -> Dict:
     """Return per-word and overall exclusion satisfaction."""
     details = {}
     for w in forbidden_words:
-        present = _contains_word(translation, w)
+        present = _contains_word(translation, w, is_tr_target)
         details[w] = {"present": present, "satisfied": not present}
     overall = all(not v["present"] for v in details.values())
     return {"overall": overall, "details": details}
 
-
-def satisfaction_inclusion(translation: str, required_words: List[str]) -> Dict:
+def satisfaction_inclusion(translation: str, required_words: List[str], is_tr_target: bool = False) -> Dict:
     """Return per-word and overall inclusion satisfaction."""
     details = {}
     for w in required_words:
-        present = _contains_word(translation, w)
+        present = _contains_word(translation, w, is_tr_target)
         details[w] = {"present": present, "satisfied": present}
     overall = all(v["present"] for v in details.values())
     return {"overall": overall, "details": details}
@@ -160,10 +163,13 @@ def evaluate_sample(result: SampleResult) -> Dict:
     """
     baseline = result.unconstrained
     metrics  = {}
+    
+    # Check if the target language is Turkish based on the direction string (e.g., "EN→TR")
+    is_tr_target = "→TR" in result.direction or "en-tr" in result.direction.lower()
 
     # ── Hard exclusion ────────────────────────────────────────────────────────
     if result.hard_exclusion and result.forbidden_words:
-        sat  = satisfaction_exclusion(result.hard_exclusion, result.forbidden_words)
+        sat  = satisfaction_exclusion(result.hard_exclusion, result.forbidden_words, is_tr_target)
         bleu = compute_bleu(result.hard_exclusion, baseline)
         violated_at_baseline = (not sat["overall"]) and (bleu is not None and bleu >= 99.9)
         metrics["hard_exclusion"] = {
@@ -176,7 +182,7 @@ def evaluate_sample(result: SampleResult) -> Dict:
 
     # ── Hard inclusion (soft-first gate) ──────────────────────────────────────
     if result.hard_inclusion and result.required_words:
-        sat = satisfaction_inclusion(result.hard_inclusion, result.required_words)
+        sat = satisfaction_inclusion(result.hard_inclusion, result.required_words, is_tr_target)
         metrics["hard_inclusion"] = {
             "satisfaction"    : sat,
             "bleu_vs_baseline": compute_bleu(result.hard_inclusion, baseline),
@@ -186,7 +192,7 @@ def evaluate_sample(result: SampleResult) -> Dict:
 
     # ── Hard inclusion ablation (pure hard boost, no soft gate) ───────────────
     if result.hard_inclusion_ablation and result.required_words:
-        sat = satisfaction_inclusion(result.hard_inclusion_ablation, result.required_words)
+        sat = satisfaction_inclusion(result.hard_inclusion_ablation, result.required_words, is_tr_target)
         metrics["hard_inclusion_ablation"] = {
             "satisfaction"    : sat,
             "bleu_vs_baseline": compute_bleu(result.hard_inclusion_ablation, baseline),
@@ -197,11 +203,11 @@ def evaluate_sample(result: SampleResult) -> Dict:
     # ── Hard combined (exclusion + inclusion simultaneously) ──────────────────
     if result.hard_combined and (result.forbidden_words or result.required_words):
         excl_sat = (
-            satisfaction_exclusion(result.hard_combined, result.forbidden_words)
+            satisfaction_exclusion(result.hard_combined, result.forbidden_words, is_tr_target)
             if result.forbidden_words else {"overall": True, "details": {}}
         )
         incl_sat = (
-            satisfaction_inclusion(result.hard_combined, result.required_words)
+            satisfaction_inclusion(result.hard_combined, result.required_words, is_tr_target)
             if result.required_words else {"overall": True, "details": {}}
         )
         bleu = compute_bleu(result.hard_combined, baseline)
@@ -216,7 +222,7 @@ def evaluate_sample(result: SampleResult) -> Dict:
 
     # ── Soft penalty (isolated — no reward, no escalation) ────────────────────
     if result.soft_penalty and result.penalty_words:
-        sat  = satisfaction_exclusion(result.soft_penalty, result.penalty_words)
+        sat  = satisfaction_exclusion(result.soft_penalty, result.penalty_words, is_tr_target)
         bleu = compute_bleu(result.soft_penalty, baseline)
         violated_at_baseline = (not sat["overall"]) and (bleu is not None and bleu >= 99.9)
         metrics["soft_penalty"] = {
@@ -229,7 +235,7 @@ def evaluate_sample(result: SampleResult) -> Dict:
 
     # ── Soft reward (isolated — with escalation ladder) ───────────────────────
     if result.soft_reward and result.reward_words:
-        sat = satisfaction_inclusion(result.soft_reward, result.reward_words)
+        sat = satisfaction_inclusion(result.soft_reward, result.reward_words, is_tr_target)
         metrics["soft_reward"] = {
             "satisfaction"    : sat,
             "bleu_vs_baseline": compute_bleu(result.soft_reward, baseline),
@@ -240,11 +246,11 @@ def evaluate_sample(result: SampleResult) -> Dict:
     # ── Soft combined (pure soft — no escalation) ─────────────────────────────
     if result.soft_combined and (result.penalty_words or result.reward_words):
         pen_sat = (
-            satisfaction_exclusion(result.soft_combined, result.penalty_words)
+            satisfaction_exclusion(result.soft_combined, result.penalty_words, is_tr_target)
             if result.penalty_words else {"overall": True, "details": {}}
         )
         rew_sat = (
-            satisfaction_inclusion(result.soft_combined, result.reward_words)
+            satisfaction_inclusion(result.soft_combined, result.reward_words, is_tr_target)
             if result.reward_words else {"overall": True, "details": {}}
         )
         bleu = compute_bleu(result.soft_combined, baseline)

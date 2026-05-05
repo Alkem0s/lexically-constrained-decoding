@@ -15,11 +15,15 @@ from constraints import (
 def _turkish_lower(s: str) -> str:
     return s.replace('İ', 'i').replace('I', 'ı').lower()
 
-def _missing_words(translation: str, words: List[str]) -> List[str]:
-    """Exact-word check, consistent with evaluation.satisfaction_inclusion."""
+def _missing_words(translation: str, words: List[str], is_tr_target: bool = False) -> List[str]:
+    """Exact-word check, or stem-check for Turkish."""
     def _contains(text, word):
         w = _turkish_lower(word)
-        pattern = r'(^|\W)' + re.escape(w) + r'(?=\W|$)'
+        if is_tr_target:
+            # Match the word boundary before, but allow valid Turkish letters after!
+            pattern = r'(^|\W)' + re.escape(w) + r'[a-zçğıöşü]*'
+        else:
+            pattern = r'(^|\W)' + re.escape(w) + r'(?=\W|$)'
         return bool(re.search(pattern, _turkish_lower(text)))
     return [w for w in words if not _contains(translation, w)]
 
@@ -126,17 +130,13 @@ def hard_inclusion(
     _force_hard    : bool = False,
 ) -> Tuple[str, List[Dict]]:
     
-    if not _force_hard:
-        soft_trans, soft_log = soft_reward_only(
-            model_wrapper, source_text, required_words,
-            reward_val=config.SOFT_REWARD_STRENGTH * 1.5,   # more aggressive on first pass
-        )
-        still_missing = _missing_words(soft_trans, required_words)
-        if not still_missing:
-            return soft_trans, soft_log
-        required_words = still_missing
-
-    token_sequences = model_wrapper.words_to_sequences(required_words)
+    # Check if we are translating into Turkish
+    is_en_tr = "en-tr" in model_wrapper.model_name
+    
+    # The soft-first gate has been removed. HardInclusionProcessor now natively
+    # handles early token leniency via HARD_INCL_EARLY_TOKENS.
+    # Expand Turkish constraints, leave English alone
+    token_sequences = model_wrapper.words_to_sequences(required_words, expand_tr=is_en_tr)
     if not token_sequences:
         return unconstrained(model_wrapper, source_text)
 
@@ -144,6 +144,9 @@ def hard_inclusion(
     min_content_tokens = max(3, min(5, src_len // 3))
     eos_id             = model_wrapper.tokenizer.eos_token_id
     boundary_mask      = model_wrapper.get_boundary_mask().to(config.DEVICE)
+
+    # Select the correct Suffix Penalty based on language direction
+    active_penalty = config.SUFFIX_PENALTY_TR if is_en_tr else config.SUFFIX_PENALTY_EN
 
     log       = []
     processor = HardInclusionProcessor(
@@ -154,6 +157,7 @@ def hard_inclusion(
         boost                    = config.HARD_INCLUSION_BOOST,
         log_store                = log,
         min_content_tokens       = min_content_tokens,
+        suffix_penalty           = active_penalty
     )
     outputs     = _generate(model_wrapper, source_text, processors=[processor])
     translation = model_wrapper.decode(outputs)
@@ -167,8 +171,10 @@ def combined_hard(
     required_words : List[str],
 ) -> Tuple[str, List[Dict], List[Dict]]:
 
+    is_en_tr = "en-tr" in model_wrapper.model_name
+
     forbidden_ids   = model_wrapper.flat_token_ids(forbidden_words)
-    token_sequences = model_wrapper.words_to_sequences(required_words)
+    token_sequences = model_wrapper.words_to_sequences(required_words, expand_tr=is_en_tr)
 
     if not forbidden_ids and not token_sequences:
         t, _ = unconstrained(model_wrapper, source_text)
@@ -180,45 +186,16 @@ def combined_hard(
     excl_log = []
     incl_log = []
 
-    # ── THE RERANKING PHASE ──
-    if forbidden_ids and token_sequences:
-        phase1_excl_log = []
-        excl_proc       = HardExclusionProcessor(forbidden_ids, log_store=phase1_excl_log)
-        
-        # Now returns a list of (candidate_string, score) tuples
-        candidates_with_scores = _generate_multi(
-            model_wrapper, source_text, processors=[excl_proc],
-            num_beams=config.COMBINED_HARD_RERANK_BEAMS,
-        )
-        
-        # Filter for candidates that satisfy the required words
-        passing = [
-            cand for cand in candidates_with_scores 
-            if not _missing_words(cand[0], required_words)
-        ]
-        
-        if passing:
-            best_candidate = max(
-                passing,
-                key=lambda c: (
-                    len(set(c[0].lower().split()) & baseline_tokens) / max(len(baseline_tokens), 1)
-                    + c[1] / max(len(c[0].split()), 1) * 0.3   # weighted score term
-                )
-            )[0]
-            
-            incl_log.append({
-                "step": 0, "type": "inclusion", "tokens": {},
-                "pending_count": 0,
-                "note": f"reranking: {len(passing)}/{len(candidates_with_scores)} passed, best selected by sequence score"
-            })
-            return best_candidate, phase1_excl_log, incl_log
-
     processors = []
+    if forbidden_ids:
+        processors.append(HardExclusionProcessor(forbidden_ids, log_store=excl_log))
+
     if token_sequences:
         src_len            = model_wrapper.encode(source_text)["input_ids"].shape[1]
         min_content_tokens = max(1, min(3, src_len // 4))
         eos_id             = model_wrapper.tokenizer.eos_token_id
         boundary_mask      = model_wrapper.get_boundary_mask().to(config.DEVICE)
+        active_penalty     = config.SUFFIX_PENALTY_TR if is_en_tr else config.SUFFIX_PENALTY_EN
 
         processors.append(
             HardInclusionProcessor(
@@ -228,10 +205,9 @@ def combined_hard(
                 boundary_mask            = boundary_mask,
                 log_store                = incl_log,
                 min_content_tokens       = min_content_tokens,
+                suffix_penalty           = active_penalty
             )
         )
-    if forbidden_ids:
-        processors.append(HardExclusionProcessor(forbidden_ids, log_store=excl_log))
 
     outputs     = _generate(model_wrapper, source_text, processors=processors)
     translation = model_wrapper.decode(outputs)
@@ -270,7 +246,10 @@ def soft_reward_only(
     reward_words  : List[str],
     reward_val    : float = config.SOFT_REWARD_STRENGTH,
 ) -> Tuple[str, List[Dict]]:
-    reward_groups = model_wrapper.words_to_token_ids(reward_words or [])
+    
+    is_en_tr = "en-tr" in model_wrapper.model_name
+    
+    reward_groups = model_wrapper.words_to_token_ids(reward_words or [], expand_tr=is_en_tr)
     if not reward_groups:
         return unconstrained(model_wrapper, source_text)
 
@@ -285,9 +264,10 @@ def soft_reward_only(
     outputs     = _generate(model_wrapper, source_text, processors=[processor])
     translation = model_wrapper.decode(outputs)
 
-    missing = _missing_words(translation, reward_words or [])
+    # PROPERLY PASS is_tr_target
+    missing = _missing_words(translation, reward_words or [], is_tr_target=is_en_tr)
     if missing:
-        boost_groups = model_wrapper.words_to_token_ids(missing)
+        boost_groups = model_wrapper.words_to_token_ids(missing, expand_tr=is_en_tr)
         boost_log    = []
         boost_proc   = SoftConstraintProcessor(
             reward_token_groups = boost_groups,
@@ -298,7 +278,7 @@ def soft_reward_only(
         )
         boost_outputs = _generate(model_wrapper, source_text, processors=[boost_proc])
         boost_trans   = model_wrapper.decode(boost_outputs)
-        still_missing = _missing_words(boost_trans, missing)
+        still_missing = _missing_words(boost_trans, missing, is_tr_target=is_en_tr)
 
         if not still_missing:
             log.append({"escalated": "soft_boost", "missing_words": missing})
@@ -328,7 +308,9 @@ def _soft_combined_pure(
     penalty_val   : float = config.SOFT_PENALTY_STRENGTH,
 ) -> Tuple[str, List[Dict]]:
     
-    reward_groups = model_wrapper.words_to_token_ids(reward_words or [])
+    is_en_tr = "en-tr" in model_wrapper.model_name
+    
+    reward_groups = model_wrapper.words_to_token_ids(reward_words or [], expand_tr=is_en_tr)
     penalty_ids   = model_wrapper.flat_token_ids(penalty_words or [])
 
     if not reward_groups and not penalty_ids:
@@ -356,6 +338,8 @@ def combined_soft(
     penalty_val   : float = config.SOFT_PENALTY_STRENGTH,
 ) -> Tuple[str, List[Dict]]:
     
+    is_en_tr = "en-tr" in model_wrapper.model_name
+    
     trans, log = _soft_combined_pure(
         model_wrapper, source_text,
         reward_words=reward_words, penalty_words=penalty_words,
@@ -363,7 +347,7 @@ def combined_soft(
     )
 
     # ── Post-generation retry (mirrors soft_reward_only escalation) ───────────
-    missing = _missing_words(trans, reward_words or [])
+    missing = _missing_words(trans, reward_words or [], is_tr_target=is_en_tr)
     if missing:
         retry_trans, _ = _soft_combined_pure(
             model_wrapper, source_text,
@@ -372,7 +356,7 @@ def combined_soft(
             penalty_val=penalty_val,
         )
         log.append({"escalated": "soft_boost", "missing_words": missing})
-        still_missing = _missing_words(retry_trans, missing)
+        still_missing = _missing_words(retry_trans, missing, is_tr_target=is_en_tr)
         if not still_missing:
             return retry_trans, log
         # If soft retry still fails, log it but return best effort
@@ -393,7 +377,9 @@ def soft_constrained(
     penalty_val   : float = config.SOFT_PENALTY_STRENGTH,
 ) -> Tuple[str, List[Dict]]:
 
-    reward_groups = model_wrapper.words_to_token_ids(reward_words or [])
+    is_en_tr = "en-tr" in model_wrapper.model_name
+
+    reward_groups = model_wrapper.words_to_token_ids(reward_words or [], expand_tr=is_en_tr)
     penalty_ids   = model_wrapper.flat_token_ids(penalty_words or [])
 
     if not reward_groups and not penalty_ids:
@@ -411,7 +397,8 @@ def soft_constrained(
     translation = model_wrapper.decode(outputs)
 
     if penalty_words:
-        still_forbidden = [w for w in penalty_words if _word_satisfied(translation, w)]
+        # Replaced _word_satisfied with _missing_words check to avoid crashing
+        still_forbidden = [w for w in penalty_words if not _missing_words(translation, [w])]
         if still_forbidden:
             hard_excl_ids    = model_wrapper.flat_token_ids(still_forbidden)
             retry_log        = []
@@ -419,9 +406,9 @@ def soft_constrained(
                 HardExclusionProcessor(hard_excl_ids, log_store=retry_log),
             ]
             if reward_groups:
-                still_missing = _missing_words(translation, reward_words or [])
+                still_missing = _missing_words(translation, reward_words or [], is_tr_target=is_en_tr)
                 if still_missing:
-                    retry_reward_groups = model_wrapper.words_to_token_ids(still_missing)
+                    retry_reward_groups = model_wrapper.words_to_token_ids(still_missing, expand_tr=is_en_tr)
                     retry_processors.append(SoftConstraintProcessor(
                         reward_token_groups = retry_reward_groups,
                         penalty_ids         = [],
@@ -438,9 +425,9 @@ def soft_constrained(
             })
 
     if reward_words:
-        missing = _missing_words(translation, reward_words)
+        missing = _missing_words(translation, reward_words, is_tr_target=is_en_tr)
         if missing:
-            retry_groups = model_wrapper.words_to_token_ids(missing)
+            retry_groups = model_wrapper.words_to_token_ids(missing, expand_tr=is_en_tr)
             retry_log    = []
             retry_proc   = SoftConstraintProcessor(
                 reward_token_groups = retry_groups,
@@ -451,7 +438,7 @@ def soft_constrained(
             )
             retry_outputs = _generate(model_wrapper, source_text, processors=[retry_proc])
             retry_trans   = model_wrapper.decode(retry_outputs)
-            still_missing = _missing_words(retry_trans, missing)
+            still_missing = _missing_words(retry_trans, missing, is_tr_target=is_en_tr)
             if not still_missing:
                 log.append({"escalated": "soft_boost", "missing_words": missing})
                 return retry_trans, log

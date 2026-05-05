@@ -109,9 +109,8 @@ class SoftConstraintProcessor(LogitsProcessor):
         for ids in self.pending_rewards.values():
             pending_ids.update(ids)
 
-        if pending_ids:
-            is_early = self._step <= 3
-            eff_reward = 0.0 if is_early else self._effective_reward()
+        if pending_ids and self._step > 3:
+            eff_reward = self._effective_reward()
             
             pending_tensor = torch.tensor(
                 list(pending_ids), dtype=torch.long, device=scores.device
@@ -162,6 +161,7 @@ class HardInclusionProcessor(LogitsProcessor):
         boost                    : float = config.HARD_INCLUSION_BOOST,
         log_store                : List[Dict] = None,
         min_content_tokens       : int = 3,
+        suffix_penalty           : float = 0.0,
     ):
         self.master_sequences     = {i: seq for i, seq in enumerate(required_token_sequences)}
         self.src_len              = src_len
@@ -171,6 +171,7 @@ class HardInclusionProcessor(LogitsProcessor):
         self.log_store            = log_store if log_store is not None else []
         self._step                = 0
         self.min_content_tokens   = min_content_tokens
+        self.suffix_penalty       = suffix_penalty
 
     def __call__(
         self,
@@ -245,9 +246,9 @@ class HardInclusionProcessor(LogitsProcessor):
                     scores[b, self.eos_token_id] -= 50.0
 
             # Morphological Escape Prevention 
-            if just_completed_any and self.boundary_mask is not None:
+            if just_completed_any and self.boundary_mask is not None and self.suffix_penalty < 0.0:
                 non_boundary = ~self.boundary_mask.to(scores.device)
-                scores[b, non_boundary] += config.SUFFIX_PENALTY
+                scores[b, non_boundary] += self.suffix_penalty
                 
             if pending_for_beam and self.eos_token_id is not None:
                 scores[b, self.eos_token_id] -= 50.0
