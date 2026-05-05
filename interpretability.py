@@ -132,7 +132,7 @@ def compare_analyses(
 
     # Output token-level detail to a file when the caller provides raw logs + tokenizer.
     if logs is not None and tokenizer is not None:
-        with open(log_file, "w", encoding="utf-8") as f:
+        with open(log_file, "a", encoding="utf-8") as f:
             for mode, log in logs.items():
                 if log:
                     print(f"\n  ── Token-level detail: {mode} ──", file=f)

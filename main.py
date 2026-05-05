@@ -85,7 +85,7 @@ def load_test_cases(path: str = "test_cases.json") -> tuple:
     return en_tr, tr_en
 
 
-EN_TR_CASES, TR_EN_CASES = load_test_cases()
+EN_TR_CASES, TR_EN_CASES = load_test_cases("test_cases_eval.json")
 
 
 # ── Per-sample runner ─────────────────────────────────────────────────────────

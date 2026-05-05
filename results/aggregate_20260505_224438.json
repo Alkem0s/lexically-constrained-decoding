@@ -1,0 +1,58 @@
+{
+  "hard_exclusion": {
+    "n_samples": 60,
+    "avg_satisfaction": 1.0,
+    "avg_bleu_vs_base": 56.9,
+    "avg_length_ratio": 0.987,
+    "n_violated_at_baseline": 0,
+    "n_escalated": 0
+  },
+  "hard_inclusion": {
+    "n_samples": 48,
+    "avg_satisfaction": 1.0,
+    "avg_bleu_vs_base": 50.78,
+    "avg_length_ratio": 1.274,
+    "n_violated_at_baseline": 0,
+    "n_escalated": 0
+  },
+  "hard_inclusion_ablation": {
+    "n_samples": 48,
+    "avg_satisfaction": 1.0,
+    "avg_bleu_vs_base": 50.78,
+    "avg_length_ratio": 1.274,
+    "n_violated_at_baseline": 0,
+    "n_escalated": 0
+  },
+  "soft_penalty": {
+    "n_samples": 60,
+    "avg_satisfaction": 1.0,
+    "avg_bleu_vs_base": 56.9,
+    "avg_length_ratio": 0.987,
+    "n_violated_at_baseline": 0,
+    "n_escalated": 0
+  },
+  "soft_reward": {
+    "n_samples": 48,
+    "avg_satisfaction": 0.938,
+    "avg_bleu_vs_base": 82.46,
+    "avg_length_ratio": 1.018,
+    "n_violated_at_baseline": 0,
+    "n_escalated": 19
+  },
+  "hard_combined": {
+    "n_samples": 60,
+    "avg_satisfaction": 0.95,
+    "avg_bleu_vs_base": 36.64,
+    "avg_length_ratio": 1.254,
+    "n_violated_at_baseline": 0,
+    "n_escalated": 0
+  },
+  "soft_combined": {
+    "n_samples": 60,
+    "avg_satisfaction": 0.767,
+    "avg_bleu_vs_base": 54.96,
+    "avg_length_ratio": 0.983,
+    "n_violated_at_baseline": 0,
+    "n_escalated": 17
+  }
+}

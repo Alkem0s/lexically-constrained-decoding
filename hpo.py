@@ -100,7 +100,7 @@ def main():
     tr_en_model = model_loader.load_tr_en()
     
     # 2. Load test cases and pre-calculate baselines
-    en_tr_all, tr_en_all = load_test_cases()
+    en_tr_all, tr_en_all = load_test_cases("test_cases_hpo.json")
     
     print("\n[Step 2] Pre-calculating unconstrained baselines...")
     for case in tqdm(en_tr_all, desc="  EN-TR Baselines"):

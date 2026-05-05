@@ -1,0 +1,796 @@
+{
+  "EN_TR": [
+    {
+      "source": "The cat sat on the mat.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "kedi"
+      ],
+      "required_words": [
+        "halı"
+      ],
+      "penalty_words": [
+        "kedi"
+      ],
+      "reward_words": [
+        "halı"
+      ]
+    },
+    {
+      "source": "She bought a new car yesterday.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yeni"
+      ],
+      "required_words": [
+        "araba"
+      ],
+      "penalty_words": [
+        "yeni"
+      ],
+      "reward_words": [
+        "araba"
+      ]
+    },
+    {
+      "source": "The sun rises in the east.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "doğu"
+      ],
+      "required_words": [
+        "güneş"
+      ],
+      "penalty_words": [
+        "doğu"
+      ],
+      "reward_words": [
+        "güneş"
+      ]
+    },
+    {
+      "source": "I love eating fresh fruit.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "taze"
+      ],
+      "required_words": [
+        "meyve"
+      ],
+      "penalty_words": [
+        "taze"
+      ],
+      "reward_words": [
+        "meyve"
+      ]
+    },
+    {
+      "source": "He is a good student.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "iyi"
+      ],
+      "required_words": [
+        "öğrenci"
+      ],
+      "penalty_words": [
+        "iyi"
+      ],
+      "reward_words": [
+        "öğrenci"
+      ]
+    },
+    {
+      "source": "The doctor advised the patient to exercise.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "doktor"
+      ],
+      "required_words": [
+        "hekim"
+      ],
+      "penalty_words": [
+        "doktor"
+      ],
+      "reward_words": [
+        "hekim"
+      ]
+    },
+    {
+      "source": "Climate change is a serious problem.",
+      "direction": "EN→TR",
+      "forbidden_words": [],
+      "required_words": [
+        "iklim değişikliği"
+      ],
+      "penalty_words": [],
+      "reward_words": [
+        "iklim değişikliği"
+      ]
+    },
+    {
+      "source": "The algorithm optimizes the loss function.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "fonksiyon"
+      ],
+      "required_words": [
+        "algoritma"
+      ],
+      "penalty_words": [
+        "fonksiyon"
+      ],
+      "reward_words": [
+        "algoritma"
+      ]
+    },
+    {
+      "source": "The lawyer presented the evidence in court.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "avukat"
+      ],
+      "required_words": [
+        "kanıt"
+      ],
+      "penalty_words": [
+        "avukat"
+      ],
+      "reward_words": [
+        "kanıt"
+      ]
+    },
+    {
+      "source": "Nuclear physics requires advanced mathematics.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "fizik"
+      ],
+      "required_words": [
+        "nükleer"
+      ],
+      "penalty_words": [
+        "fizik"
+      ],
+      "reward_words": [
+        "nükleer"
+      ]
+    },
+    {
+      "source": "The dog chased the cat.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "kovaladı"
+      ],
+      "required_words": [
+        "köpek",
+        "kedi"
+      ],
+      "penalty_words": [
+        "kovaladı"
+      ],
+      "reward_words": [
+        "köpek",
+        "kedi"
+      ]
+    },
+    {
+      "source": "He drank coffee in the morning.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "içti"
+      ],
+      "required_words": [
+        "kahve",
+        "sabah"
+      ],
+      "penalty_words": [
+        "içti"
+      ],
+      "reward_words": [
+        "kahve",
+        "sabah"
+      ]
+    },
+    {
+      "source": "They walked through the green park.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yürüdü"
+      ],
+      "required_words": [
+        "yeşil",
+        "park"
+      ],
+      "penalty_words": [
+        "yürüdü"
+      ],
+      "reward_words": [
+        "yeşil",
+        "park"
+      ]
+    },
+    {
+      "source": "The boy kicked the red ball.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "çocuk"
+      ],
+      "required_words": [
+        "kırmızı",
+        "top"
+      ],
+      "penalty_words": [
+        "çocuk"
+      ],
+      "reward_words": [
+        "kırmızı",
+        "top"
+      ]
+    },
+    {
+      "source": "She read a book in the library.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "okudu"
+      ],
+      "required_words": [
+        "kitap",
+        "kütüphane"
+      ],
+      "penalty_words": [
+        "okudu"
+      ],
+      "reward_words": [
+        "kitap",
+        "kütüphane"
+      ]
+    },
+    {
+      "source": "Artificial intelligence is transforming the global economy.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "ekonomi"
+      ],
+      "required_words": [
+        "yapay zeka",
+        "dönüşüm"
+      ],
+      "penalty_words": [
+        "ekonomi"
+      ],
+      "reward_words": [
+        "yapay zeka",
+        "dönüşüm"
+      ]
+    },
+    {
+      "source": "The software engineer fixed the bug.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "hata"
+      ],
+      "required_words": [
+        "yazılım mühendisi",
+        "çözmek"
+      ],
+      "penalty_words": [
+        "hata"
+      ],
+      "reward_words": [
+        "yazılım mühendisi",
+        "çözmek"
+      ]
+    },
+    {
+      "source": "Global warming threatens polar bear habitats.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "kutup"
+      ],
+      "required_words": [
+        "küresel ısınma",
+        "tehdit"
+      ],
+      "penalty_words": [
+        "kutup"
+      ],
+      "reward_words": [
+        "küresel ısınma",
+        "tehdit"
+      ]
+    },
+    {
+      "source": "The stock exchange fluctuates daily.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "günlük"
+      ],
+      "required_words": [
+        "borsa",
+        "dalgalanmak"
+      ],
+      "penalty_words": [
+        "günlük"
+      ],
+      "reward_words": [
+        "borsa",
+        "dalgalanmak"
+      ]
+    },
+    {
+      "source": "Cybersecurity experts detected a massive breach.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "büyük"
+      ],
+      "required_words": [
+        "siber güvenlik",
+        "ihlal"
+      ],
+      "penalty_words": [
+        "büyük"
+      ],
+      "reward_words": [
+        "siber güvenlik",
+        "ihlal"
+      ]
+    },
+    {
+      "source": "The fast red car won the race.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "hızlı",
+        "kırmızı"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "hızlı",
+        "kırmızı"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "The weather is extremely cold today.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "hava",
+        "çok"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "hava",
+        "çok"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "He spoke very loudly during the meeting.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "çok",
+        "toplantı"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "çok",
+        "toplantı"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "The beautiful painting was sold at auction.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "güzel",
+        "tablo"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "güzel",
+        "tablo"
+      ],
+      "reward_words": []
+    }
+  ],
+  "TR_EN": [
+    {
+      "source": "Kedi halının üzerinde oturdu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "cat"
+      ],
+      "required_words": [
+        "feline"
+      ],
+      "penalty_words": [
+        "cat"
+      ],
+      "reward_words": [
+        "feline"
+      ]
+    },
+    {
+      "source": "O dün yeni bir araba aldı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "car"
+      ],
+      "required_words": [
+        "vehicle"
+      ],
+      "penalty_words": [
+        "car"
+      ],
+      "reward_words": [
+        "vehicle"
+      ]
+    },
+    {
+      "source": "Güneş doğudan doğar.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "east"
+      ],
+      "required_words": [
+        "sun"
+      ],
+      "penalty_words": [
+        "east"
+      ],
+      "reward_words": [
+        "sun"
+      ]
+    },
+    {
+      "source": "Taze meyve yemeyi severim.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "fresh"
+      ],
+      "required_words": [
+        "fruit"
+      ],
+      "penalty_words": [
+        "fresh"
+      ],
+      "reward_words": [
+        "fruit"
+      ]
+    },
+    {
+      "source": "O iyi bir öğrenci.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "good"
+      ],
+      "required_words": [
+        "student"
+      ],
+      "penalty_words": [
+        "good"
+      ],
+      "reward_words": [
+        "student"
+      ]
+    },
+    {
+      "source": "Doktor hastaya ilaç yazdı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "doctor"
+      ],
+      "required_words": [
+        "physician"
+      ],
+      "penalty_words": [
+        "doctor"
+      ],
+      "reward_words": [
+        "physician"
+      ]
+    },
+    {
+      "source": "Yapay zeka iş dünyasını değiştiriyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "change"
+      ],
+      "required_words": [
+        "transforming"
+      ],
+      "penalty_words": [
+        "change"
+      ],
+      "reward_words": [
+        "transforming"
+      ]
+    },
+    {
+      "source": "Algoritma kayıp fonksiyonunu optimize eder.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "function"
+      ],
+      "required_words": [
+        "algorithm"
+      ],
+      "penalty_words": [
+        "function"
+      ],
+      "reward_words": [
+        "algorithm"
+      ]
+    },
+    {
+      "source": "Avukat kanıtı mahkemeye sundu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "lawyer"
+      ],
+      "required_words": [
+        "evidence"
+      ],
+      "penalty_words": [
+        "lawyer"
+      ],
+      "reward_words": [
+        "evidence"
+      ]
+    },
+    {
+      "source": "Nükleer fizik ileri matematik gerektirir.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "physics"
+      ],
+      "required_words": [
+        "nuclear"
+      ],
+      "penalty_words": [
+        "physics"
+      ],
+      "reward_words": [
+        "nuclear"
+      ]
+    },
+    {
+      "source": "Büyük köpek küçük kediyi kovaladı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "dog",
+        "cat"
+      ],
+      "required_words": [
+        "hound",
+        "feline"
+      ],
+      "penalty_words": [
+        "dog",
+        "cat"
+      ],
+      "reward_words": [
+        "hound",
+        "feline"
+      ]
+    },
+    {
+      "source": "Sabahları kahve içmeyi severim.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "coffee"
+      ],
+      "required_words": [
+        "morning",
+        "beverage"
+      ],
+      "penalty_words": [
+        "coffee"
+      ],
+      "reward_words": [
+        "morning",
+        "beverage"
+      ]
+    },
+    {
+      "source": "Yeşil parkın içinden yürüdüler.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "walked"
+      ],
+      "required_words": [
+        "green",
+        "park"
+      ],
+      "penalty_words": [
+        "walked"
+      ],
+      "reward_words": [
+        "green",
+        "park"
+      ]
+    },
+    {
+      "source": "Çocuk kırmızı topa vurdu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "boy"
+      ],
+      "required_words": [
+        "red",
+        "ball"
+      ],
+      "penalty_words": [
+        "boy"
+      ],
+      "reward_words": [
+        "red",
+        "ball"
+      ]
+    },
+    {
+      "source": "Kütüphanede bir kitap okudu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "read"
+      ],
+      "required_words": [
+        "book",
+        "library"
+      ],
+      "penalty_words": [
+        "read"
+      ],
+      "reward_words": [
+        "book",
+        "library"
+      ]
+    },
+    {
+      "source": "Modern mimari estetik ve işlevselliği birleştirir.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "modern"
+      ],
+      "required_words": [
+        "contemporary",
+        "aesthetics"
+      ],
+      "penalty_words": [
+        "modern"
+      ],
+      "reward_words": [
+        "contemporary",
+        "aesthetics"
+      ]
+    },
+    {
+      "source": "Enflasyon oranları geçen yıla göre düştü.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "down"
+      ],
+      "required_words": [
+        "inflation",
+        "decrease"
+      ],
+      "penalty_words": [
+        "down"
+      ],
+      "reward_words": [
+        "inflation",
+        "decrease"
+      ]
+    },
+    {
+      "source": "Küresel ısınma kutup ayılarının yaşam alanlarını tehdit ediyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "polar"
+      ],
+      "required_words": [
+        "global warming",
+        "threatens"
+      ],
+      "penalty_words": [
+        "polar"
+      ],
+      "reward_words": [
+        "global warming",
+        "threatens"
+      ]
+    },
+    {
+      "source": "Borsa günlük olarak dalgalanıyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "daily"
+      ],
+      "required_words": [
+        "stock market",
+        "fluctuates"
+      ],
+      "penalty_words": [
+        "daily"
+      ],
+      "reward_words": [
+        "stock market",
+        "fluctuates"
+      ]
+    },
+    {
+      "source": "Siber güvenlik uzmanları büyük bir ihlal tespit etti.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "massive"
+      ],
+      "required_words": [
+        "cybersecurity",
+        "breach"
+      ],
+      "penalty_words": [
+        "massive"
+      ],
+      "reward_words": [
+        "cybersecurity",
+        "breach"
+      ]
+    },
+    {
+      "source": "Hızlı kırmızı araba yarışı kazandı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "fast",
+        "red"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "fast",
+        "red"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Hava bugün aşırı soğuk.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "weather",
+        "very"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "weather",
+        "very"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Toplantı sırasında çok yüksek sesle konuştu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "very",
+        "meeting"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "very",
+        "meeting"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Güzel tablo açık artırmada satıldı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "beautiful",
+        "painting"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "beautiful",
+        "painting"
+      ],
+      "reward_words": []
+    }
+  ]
+}

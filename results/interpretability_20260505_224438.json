@@ -1,0 +1,4682 @@
+[
+  {
+    "source": "The bird flew over the tall tree.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 803.9,
+        "avg_original_prob": 0.06615783167774225,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 14.75,
+        "avg_original_prob": 0.00046778094929322833,
+        "avg_delta": 1.6805952237148933,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.7857142857142857
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 14,
+        "avg_original_rank": 14.75,
+        "avg_original_prob": 0.00046778094929322833,
+        "avg_delta": 1.6805952237148933,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.7857142857142857
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 15,
+        "avg_original_rank": 2699.8,
+        "avg_original_prob": 0.04411023007436749,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 15,
+        "avg_original_rank": 60.5,
+        "avg_original_prob": 0.0009675853791122791,
+        "avg_delta": 6.512535701343404,
+        "max_delta": 50.0,
+        "beam_pressure": 0.8
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 803.9,
+        "avg_original_prob": 0.06615783167774225,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 10,
+        "avg_original_rank": 803.9,
+        "avg_original_prob": 0.06615783167774225,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "I drink water every morning.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 22848.972222222223,
+        "avg_original_prob": 0.00714139251156265,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.375
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.375
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 8,
+        "avg_original_rank": 22848.972222222223,
+        "avg_original_prob": 0.00714139251156265,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 8,
+        "avg_original_rank": 37.5,
+        "avg_original_prob": 0.39739046787144616,
+        "avg_delta": 0.8402976118574467,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.125
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 22848.972222222223,
+        "avg_original_prob": 0.00714139251156265,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 22848.972222222223,
+        "avg_original_prob": 0.00714139251156265,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "He plays football with his friends.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 14671.474431818182,
+        "avg_original_prob": 0.0022027573267467656,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 12,
+        "avg_original_rank": 15098.2,
+        "avg_original_prob": 0.10361666783891224,
+        "avg_delta": 26.078242929805064,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 12,
+        "avg_original_rank": 15098.2,
+        "avg_original_prob": 0.10361666783891224,
+        "avg_delta": 26.078242929805064,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 12,
+        "avg_original_rank": 15990.61553030303,
+        "avg_original_prob": 0.0014728499956723038,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 12,
+        "avg_original_rank": 12699.5,
+        "avg_original_prob": 0.08385887108385266,
+        "avg_delta": 22.004920509913518,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 14671.474431818182,
+        "avg_original_prob": 0.0022027573267467656,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 7,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 14671.474431818182,
+        "avg_original_prob": 0.0022027573267467656,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "She likes to watch movies.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 6,
+        "avg_original_rank": 22910.73148148148,
+        "avg_original_prob": 0.00038335460381042796,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.375
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.375
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 8,
+        "avg_original_rank": 24116.791666666668,
+        "avg_original_prob": 0.0002894427777429234,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.25
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 6,
+        "avg_original_rank": 22910.73148148148,
+        "avg_original_prob": 0.00038335460381042796,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 6,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 6,
+        "avg_original_rank": 22910.73148148148,
+        "avg_original_prob": 0.00038335460381042796,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The train arrived late.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 6,
+        "avg_original_rank": 15264.2507788162,
+        "avg_original_prob": 0.0023244594216910957,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 6,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.5
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 6,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.5
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 6,
+        "avg_original_rank": 15264.2507788162,
+        "avg_original_prob": 0.0023244594216910957,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 6,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": 0.16666666666666666
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 6,
+        "avg_original_rank": 15264.2507788162,
+        "avg_original_prob": 0.0023244594216910957,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 6,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 6,
+        "avg_original_rank": 15264.2507788162,
+        "avg_original_prob": 0.0023244594216910957,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The book is on the table.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 16560.260869565216,
+        "avg_original_prob": 0.015828150113981868,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 23086.75,
+        "avg_original_prob": 0.007745096469761847,
+        "avg_delta": 20.040298866764637,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 10,
+        "avg_original_rank": 23086.75,
+        "avg_original_prob": 0.007745096469761847,
+        "avg_delta": 20.040298866764637,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 12953.98023715415,
+        "avg_original_prob": 0.010392118250068713,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 31890.0,
+        "avg_original_prob": 0.007777996625009109,
+        "avg_delta": 15.659932414149784,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 16560.260869565216,
+        "avg_original_prob": 0.015828150113981868,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 7,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 7,
+        "avg_original_rank": 16560.260869565216,
+        "avg_original_prob": 0.015828150113981868,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The patient needs immediate surgery.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 16950.217647058824,
+        "avg_original_prob": 0.0034173986006926574,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 12,
+        "avg_original_rank": 5317.2,
+        "avg_original_prob": 2.5468045828347384e-05,
+        "avg_delta": 19.007716832704354,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 12,
+        "avg_original_rank": 5317.2,
+        "avg_original_prob": 2.5468045828347384e-05,
+        "avg_delta": 19.007716832704354,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 12,
+        "avg_original_rank": 16478.941176470587,
+        "avg_original_prob": 0.0028728817252030754,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 12,
+        "avg_original_rank": 8532.142857142857,
+        "avg_original_prob": 0.00014437246285784307,
+        "avg_delta": 13.744355937603688,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 16950.217647058824,
+        "avg_original_prob": 0.0034173986006926574,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 12,
+        "avg_original_rank": 16950.217647058824,
+        "avg_original_prob": 0.0034173986006926574,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The CEO resigned yesterday.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 15711.47619047619,
+        "avg_original_prob": 3.4485952254282804e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 24229.8,
+        "avg_original_prob": 0.004112940801223886,
+        "avg_delta": 27.463698775108877,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 11,
+        "avg_original_rank": 24229.8,
+        "avg_original_prob": 0.004112940801223886,
+        "avg_delta": 27.463698775108877,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 18438.121212121212,
+        "avg_original_prob": 2.5568522343030164e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 17885.714285714286,
+        "avg_original_prob": 0.002939021197367505,
+        "avg_delta": 20.694102266244762,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 15711.47619047619,
+        "avg_original_prob": 3.4485952254282804e-05,
+        "avg_delta": 15.581295320316901,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 7,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 7,
+        "avg_original_rank": 15711.47619047619,
+        "avg_original_prob": 3.4485952254282804e-05,
+        "avg_delta": 15.581295320316901,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Quantum computing is the future.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 13571.801136363636,
+        "avg_original_prob": 0.0009755080999909183,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 17,
+        "avg_original_rank": 11.333333333333334,
+        "avg_original_prob": 0.12710416103194197,
+        "avg_delta": 9.733829353095745,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5294117647058824
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 17,
+        "avg_original_rank": 11.333333333333334,
+        "avg_original_prob": 0.12710416103194197,
+        "avg_delta": 9.733829353095745,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5294117647058824
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 18,
+        "avg_original_rank": 16766.007575757576,
+        "avg_original_prob": 0.001017686547061097,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 18,
+        "avg_original_rank": 17.6,
+        "avg_original_prob": 0.13889760320234928,
+        "avg_delta": 11.176416656600425,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5555555555555556
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 13571.801136363636,
+        "avg_original_prob": 0.0009755080999909183,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 7,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 13571.801136363636,
+        "avg_original_prob": 0.0009755080999909183,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The stock market crashed.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 6,
+        "avg_original_rank": 11113.552083333334,
+        "avg_original_prob": 7.673818346424592e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 4.0,
+        "avg_original_prob": 7.524343042556818e-05,
+        "avg_delta": 1.6805952237148933,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.6
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 10,
+        "avg_original_rank": 4.0,
+        "avg_original_prob": 7.524343042556818e-05,
+        "avg_delta": 1.6805952237148933,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.6
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 10,
+        "avg_original_rank": 12288.54375,
+        "avg_original_prob": 4.8329356002518864e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 10,
+        "avg_original_rank": 19.75,
+        "avg_original_prob": 0.000456959513030597,
+        "avg_delta": 1.26044641778617,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.5
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 6,
+        "avg_original_rank": 11113.552083333334,
+        "avg_original_prob": 7.673818346424592e-05,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 5,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 6,
+        "avg_original_rank": 11113.552083333334,
+        "avg_original_prob": 7.673818346424592e-05,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The renewable energy sector is growing.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 14039.411764705883,
+        "avg_original_prob": 0.00856436558877439,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 13,
+        "avg_original_rank": 25337.285714285714,
+        "avg_original_prob": 0.00017261303068088246,
+        "avg_delta": 32.13909618247777,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6923076923076923
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 13,
+        "avg_original_rank": 25337.285714285714,
+        "avg_original_prob": 0.00017261303068088246,
+        "avg_delta": 32.13909618247777,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6923076923076923
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 13,
+        "avg_original_rank": 11222.977375565612,
+        "avg_original_prob": 0.00481100743894005,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 13,
+        "avg_original_rank": 22844.625,
+        "avg_original_prob": 0.00014929452170520108,
+        "avg_delta": 28.784815564798823,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6923076923076923
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 14039.411764705883,
+        "avg_original_prob": 0.00856436558877439,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 7,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 7,
+        "avg_original_rank": 14039.411764705883,
+        "avg_original_prob": 0.00856436558877439,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The detective found a crucial clue.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 11018.729166666666,
+        "avg_original_prob": 0.004381620712982957,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 12,
+        "avg_original_rank": 12792.0,
+        "avg_original_prob": 4.339656530711571e-05,
+        "avg_delta": 18.5546550410261,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 12,
+        "avg_original_rank": 12792.0,
+        "avg_original_prob": 4.339656530711571e-05,
+        "avg_delta": 18.5546550410261,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 8464.9375,
+        "avg_original_prob": 0.003594488674758574,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 5270.0,
+        "avg_original_prob": 4.822254378008698e-05,
+        "avg_delta": 18.257462869810087,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 11018.729166666666,
+        "avg_original_prob": 0.004381620712982957,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 11018.729166666666,
+        "avg_original_prob": 0.004381620712982957,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "A small dog barked at the big cat.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 12,
+        "avg_original_rank": 4151.4,
+        "avg_original_prob": 0.023195293832639883,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 18,
+        "avg_original_rank": 8607.368421052632,
+        "avg_original_prob": 0.0004687322907437575,
+        "avg_delta": 11.739310672738968,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2222222222222223
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 18,
+        "avg_original_rank": 8607.368421052632,
+        "avg_original_prob": 0.0004687322907437575,
+        "avg_delta": 11.739310672738968,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2222222222222223
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 18,
+        "avg_original_rank": 4278.222222222223,
+        "avg_original_prob": 0.015690888503194205,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 18,
+        "avg_original_rank": 6212.826086956522,
+        "avg_original_prob": 0.0005447241312100706,
+        "avg_delta": 9.74408867721371,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2222222222222223
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 12,
+        "avg_original_rank": 4151.4,
+        "avg_original_prob": 0.023195293832639883,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 12,
+        "avg_original_rank": 4151.4,
+        "avg_original_prob": 0.023195293832639883,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "She wrote a letter to her mother.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 4464.09375,
+        "avg_original_prob": 0.004565023590865043,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 13,
+        "avg_original_rank": 8494.142857142857,
+        "avg_original_prob": 0.05568127304450497,
+        "avg_delta": 26.031809720486027,
+        "max_delta": 50.0,
+        "beam_pressure": 0.9230769230769231
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 13,
+        "avg_original_rank": 8494.142857142857,
+        "avg_original_prob": 0.05568127304450497,
+        "avg_delta": 26.031809720486027,
+        "max_delta": 50.0,
+        "beam_pressure": 0.9230769230769231
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 13,
+        "avg_original_rank": 7565.121794871795,
+        "avg_original_prob": 0.0028160834494196743,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 13,
+        "avg_original_rank": 7812.25,
+        "avg_original_prob": 0.04422429195260236,
+        "avg_delta": 23.09234749637173,
+        "max_delta": 50.0,
+        "beam_pressure": 0.8461538461538461
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 4464.09375,
+        "avg_original_prob": 0.004565023590865043,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 4464.09375,
+        "avg_original_prob": 0.004565023590865043,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The strong wind blew away the tent.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 13678.83,
+        "avg_original_prob": 0.0037739356758058305,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 17,
+        "avg_original_rank": 4260.764705882353,
+        "avg_original_prob": 0.04136632087993482,
+        "avg_delta": 12.563329214975582,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1764705882352942
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 17,
+        "avg_original_rank": 4260.764705882353,
+        "avg_original_prob": 0.04136632087993482,
+        "avg_delta": 12.563329214975582,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1764705882352942
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 17,
+        "avg_original_rank": 12714.835294117647,
+        "avg_original_prob": 0.0022317543810972916,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 17,
+        "avg_original_rank": 3443.2631578947367,
+        "avg_original_prob": 0.03613071392265068,
+        "avg_delta": 11.275512287954012,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1764705882352942
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 13678.83,
+        "avg_original_prob": 0.0037739356758058305,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 10,
+        "avg_original_rank": 13678.83,
+        "avg_original_prob": 0.0037739356758058305,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "He opened the door and walked inside.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 16561.8125,
+        "avg_original_prob": 0.01241660899162067,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 12945.333333333334,
+        "avg_original_prob": 0.005038054033777447,
+        "avg_delta": 15.302090593843719,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2857142857142858
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 14,
+        "avg_original_rank": 12945.333333333334,
+        "avg_original_prob": 0.005038054033777447,
+        "avg_delta": 15.302090593843719,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2857142857142858
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 14,
+        "avg_original_rank": 19621.488095238095,
+        "avg_original_prob": 0.007142633808719098,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 14,
+        "avg_original_rank": 12759.266666666666,
+        "avg_original_prob": 0.005683804519454346,
+        "avg_delta": 18.027788493341617,
+        "max_delta": 50.0,
+        "beam_pressure": 1.3571428571428572
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 16561.8125,
+        "avg_original_prob": 0.01241660899162067,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 16561.8125,
+        "avg_original_prob": 0.01241660899162067,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "They ate dinner at a fancy restaurant.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 10841.173333333334,
+        "avg_original_prob": 0.0035457497669068544,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 16,
+        "avg_original_rank": 13592.470588235294,
+        "avg_original_prob": 0.00042380405974493926,
+        "avg_delta": 15.745014524871655,
+        "max_delta": 50.0,
+        "beam_pressure": 1.375
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 16,
+        "avg_original_rank": 13592.470588235294,
+        "avg_original_prob": 0.00042380405974493926,
+        "avg_delta": 15.745014524871655,
+        "max_delta": 50.0,
+        "beam_pressure": 1.375
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 17,
+        "avg_original_rank": 10242.325490196079,
+        "avg_original_prob": 0.0023667668760909335,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 17,
+        "avg_original_rank": 9026.777777777777,
+        "avg_original_prob": 0.0004491842726995148,
+        "avg_delta": 13.321446267253954,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2352941176470589
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 10841.173333333334,
+        "avg_original_prob": 0.0035457497669068544,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 10,
+        "avg_original_rank": 10841.173333333334,
+        "avg_original_prob": 0.0035457497669068544,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The blue sky was full of clouds.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 8256.026785714286,
+        "avg_original_prob": 0.008840868704079392,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 13,
+        "avg_original_rank": 14.4,
+        "avg_original_prob": 0.0003014523419551551,
+        "avg_delta": 1.6805952237148933,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.8461538461538461
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 13,
+        "avg_original_rank": 14.4,
+        "avg_original_prob": 0.0003014523419551551,
+        "avg_delta": 1.6805952237148933,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.8461538461538461
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 12,
+        "avg_original_rank": 10392.89880952381,
+        "avg_original_prob": 0.005903051104177897,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 12,
+        "avg_original_rank": 16.75,
+        "avg_original_prob": 0.0003893404709742754,
+        "avg_delta": 1.6805952237148933,
+        "max_delta": 1.6805952237148933,
+        "beam_pressure": 0.8333333333333334
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 8256.026785714286,
+        "avg_original_prob": 0.008840868704079392,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 8256.026785714286,
+        "avg_original_prob": 0.008840868704079392,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The international space station orbits the Earth.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 12,
+        "avg_original_rank": 11266.330128205129,
+        "avg_original_prob": 0.007435971675059856,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 21,
+        "avg_original_rank": 2260.3333333333335,
+        "avg_original_prob": 0.03321984808482862,
+        "avg_delta": 19.611876815438965,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2380952380952381
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 21,
+        "avg_original_rank": 2260.3333333333335,
+        "avg_original_prob": 0.03321984808482862,
+        "avg_delta": 19.611876815438965,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2380952380952381
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 22,
+        "avg_original_rank": 8474.09965034965,
+        "avg_original_prob": 0.004137544401633412,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 22,
+        "avg_original_rank": 3035.88,
+        "avg_original_prob": 0.009513771092302932,
+        "avg_delta": 14.741304126873276,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2727272727272727
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 12,
+        "avg_original_rank": 11266.330128205129,
+        "avg_original_prob": 0.007435971675059856,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 12,
+        "avg_original_rank": 11266.330128205129,
+        "avg_original_prob": 0.007435971675059856,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Machine translation uses neural networks.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 14640.363636363636,
+        "avg_original_prob": 0.006036628108763846,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 20,
+        "avg_original_rank": 11778.157894736842,
+        "avg_original_prob": 0.008510128143161398,
+        "avg_delta": 21.169081073727643,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 20,
+        "avg_original_rank": 11778.157894736842,
+        "avg_original_prob": 0.008510128143161398,
+        "avg_delta": 21.169081073727643,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 54,
+        "avg_original_rank": 17362.81349206349,
+        "avg_original_prob": 0.001600839201930818,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 54,
+        "avg_original_rank": 18691.619047619046,
+        "avg_original_prob": 0.011389415861356066,
+        "avg_delta": 18.90892852099874,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1666666666666667
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 11,
+        "avg_original_rank": 14640.363636363636,
+        "avg_original_prob": 0.006036628108763846,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 13,
+        "avg_original_rank": 14640.363636363636,
+        "avg_original_prob": 0.006036628108763846,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The central bank raised interest rates.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 21430.66287878788,
+        "avg_original_prob": 0.0028214971038636244,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 19,
+        "avg_original_rank": 11406.0,
+        "avg_original_prob": 0.025987875610161224,
+        "avg_delta": 18.021870047600675,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0526315789473684
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 19,
+        "avg_original_rank": 11406.0,
+        "avg_original_prob": 0.025987875610161224,
+        "avg_delta": 18.021870047600675,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0526315789473684
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 18,
+        "avg_original_rank": 19897.94107744108,
+        "avg_original_prob": 0.0027611086585717383,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 18,
+        "avg_original_rank": 9952.15,
+        "avg_original_prob": 0.05042648430649734,
+        "avg_delta": 14.563550218095575,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1111111111111112
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 21430.66287878788,
+        "avg_original_prob": 0.0028214971038636244,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 21430.66287878788,
+        "avg_original_prob": 0.0028214971038636244,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The archaeological dig revealed ancient artifacts.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 10529.712121212122,
+        "avg_original_prob": 0.014304437999279364,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 21,
+        "avg_original_rank": 5692.708333333333,
+        "avg_original_prob": 0.0010501291932409156,
+        "avg_delta": 19.695244384965232,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2380952380952381
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 21,
+        "avg_original_rank": 5692.708333333333,
+        "avg_original_prob": 0.0010501291932409156,
+        "avg_delta": 19.695244384965232,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2380952380952381
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 21,
+        "avg_original_rank": 16733.968253968254,
+        "avg_original_prob": 0.007608157876360238,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 21,
+        "avg_original_rank": 874.2173913043479,
+        "avg_original_prob": 0.0009563775850873081,
+        "avg_delta": 14.484897386209804,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2380952380952381
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 11,
+        "avg_original_rank": 10529.712121212122,
+        "avg_original_prob": 0.014304437999279364,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 10529.712121212122,
+        "avg_original_prob": 0.014304437999279364,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The new legislation will affect tax brackets.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 18450.4780058651,
+        "avg_original_prob": 0.0039910041207484445,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 18,
+        "avg_original_rank": 9558.764705882353,
+        "avg_original_prob": 0.0007364433690338836,
+        "avg_delta": 14.147847236242391,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1111111111111112
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 18,
+        "avg_original_rank": 9558.764705882353,
+        "avg_original_prob": 0.0007364433690338836,
+        "avg_delta": 14.147847236242391,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1111111111111112
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 18,
+        "avg_original_rank": 21261.697132616486,
+        "avg_original_prob": 0.002441701990407285,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 18,
+        "avg_original_rank": 9605.25,
+        "avg_original_prob": 0.0013256142049755226,
+        "avg_delta": 13.961147955025845,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2222222222222223
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 11,
+        "avg_original_rank": 18450.4780058651,
+        "avg_original_prob": 0.0039910041207484445,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 12,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 13,
+        "avg_original_rank": 18450.4780058651,
+        "avg_original_prob": 0.0039910041207484445,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Sustainable agriculture relies on water conservation.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 22523.3375,
+        "avg_original_prob": 0.006127476479365579,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 22,
+        "avg_original_rank": 439.9,
+        "avg_original_prob": 0.003390969656993548,
+        "avg_delta": 13.760446417786167,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2272727272727273
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 22,
+        "avg_original_rank": 439.9,
+        "avg_original_prob": 0.003390969656993548,
+        "avg_delta": 13.760446417786167,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2272727272727273
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 23,
+        "avg_original_rank": 20071.005434782608,
+        "avg_original_prob": 0.00317235766286423,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 23,
+        "avg_original_rank": 463.7916666666667,
+        "avg_original_prob": 0.002634371506511949,
+        "avg_delta": 13.76044641778617,
+        "max_delta": 50.0,
+        "beam_pressure": 1.3478260869565217
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 22523.3375,
+        "avg_original_prob": 0.006127476479365579,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 12,
+        "avg_original_rank": 22523.3375,
+        "avg_original_prob": 0.006127476479365579,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The quick brown fox jumps over the lazy dog.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 12,
+        "avg_original_rank": 18887.922222222223,
+        "avg_original_prob": 0.006671337584954632,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 12,
+        "avg_original_rank": 18887.922222222223,
+        "avg_original_prob": 0.006671337584954632,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 12,
+        "avg_original_rank": 18887.922222222223,
+        "avg_original_prob": 0.006671337584954632,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 12,
+        "avg_original_rank": 18887.922222222223,
+        "avg_original_prob": 0.006671337584954632,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "We must protect the environment.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 11695.541666666666,
+        "avg_original_prob": 0.008946755502064701,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 7,
+        "avg_original_rank": 11695.541666666666,
+        "avg_original_prob": 0.008946755502064701,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 11695.541666666666,
+        "avg_original_prob": 0.008946755502064701,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 7,
+        "avg_original_rank": 11695.541666666666,
+        "avg_original_prob": 0.008946755502064701,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The concert was very loud.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 11783.611538461539,
+        "avg_original_prob": 0.012263005006621341,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 10,
+        "avg_original_rank": 11783.611538461539,
+        "avg_original_prob": 0.012263005006621341,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 11783.611538461539,
+        "avg_original_prob": 0.012263005006621341,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 10,
+        "avg_original_rank": 11783.611538461539,
+        "avg_original_prob": 0.012263005006621341,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "She is studying for her final exams.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 14930.600961538461,
+        "avg_original_prob": 0.0012521642189538508,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 8,
+        "avg_original_rank": 14930.600961538461,
+        "avg_original_prob": 0.0012521642189538508,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 14930.600961538461,
+        "avg_original_prob": 0.0012521642189538508,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 14930.600961538461,
+        "avg_original_prob": 0.0012521642189538508,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The city is known for its beautiful architecture.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 11430.529914529914,
+        "avg_original_prob": 0.01812583622878307,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 9,
+        "avg_original_rank": 11430.529914529914,
+        "avg_original_prob": 0.01812583622878307,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 11430.529914529914,
+        "avg_original_prob": 0.01812583622878307,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 11430.529914529914,
+        "avg_original_prob": 0.01812583622878307,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "The museum was closed on Monday.",
+    "direction": "EN→TR",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 17173.72380952381,
+        "avg_original_prob": 0.002685820035452412,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 7,
+        "avg_original_rank": 17173.72380952381,
+        "avg_original_prob": 0.002685820035452412,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 17173.72380952381,
+        "avg_original_prob": 0.002685820035452412,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 7,
+        "avg_original_rank": 17173.72380952381,
+        "avg_original_prob": 0.002685820035452412,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Kuş yüksek ağacın üzerinden uçtu.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 10476.777777777777,
+        "avg_original_prob": 0.015784960665884838,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 34541.75,
+        "avg_original_prob": 9.486413858894593e-07,
+        "avg_delta": 12.151733085074783,
+        "max_delta": 14.761085625493854,
+        "beam_pressure": 0.45454545454545453
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 11,
+        "avg_original_rank": 34541.75,
+        "avg_original_prob": 9.486413858894593e-07,
+        "avg_delta": 12.151733085074783,
+        "max_delta": 14.761085625493854,
+        "beam_pressure": 0.45454545454545453
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 10982.88961038961,
+        "avg_original_prob": 0.012915818193926145,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 27215.6,
+        "avg_original_prob": 8.175878343763543e-06,
+        "avg_delta": 7.632314933302112,
+        "max_delta": 12.96542267849478,
+        "beam_pressure": 0.2727272727272727
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 10476.777777777777,
+        "avg_original_prob": 0.015784960665884838,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 10476.777777777777,
+        "avg_original_prob": 0.015784960665884838,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Her sabah su içerim.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 6066.536363636364,
+        "avg_original_prob": 0.012498501720535739,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 15082.0,
+        "avg_original_prob": 8.386769868214591e-06,
+        "avg_delta": 24.46918469514036,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 11,
+        "avg_original_rank": 15082.0,
+        "avg_original_prob": 8.386769868214591e-06,
+        "avg_delta": 24.46918469514036,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 5277.611570247934,
+        "avg_original_prob": 0.011497673328091337,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 6541.285714285715,
+        "avg_original_prob": 6.705336984071306e-05,
+        "avg_delta": 18.6791328594777,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 6066.536363636364,
+        "avg_original_prob": 0.012498501720535739,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": 3.0,
+        "avg_original_prob": 1.7863048583421914e-06,
+        "avg_delta": 7.53864263123874,
+        "max_delta": 8.47164125756493,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 5352.862385321101,
+        "avg_original_prob": 0.012613116155988136,
+        "avg_delta": 14.697460887731124,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Arkadaşlarıyla futbol oynar.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 13566.291666666666,
+        "avg_original_prob": 0.0040781767625624014,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 395.25,
+        "avg_original_prob": 0.0011007337179762544,
+        "avg_delta": 18.82618115572101,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 11,
+        "avg_original_rank": 395.25,
+        "avg_original_prob": 0.0011007337179762544,
+        "avg_delta": 18.82618115572101,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 13276.363636363636,
+        "avg_original_prob": 0.002988337917571594,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 378.1666666666667,
+        "avg_original_prob": 0.0006952986047205437,
+        "avg_delta": 12.83948823829966,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 13566.291666666666,
+        "avg_original_prob": 0.0040781767625624014,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 13566.291666666666,
+        "avg_original_prob": 0.0040781767625624014,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Film izlemeyi sever.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 8879.90909090909,
+        "avg_original_prob": 0.008144447819102557,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 2472.6666666666665,
+        "avg_original_prob": 2.1408285268383526e-05,
+        "avg_delta": 24.939060352579972,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 10,
+        "avg_original_rank": 2472.6666666666665,
+        "avg_original_prob": 2.1408285268383526e-05,
+        "avg_delta": 24.939060352579972,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 10,
+        "avg_original_rank": 6914.063636363637,
+        "avg_original_prob": 0.001652774396301931,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 10,
+        "avg_original_rank": 7774.6,
+        "avg_original_prob": 1.5043779126244771e-05,
+        "avg_delta": 16.84142222901487,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 8879.90909090909,
+        "avg_original_prob": 0.008144447819102557,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": 4.333333333333333,
+        "avg_original_prob": 0.00018134000159382899,
+        "avg_delta": 6.695150967433095,
+        "max_delta": 8.120306842188743,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 8056.340206185567,
+        "avg_original_prob": 0.007405603401512305,
+        "avg_delta": 14.74738203856363,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Tren geç geldi.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 30613.371399176955,
+        "avg_original_prob": 0.0038763126681207586,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 1068.6,
+        "avg_original_prob": 0.008849038043672408,
+        "avg_delta": 25.34985590807967,
+        "max_delta": 50.0,
+        "beam_pressure": 0.7
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 10,
+        "avg_original_rank": 1068.6,
+        "avg_original_prob": 0.008849038043672408,
+        "avg_delta": 25.34985590807967,
+        "max_delta": 50.0,
+        "beam_pressure": 0.7
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 29099.718013468013,
+        "avg_original_prob": 0.0023698006414186587,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 159.85714285714286,
+        "avg_original_prob": 0.008000549159987713,
+        "avg_delta": 15.246054413551368,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 30613.371399176955,
+        "avg_original_prob": 0.0038763126681207586,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": 3.0,
+        "avg_original_prob": 3.744835794350365e-06,
+        "avg_delta": 0.39500318405168855,
+        "max_delta": 0.39500318405168855,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 30613.371399176955,
+        "avg_original_prob": 0.0038763126681207586,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Kitap masanın üzerinde.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 7928.321428571428,
+        "avg_original_prob": 0.004705116854921191,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 3190.0,
+        "avg_original_prob": 6.0898838114553655e-06,
+        "avg_delta": 8.975196570106124,
+        "max_delta": 12.7873445486072,
+        "beam_pressure": 0.5
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 10,
+        "avg_original_rank": 3190.0,
+        "avg_original_prob": 6.0898838114553655e-06,
+        "avg_delta": 8.975196570106124,
+        "max_delta": 12.7873445486072,
+        "beam_pressure": 0.5
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 10,
+        "avg_original_rank": 8258.589285714286,
+        "avg_original_prob": 0.0037691095182937925,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 10,
+        "avg_original_rank": 5251.5,
+        "avg_original_prob": 1.353784928899889e-05,
+        "avg_delta": 5.866403648048017,
+        "max_delta": 12.294114250445693,
+        "beam_pressure": 0.6
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 7928.321428571428,
+        "avg_original_prob": 0.004705116854921191,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": 4.666666666666667,
+        "avg_original_prob": 1.7361713503305508e-06,
+        "avg_delta": 7.932339449386502,
+        "max_delta": 9.27894542460644,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 10,
+        "avg_original_rank": 7928.321428571428,
+        "avg_original_prob": 0.004705116854921191,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Hasta acil ameliyat olmalı.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 21684.678062678064,
+        "avg_original_prob": 9.363943004686712e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 2775.5,
+        "avg_original_prob": 1.581793731020298e-05,
+        "avg_delta": 20.54900551467665,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 11,
+        "avg_original_rank": 2775.5,
+        "avg_original_prob": 1.581793731020298e-05,
+        "avg_delta": 20.54900551467665,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 18695.480186480185,
+        "avg_original_prob": 0.00032163108675931085,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 2193.5,
+        "avg_original_prob": 1.272337495568839e-05,
+        "avg_delta": 14.808835547697,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5454545454545454
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 21684.678062678064,
+        "avg_original_prob": 9.363943004686712e-05,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 21684.678062678064,
+        "avg_original_prob": 9.363943004686712e-05,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "CEO dün istifa etti.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 23830.082706766916,
+        "avg_original_prob": 0.0004888267976550108,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 293.5,
+        "avg_original_prob": 0.007846672983589542,
+        "avg_delta": 16.45236168372738,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 11,
+        "avg_original_rank": 293.5,
+        "avg_original_prob": 0.007846672983589542,
+        "avg_delta": 16.45236168372738,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 25928.076555023923,
+        "avg_original_prob": 0.00031192023193461435,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 11,
+        "avg_original_rank": 240.33333333333334,
+        "avg_original_prob": 0.005530486719446041,
+        "avg_delta": 11.2483403264374,
+        "max_delta": 50.0,
+        "beam_pressure": 0.45454545454545453
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 23830.082706766916,
+        "avg_original_prob": 0.0004888267976550108,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 7,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 7,
+        "avg_original_rank": 23830.082706766916,
+        "avg_original_prob": 0.0004888267976550108,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Kuantum bilgisayarlar gelecektir.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 21286.796875,
+        "avg_original_prob": 0.003423425080944089,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 4484.666666666667,
+        "avg_original_prob": 4.6922021586700185e-06,
+        "avg_delta": 24.477502388096074,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 10,
+        "avg_original_rank": 4484.666666666667,
+        "avg_original_prob": 4.6922021586700185e-06,
+        "avg_delta": 24.477502388096074,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 3,
+        "avg_original_rank": 16458.489583333332,
+        "avg_original_prob": 0.0091251812393848,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 3,
+        "avg_original_rank": 57028.0,
+        "avg_original_prob": 0.0,
+        "avg_delta": 499.5,
+        "max_delta": 999.0,
+        "beam_pressure": 1.0
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 21286.796875,
+        "avg_original_prob": 0.003423425080944089,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 21286.796875,
+        "avg_original_prob": 0.003423425080944089,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Borsa çöktü.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 31496.845238095237,
+        "avg_original_prob": 0.00033783456956713664,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 1954.0,
+        "avg_original_prob": 3.33876309923653e-05,
+        "avg_delta": 25.444729303641843,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 10,
+        "avg_original_rank": 1954.0,
+        "avg_original_prob": 3.33876309923653e-05,
+        "avg_delta": 25.444729303641843,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 10,
+        "avg_original_rank": 30552.825,
+        "avg_original_prob": 0.0002373720321105388,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 10,
+        "avg_original_rank": 2886.2,
+        "avg_original_prob": 2.4809815749904372e-05,
+        "avg_delta": 15.146571944329974,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 31496.845238095237,
+        "avg_original_prob": 0.00033783456956713664,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 31496.845238095237,
+        "avg_original_prob": 0.00033783456956713664,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Yenilenebilir enerji sektörü büyüyor.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 16824.765625,
+        "avg_original_prob": 7.516887251979298e-06,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 181.28571428571428,
+        "avg_original_prob": 0.00041367351540040024,
+        "avg_delta": 8.583367334612765,
+        "max_delta": 50.0,
+        "beam_pressure": 0.7142857142857143
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 14,
+        "avg_original_rank": 181.28571428571428,
+        "avg_original_prob": 0.00041367351540040024,
+        "avg_delta": 8.583367334612765,
+        "max_delta": 50.0,
+        "beam_pressure": 0.7142857142857143
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 14,
+        "avg_original_rank": 20114.165178571428,
+        "avg_original_prob": 5.5061408518345246e-06,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 14,
+        "avg_original_rank": 167.22222222222223,
+        "avg_original_prob": 0.00042888788314283173,
+        "avg_delta": 6.862685174000472,
+        "max_delta": 50.0,
+        "beam_pressure": 0.7142857142857143
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 16824.765625,
+        "avg_original_prob": 7.516887251979298e-06,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 8,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 16824.765625,
+        "avg_original_prob": 7.516887251979298e-06,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Dedektif önemli bir ipucu buldu.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 31034.5,
+        "avg_original_prob": 0.0013423940368739455,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 29105.8,
+        "avg_original_prob": 0.0004064280721280511,
+        "avg_delta": 19.3127303909729,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 11,
+        "avg_original_rank": 29105.8,
+        "avg_original_prob": 0.0004064280721280511,
+        "avg_delta": 19.3127303909729,
+        "max_delta": 50.0,
+        "beam_pressure": 0.6363636363636364
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 12,
+        "avg_original_rank": 29465.98717948718,
+        "avg_original_prob": 0.0011882534445784136,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 12,
+        "avg_original_rank": 28207.714285714286,
+        "avg_original_prob": 0.0002936134820694341,
+        "avg_delta": 14.616208053176582,
+        "max_delta": 50.0,
+        "beam_pressure": 0.5833333333333334
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 31034.5,
+        "avg_original_prob": 0.0013423940368739455,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": 23.25,
+        "avg_original_prob": 3.1139995229523265e-05,
+        "avg_delta": 6.0063445350084415,
+        "max_delta": 9.773804457723465,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 29236.702898550724,
+        "avg_original_prob": 0.001266379309822095,
+        "avg_delta": 14.976069134824083,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Küçük köpek büyük kediye havladı.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 12,
+        "avg_original_rank": 15765.65909090909,
+        "avg_original_prob": 0.0013195009243337239,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 18,
+        "avg_original_rank": 1586.8095238095239,
+        "avg_original_prob": 0.009789073282063111,
+        "avg_delta": 8.751630211826127,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 18,
+        "avg_original_rank": 1586.8095238095239,
+        "avg_original_prob": 0.009789073282063111,
+        "avg_delta": 8.751630211826127,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 18,
+        "avg_original_rank": 16174.72053872054,
+        "avg_original_prob": 0.0008678362249043911,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 18,
+        "avg_original_rank": 1258.8636363636363,
+        "avg_original_prob": 0.014192053281414535,
+        "avg_delta": 7.935058206197474,
+        "max_delta": 50.0,
+        "beam_pressure": 0.7222222222222222
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 12,
+        "avg_original_rank": 15765.65909090909,
+        "avg_original_prob": 0.0013195009243337239,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 12,
+        "avg_original_rank": 5.0,
+        "avg_original_prob": 5.738300279561724e-06,
+        "avg_delta": 7.442482408833524,
+        "max_delta": 11.258726611108955,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 14,
+        "avg_original_rank": 14621.442622950819,
+        "avg_original_prob": 0.001224122373172883,
+        "avg_delta": 14.992193449360634,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Annesine bir mektup yazdı.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 19637.26767676768,
+        "avg_original_prob": 0.00940206507044786,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 12315.538461538461,
+        "avg_original_prob": 0.00019209096261035412,
+        "avg_delta": 14.50861022025153,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 14,
+        "avg_original_rank": 12315.538461538461,
+        "avg_original_prob": 0.00019209096261035412,
+        "avg_delta": 14.50861022025153,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 13,
+        "avg_original_rank": 14589.482517482518,
+        "avg_original_prob": 0.006520070446942856,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 13,
+        "avg_original_rank": 14732.6875,
+        "avg_original_prob": 9.868927048373166e-05,
+        "avg_delta": 10.126014269883619,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1538461538461537
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 19637.26767676768,
+        "avg_original_prob": 0.00940206507044786,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": 3.3333333333333335,
+        "avg_original_prob": 1.5551606221464453e-06,
+        "avg_delta": 8.33595763692661,
+        "max_delta": 11.530094713916418,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 12227.544025157233,
+        "avg_original_prob": 0.005855182507937336,
+        "avg_delta": 12.379753073803236,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Güçlü rüzgar çadırı uçurdu.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 21482.228395061727,
+        "avg_original_prob": 0.005922691033231717,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 15930.25,
+        "avg_original_prob": 0.00017523516155885469,
+        "avg_delta": 11.792750465331691,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1428571428571428
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 14,
+        "avg_original_rank": 15930.25,
+        "avg_original_prob": 0.00017523516155885469,
+        "avg_delta": 11.792750465331691,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1428571428571428
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 14,
+        "avg_original_rank": 20604.146825396827,
+        "avg_original_prob": 0.00381267467974063,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 14,
+        "avg_original_rank": 16023.42857142857,
+        "avg_original_prob": 0.000150239504055857,
+        "avg_delta": 10.420677160490593,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2142857142857142
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 21482.228395061727,
+        "avg_original_prob": 0.005922691033231717,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": 8.842105263157896,
+        "avg_original_prob": 3.025133006710683e-05,
+        "avg_delta": 7.802550613527617,
+        "max_delta": 9.545415000855293,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 19228.116022099446,
+        "avg_original_prob": 0.005305225797841783,
+        "avg_delta": 14.827703099956814,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Kapıyı açtı ve içeri girdi.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 10,
+        "avg_original_rank": 3377.5692307692307,
+        "avg_original_prob": 0.006869616173575056,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 9588.642857142857,
+        "avg_original_prob": 0.05622118991259738,
+        "avg_delta": 15.909235376862414,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2142857142857142
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 14,
+        "avg_original_rank": 9588.642857142857,
+        "avg_original_prob": 0.05622118991259738,
+        "avg_delta": 15.909235376862414,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2142857142857142
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 14,
+        "avg_original_rank": 5444.3626373626375,
+        "avg_original_prob": 0.0049177956463554665,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 14,
+        "avg_original_rank": 7834.111111111111,
+        "avg_original_prob": 0.04691455577799767,
+        "avg_delta": 12.213327602008079,
+        "max_delta": 50.0,
+        "beam_pressure": 1.2142857142857142
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 10,
+        "avg_original_rank": 3377.5692307692307,
+        "avg_original_prob": 0.006869616173575056,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": 7.0,
+        "avg_original_prob": 0.00879535232076835,
+        "avg_delta": 5.2956318773973,
+        "max_delta": 8.19596722894844,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 12,
+        "avg_original_rank": 3289.157894736842,
+        "avg_original_prob": 0.007206402598341838,
+        "avg_delta": 15.478795688536607,
+        "max_delta": 23.739233227311935,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Lüks bir restoranda akşam yemeği yediler.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 22714.603896103898,
+        "avg_original_prob": 0.0030521133237294364,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 17,
+        "avg_original_rank": 13868.611111111111,
+        "avg_original_prob": 0.0001422060817333204,
+        "avg_delta": 17.32778518695543,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1764705882352942
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 17,
+        "avg_original_rank": 13868.611111111111,
+        "avg_original_prob": 0.0001422060817333204,
+        "avg_delta": 17.32778518695543,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1764705882352942
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 17,
+        "avg_original_rank": 17228.659663865546,
+        "avg_original_prob": 0.008434456859706964,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 17,
+        "avg_original_rank": 13046.444444444445,
+        "avg_original_prob": 9.969318129618741e-05,
+        "avg_delta": 13.513019548245321,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1176470588235294
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 11,
+        "avg_original_rank": 22714.603896103898,
+        "avg_original_prob": 0.0030521133237294364,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 12,
+        "avg_original_rank": 5.2,
+        "avg_original_prob": 2.9523927469199408e-05,
+        "avg_delta": 7.382137841930029,
+        "max_delta": 10.150470557340679,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 21554.251592356686,
+        "avg_original_prob": 0.0031755437656288553,
+        "avg_delta": 15.412235960569305,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Mavi gökyüzü bulutlarla doluydu.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 9974.285185185185,
+        "avg_original_prob": 0.005785578586020034,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 16,
+        "avg_original_rank": 1409.0,
+        "avg_original_prob": 0.043551746964405016,
+        "avg_delta": 7.887068944741922,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 16,
+        "avg_original_rank": 1409.0,
+        "avg_original_prob": 0.043551746964405016,
+        "avg_delta": 7.887068944741922,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 15,
+        "avg_original_rank": 11026.291111111112,
+        "avg_original_prob": 0.0034778366711121105,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 15,
+        "avg_original_rank": 4559.941176470588,
+        "avg_original_prob": 0.0006042709693340786,
+        "avg_delta": 3.9386819983472257,
+        "max_delta": 13.00251144518885,
+        "beam_pressure": 1.1333333333333333
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 9974.285185185185,
+        "avg_original_prob": 0.005785578586020034,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 10,
+        "avg_original_rank": 10.5,
+        "avg_original_prob": 0.0025143794958353283,
+        "avg_delta": 5.4868385951300755,
+        "max_delta": 7.812018227775928,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 9903.049342105263,
+        "avg_original_prob": 0.005138926790785186,
+        "avg_delta": 15.466813281185484,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Uluslararası uzay istasyonu dünyanın yörüngesinde dönüyor.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 10939.163265306122,
+        "avg_original_prob": 0.028281929915678895,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 24,
+        "avg_original_rank": 316.4642857142857,
+        "avg_original_prob": 0.0027996602422766565,
+        "avg_delta": 5.736165449396249,
+        "max_delta": 50.0,
+        "beam_pressure": 0.75
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 24,
+        "avg_original_rank": 316.4642857142857,
+        "avg_original_prob": 0.0027996602422766565,
+        "avg_delta": 5.736165449396249,
+        "max_delta": 50.0,
+        "beam_pressure": 0.75
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 30,
+        "avg_original_rank": 12886.328571428572,
+        "avg_original_prob": 0.009813573772691037,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 30,
+        "avg_original_rank": 2699.529411764706,
+        "avg_original_prob": 0.0011728419330719428,
+        "avg_delta": 4.31066254832317,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 14,
+        "avg_original_rank": 10939.163265306122,
+        "avg_original_prob": 0.028281929915678895,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 12,
+        "avg_original_rank": 4.8,
+        "avg_original_prob": 9.423847359357751e-05,
+        "avg_delta": 5.896983918001291,
+        "max_delta": 9.994142274090347,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 16,
+        "avg_original_rank": 10938.969387755102,
+        "avg_original_prob": 0.028281929915678895,
+        "avg_delta": 15.599440483668543,
+        "max_delta": 17.359521328778442,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Makine çevirisi sinir ağlarını kullanır.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 16668.576923076922,
+        "avg_original_prob": 0.008816156816561142,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 19,
+        "avg_original_rank": 8119.954545454545,
+        "avg_original_prob": 0.006272078286025879,
+        "avg_delta": 21.261056466512358,
+        "max_delta": 50.0,
+        "beam_pressure": 1.368421052631579
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 19,
+        "avg_original_rank": 8119.954545454545,
+        "avg_original_prob": 0.006272078286025879,
+        "avg_delta": 21.261056466512358,
+        "max_delta": 50.0,
+        "beam_pressure": 1.368421052631579
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 26,
+        "avg_original_rank": 9604.960059171597,
+        "avg_original_prob": 0.002834576397003208,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 26,
+        "avg_original_rank": 20314.303030303032,
+        "avg_original_prob": 0.006060356711421291,
+        "avg_delta": 27.05039984804034,
+        "max_delta": 50.0,
+        "beam_pressure": 1.3846153846153846
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 16668.576923076922,
+        "avg_original_prob": 0.008816156816561142,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 10,
+        "avg_original_rank": 16668.576923076922,
+        "avg_original_prob": 0.008816156816561142,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Merkez bankası faiz oranlarını artırdı.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 20027.066666666666,
+        "avg_original_prob": 0.012943013822223955,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 15,
+        "avg_original_rank": 3451.0,
+        "avg_original_prob": 0.00014015937276540697,
+        "avg_delta": 4.6464171987294325,
+        "max_delta": 15.371945440525144,
+        "beam_pressure": 0.8666666666666667
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 15,
+        "avg_original_rank": 3451.0,
+        "avg_original_prob": 0.00014015937276540697,
+        "avg_delta": 4.6464171987294325,
+        "max_delta": 15.371945440525144,
+        "beam_pressure": 0.8666666666666667
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 16,
+        "avg_original_rank": 19042.74,
+        "avg_original_prob": 0.004938011575263701,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 16,
+        "avg_original_rank": 4639.0,
+        "avg_original_prob": 0.0001705579048929293,
+        "avg_delta": 3.325551001922108,
+        "max_delta": 10.182796533694844,
+        "beam_pressure": 0.9375
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 20027.066666666666,
+        "avg_original_prob": 0.012943013822223955,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 20027.066666666666,
+        "avg_original_prob": 0.012943013822223955,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Arkeolojik kazı antik eserleri ortaya çıkardı.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 28610.626666666667,
+        "avg_original_prob": 0.0018777036357492231,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 16,
+        "avg_original_rank": 4832.125,
+        "avg_original_prob": 0.00972784847779451,
+        "avg_delta": 10.914943300429787,
+        "max_delta": 50.0,
+        "beam_pressure": 1.375
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 16,
+        "avg_original_rank": 4832.125,
+        "avg_original_prob": 0.00972784847779451,
+        "avg_delta": 10.914943300429787,
+        "max_delta": 50.0,
+        "beam_pressure": 1.375
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 16,
+        "avg_original_rank": 28680.94,
+        "avg_original_prob": 0.0010578964599799435,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 16,
+        "avg_original_rank": 3982.8888888888887,
+        "avg_original_prob": 0.009252054840020365,
+        "avg_delta": 9.887010337474216,
+        "max_delta": 50.0,
+        "beam_pressure": 1.375
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 28610.626666666667,
+        "avg_original_prob": 0.0018777036357492231,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 9,
+        "avg_original_rank": 2.0,
+        "avg_original_prob": 0.027750659734010696,
+        "avg_delta": 4.994547724099334,
+        "max_delta": 4.994547724099334,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 28484.03982300885,
+        "avg_original_prob": 0.0019485793320646746,
+        "avg_delta": 15.521201093235842,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Yeni mevzuat vergi dilimlerini etkileyecek.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 16712.333333333332,
+        "avg_original_prob": 2.4847923562922666e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 18,
+        "avg_original_rank": 2911.15,
+        "avg_original_prob": 0.0070432805918983375,
+        "avg_delta": 17.482827418611926,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 18,
+        "avg_original_rank": 2911.15,
+        "avg_original_prob": 0.0070432805918983375,
+        "avg_delta": 17.482827418611926,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 18,
+        "avg_original_rank": 18375.372685185186,
+        "avg_original_prob": 1.773431182557535e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 18,
+        "avg_original_rank": 2962.3636363636365,
+        "avg_original_prob": 0.006406919879562555,
+        "avg_delta": 16.319911582703558,
+        "max_delta": 50.0,
+        "beam_pressure": 1.0
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 11,
+        "avg_original_rank": 16712.333333333332,
+        "avg_original_prob": 2.4847923562922666e-05,
+        "avg_delta": 15.581295320316892,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": 7.0,
+        "avg_original_prob": 1.1763531359873821e-05,
+        "avg_delta": 2.3311676446470404,
+        "max_delta": 4.455690860123809,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 16161.608058608059,
+        "avg_original_prob": 2.4416569973811168e-05,
+        "avg_delta": 15.151481801168158,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Sürdürülebilir tarım suyun korunmasına dayanır.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 20024.034965034964,
+        "avg_original_prob": 0.0025579202639814023,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 18,
+        "avg_original_rank": 4266.235294117647,
+        "avg_original_prob": 0.004492011727152471,
+        "avg_delta": 17.12128684871454,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1666666666666667
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 18,
+        "avg_original_rank": 4266.235294117647,
+        "avg_original_prob": 0.004492011727152471,
+        "avg_delta": 17.12128684871454,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1666666666666667
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 18,
+        "avg_original_rank": 17929.950854700855,
+        "avg_original_prob": 0.0017187338664764748,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 18,
+        "avg_original_rank": 4868.333333333333,
+        "avg_original_prob": 0.0035843779651516102,
+        "avg_delta": 14.280156394754602,
+        "max_delta": 50.0,
+        "beam_pressure": 1.1111111111111112
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 11,
+        "avg_original_rank": 20024.034965034964,
+        "avg_original_prob": 0.0025579202639814023,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 11,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 20024.034965034964,
+        "avg_original_prob": 0.0025579202639814023,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Hızlı kahverengi tilki tembel köpeğin üzerinden atlar.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 14,
+        "avg_original_rank": 23142.902857142857,
+        "avg_original_prob": 0.008222667033102751,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 14,
+        "avg_original_rank": 23142.902857142857,
+        "avg_original_prob": 0.008222667033102751,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 14,
+        "avg_original_rank": 23142.902857142857,
+        "avg_original_prob": 0.008222667033102751,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 14,
+        "avg_original_rank": 23142.902857142857,
+        "avg_original_prob": 0.008222667033102751,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Çevreyi korumalıyız.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 8,
+        "avg_original_rank": 15660.077586206897,
+        "avg_original_prob": 0.004722198006474321,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 8,
+        "avg_original_rank": 15660.077586206897,
+        "avg_original_prob": 0.004722198006474321,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 8,
+        "avg_original_rank": 15660.077586206897,
+        "avg_original_prob": 0.004722198006474321,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 8,
+        "avg_original_rank": 15660.077586206897,
+        "avg_original_prob": 0.004722198006474321,
+        "avg_delta": 15.58129532031689,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Konser çok gürültülüydü.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 7,
+        "avg_original_rank": 22757.530266343827,
+        "avg_original_prob": 0.002251007281009998,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 7,
+        "avg_original_rank": 22757.530266343827,
+        "avg_original_prob": 0.002251007281009998,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 7,
+        "avg_original_rank": 22757.530266343827,
+        "avg_original_prob": 0.002251007281009998,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 7,
+        "avg_original_rank": 22757.530266343827,
+        "avg_original_prob": 0.002251007281009998,
+        "avg_delta": 15.581295320316894,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Final sınavları için çalışıyor.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 10048.474074074074,
+        "avg_original_prob": 3.1857644150132157e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 9,
+        "avg_original_rank": 10048.474074074074,
+        "avg_original_prob": 3.1857644150132157e-05,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 10048.474074074074,
+        "avg_original_prob": 3.1857644150132157e-05,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 10048.474074074074,
+        "avg_original_prob": 3.1857644150132157e-05,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Şehir güzel mimarisiyle bilinir.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 11,
+        "avg_original_rank": 15524.757575757576,
+        "avg_original_prob": 0.004792302809018878,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 11,
+        "avg_original_rank": 15524.757575757576,
+        "avg_original_prob": 0.004792302809018878,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 11,
+        "avg_original_rank": 15524.757575757576,
+        "avg_original_prob": 0.004792302809018878,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 11,
+        "avg_original_rank": 15524.757575757576,
+        "avg_original_prob": 0.004792302809018878,
+        "avg_delta": 15.581295320316896,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  },
+  {
+    "source": "Müze pazartesi günü kapalıydı.",
+    "direction": "TR→EN",
+    "analyses": {
+      "hard_excl": {
+        "constraint_type": "hard_exclusion",
+        "num_steps_active": 9,
+        "avg_original_rank": 14428.73202614379,
+        "avg_original_prob": 0.007164672141097444,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_incl": {
+        "constraint_type": "hard_inclusion",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_incl_abl": {
+        "constraint_type": "hard_inclusion_ablation",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "hard_comb_excl": {
+        "constraint_type": "hard_combined_excl",
+        "num_steps_active": 9,
+        "avg_original_rank": 14428.73202614379,
+        "avg_original_prob": 0.007164672141097444,
+        "avg_delta": 999.0,
+        "max_delta": 999.0,
+        "beam_pressure": null
+      },
+      "hard_comb_incl": {
+        "constraint_type": "hard_combined_incl",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_pen": {
+        "constraint_type": "soft_penalty",
+        "num_steps_active": 9,
+        "avg_original_rank": 14428.73202614379,
+        "avg_original_prob": 0.007164672141097444,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      },
+      "soft_rew": {
+        "constraint_type": "soft_reward",
+        "num_steps_active": 0,
+        "avg_original_rank": null,
+        "avg_original_prob": null,
+        "avg_delta": null,
+        "max_delta": null,
+        "beam_pressure": null
+      },
+      "soft_comb": {
+        "constraint_type": "soft_combined",
+        "num_steps_active": 9,
+        "avg_original_rank": 14428.73202614379,
+        "avg_original_prob": 0.007164672141097444,
+        "avg_delta": 15.581295320316897,
+        "max_delta": 15.581295320316896,
+        "beam_pressure": null
+      }
+    }
+  }
+]

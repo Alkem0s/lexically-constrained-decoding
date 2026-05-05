@@ -1,0 +1,978 @@
+{
+  "EN_TR": [
+    {
+      "source": "The bird flew over the tall tree.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "uçtu"
+      ],
+      "required_words": [
+        "kuş"
+      ],
+      "penalty_words": [
+        "uçtu"
+      ],
+      "reward_words": [
+        "kuş"
+      ]
+    },
+    {
+      "source": "I drink water every morning.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "içerim"
+      ],
+      "required_words": [
+        "su"
+      ],
+      "penalty_words": [
+        "içerim"
+      ],
+      "reward_words": [
+        "su"
+      ]
+    },
+    {
+      "source": "He plays football with his friends.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "arkadaş"
+      ],
+      "required_words": [
+        "futbol"
+      ],
+      "penalty_words": [
+        "arkadaş"
+      ],
+      "reward_words": [
+        "futbol"
+      ]
+    },
+    {
+      "source": "She likes to watch movies.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "izlemek"
+      ],
+      "required_words": [
+        "film"
+      ],
+      "penalty_words": [
+        "izlemek"
+      ],
+      "reward_words": [
+        "film"
+      ]
+    },
+    {
+      "source": "The train arrived late.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "geç"
+      ],
+      "required_words": [
+        "tren"
+      ],
+      "penalty_words": [
+        "geç"
+      ],
+      "reward_words": [
+        "tren"
+      ]
+    },
+    {
+      "source": "The book is on the table.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "masa"
+      ],
+      "required_words": [
+        "kitap"
+      ],
+      "penalty_words": [
+        "masa"
+      ],
+      "reward_words": [
+        "kitap"
+      ]
+    },
+    {
+      "source": "The patient needs immediate surgery.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "ameliyat"
+      ],
+      "required_words": [
+        "operasyon"
+      ],
+      "penalty_words": [
+        "ameliyat"
+      ],
+      "reward_words": [
+        "operasyon"
+      ]
+    },
+    {
+      "source": "The CEO resigned yesterday.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "ayrıldı"
+      ],
+      "required_words": [
+        "istifa"
+      ],
+      "penalty_words": [
+        "ayrıldı"
+      ],
+      "reward_words": [
+        "istifa"
+      ]
+    },
+    {
+      "source": "Quantum computing is the future.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "gelecek"
+      ],
+      "required_words": [
+        "kuantum"
+      ],
+      "penalty_words": [
+        "gelecek"
+      ],
+      "reward_words": [
+        "kuantum"
+      ]
+    },
+    {
+      "source": "The stock market crashed.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "piyasa"
+      ],
+      "required_words": [
+        "borsa"
+      ],
+      "penalty_words": [
+        "piyasa"
+      ],
+      "reward_words": [
+        "borsa"
+      ]
+    },
+    {
+      "source": "The renewable energy sector is growing.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "enerji"
+      ],
+      "required_words": [
+        "yenilenebilir"
+      ],
+      "penalty_words": [
+        "enerji"
+      ],
+      "reward_words": [
+        "yenilenebilir"
+      ]
+    },
+    {
+      "source": "The detective found a crucial clue.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "buldu"
+      ],
+      "required_words": [
+        "ipucu"
+      ],
+      "penalty_words": [
+        "buldu"
+      ],
+      "reward_words": [
+        "ipucu"
+      ]
+    },
+    {
+      "source": "A small dog barked at the big cat.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "köpek"
+      ],
+      "required_words": [
+        "küçük",
+        "kedi"
+      ],
+      "penalty_words": [
+        "köpek"
+      ],
+      "reward_words": [
+        "küçük",
+        "kedi"
+      ]
+    },
+    {
+      "source": "She wrote a letter to her mother.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yazdı"
+      ],
+      "required_words": [
+        "mektup",
+        "anne"
+      ],
+      "penalty_words": [
+        "yazdı"
+      ],
+      "reward_words": [
+        "mektup",
+        "anne"
+      ]
+    },
+    {
+      "source": "The strong wind blew away the tent.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "güçlü"
+      ],
+      "required_words": [
+        "rüzgar",
+        "çadır"
+      ],
+      "penalty_words": [
+        "güçlü"
+      ],
+      "reward_words": [
+        "rüzgar",
+        "çadır"
+      ]
+    },
+    {
+      "source": "He opened the door and walked inside.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "açtı"
+      ],
+      "required_words": [
+        "kapı",
+        "içeri"
+      ],
+      "penalty_words": [
+        "açtı"
+      ],
+      "reward_words": [
+        "kapı",
+        "içeri"
+      ]
+    },
+    {
+      "source": "They ate dinner at a fancy restaurant.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yemek"
+      ],
+      "required_words": [
+        "akşam",
+        "restoran"
+      ],
+      "penalty_words": [
+        "yemek"
+      ],
+      "reward_words": [
+        "akşam",
+        "restoran"
+      ]
+    },
+    {
+      "source": "The blue sky was full of clouds.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "gökyüzü"
+      ],
+      "required_words": [
+        "mavi",
+        "bulut"
+      ],
+      "penalty_words": [
+        "gökyüzü"
+      ],
+      "reward_words": [
+        "mavi",
+        "bulut"
+      ]
+    },
+    {
+      "source": "The international space station orbits the Earth.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "dünya"
+      ],
+      "required_words": [
+        "uzay istasyonu",
+        "yörünge"
+      ],
+      "penalty_words": [
+        "dünya"
+      ],
+      "reward_words": [
+        "uzay istasyonu",
+        "yörünge"
+      ]
+    },
+    {
+      "source": "Machine translation uses neural networks.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "çeviri"
+      ],
+      "required_words": [
+        "makine çevirisi",
+        "sinir ağları"
+      ],
+      "penalty_words": [
+        "çeviri"
+      ],
+      "reward_words": [
+        "makine çevirisi",
+        "sinir ağları"
+      ]
+    },
+    {
+      "source": "The central bank raised interest rates.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "oran"
+      ],
+      "required_words": [
+        "merkez bankası",
+        "faiz"
+      ],
+      "penalty_words": [
+        "oran"
+      ],
+      "reward_words": [
+        "merkez bankası",
+        "faiz"
+      ]
+    },
+    {
+      "source": "The archaeological dig revealed ancient artifacts.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "kazı"
+      ],
+      "required_words": [
+        "arkeolojik",
+        "eserler"
+      ],
+      "penalty_words": [
+        "kazı"
+      ],
+      "reward_words": [
+        "arkeolojik",
+        "eserler"
+      ]
+    },
+    {
+      "source": "The new legislation will affect tax brackets.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yeni"
+      ],
+      "required_words": [
+        "mevzuat",
+        "vergi"
+      ],
+      "penalty_words": [
+        "yeni"
+      ],
+      "reward_words": [
+        "mevzuat",
+        "vergi"
+      ]
+    },
+    {
+      "source": "Sustainable agriculture relies on water conservation.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "tarım"
+      ],
+      "required_words": [
+        "sürdürülebilir",
+        "koruma"
+      ],
+      "penalty_words": [
+        "tarım"
+      ],
+      "reward_words": [
+        "sürdürülebilir",
+        "koruma"
+      ]
+    },
+    {
+      "source": "The quick brown fox jumps over the lazy dog.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "hızlı",
+        "kahverengi"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "hızlı",
+        "kahverengi"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "We must protect the environment.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "çevre"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "çevre"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "The concert was very loud.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "konser",
+        "çok"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "konser",
+        "çok"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "She is studying for her final exams.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "çalışıyor"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "çalışıyor"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "The city is known for its beautiful architecture.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "güzel"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "güzel"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "The museum was closed on Monday.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "kapalı"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "kapalı"
+      ],
+      "reward_words": []
+    }
+  ],
+  "TR_EN": [
+    {
+      "source": "Kuş yüksek ağacın üzerinden uçtu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "bird"
+      ],
+      "required_words": [
+        "avian"
+      ],
+      "penalty_words": [
+        "bird"
+      ],
+      "reward_words": [
+        "avian"
+      ]
+    },
+    {
+      "source": "Her sabah su içerim.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "drink"
+      ],
+      "required_words": [
+        "consume"
+      ],
+      "penalty_words": [
+        "drink"
+      ],
+      "reward_words": [
+        "consume"
+      ]
+    },
+    {
+      "source": "Arkadaşlarıyla futbol oynar.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "football"
+      ],
+      "required_words": [
+        "soccer"
+      ],
+      "penalty_words": [
+        "football"
+      ],
+      "reward_words": [
+        "soccer"
+      ]
+    },
+    {
+      "source": "Film izlemeyi sever.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "movies"
+      ],
+      "required_words": [
+        "cinema"
+      ],
+      "penalty_words": [
+        "movies"
+      ],
+      "reward_words": [
+        "cinema"
+      ]
+    },
+    {
+      "source": "Tren geç geldi.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "late"
+      ],
+      "required_words": [
+        "delayed"
+      ],
+      "penalty_words": [
+        "late"
+      ],
+      "reward_words": [
+        "delayed"
+      ]
+    },
+    {
+      "source": "Kitap masanın üzerinde.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "book"
+      ],
+      "required_words": [
+        "novel"
+      ],
+      "penalty_words": [
+        "book"
+      ],
+      "reward_words": [
+        "novel"
+      ]
+    },
+    {
+      "source": "Hasta acil ameliyat olmalı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "operation"
+      ],
+      "required_words": [
+        "surgery"
+      ],
+      "penalty_words": [
+        "operation"
+      ],
+      "reward_words": [
+        "surgery"
+      ]
+    },
+    {
+      "source": "CEO dün istifa etti.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "quit"
+      ],
+      "required_words": [
+        "resigned"
+      ],
+      "penalty_words": [
+        "quit"
+      ],
+      "reward_words": [
+        "resigned"
+      ]
+    },
+    {
+      "source": "Kuantum bilgisayarlar gelecektir.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "computers"
+      ],
+      "required_words": [
+        "computing"
+      ],
+      "penalty_words": [
+        "computers"
+      ],
+      "reward_words": [
+        "computing"
+      ]
+    },
+    {
+      "source": "Borsa çöktü.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "fell"
+      ],
+      "required_words": [
+        "crashed"
+      ],
+      "penalty_words": [
+        "fell"
+      ],
+      "reward_words": [
+        "crashed"
+      ]
+    },
+    {
+      "source": "Yenilenebilir enerji sektörü büyüyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "green"
+      ],
+      "required_words": [
+        "renewable"
+      ],
+      "penalty_words": [
+        "green"
+      ],
+      "reward_words": [
+        "renewable"
+      ]
+    },
+    {
+      "source": "Dedektif önemli bir ipucu buldu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "clue"
+      ],
+      "required_words": [
+        "evidence"
+      ],
+      "penalty_words": [
+        "clue"
+      ],
+      "reward_words": [
+        "evidence"
+      ]
+    },
+    {
+      "source": "Küçük köpek büyük kediye havladı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "small",
+        "cat"
+      ],
+      "required_words": [
+        "tiny",
+        "feline"
+      ],
+      "penalty_words": [
+        "small",
+        "cat"
+      ],
+      "reward_words": [
+        "tiny",
+        "feline"
+      ]
+    },
+    {
+      "source": "Annesine bir mektup yazdı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "letter"
+      ],
+      "required_words": [
+        "epistle",
+        "mother"
+      ],
+      "penalty_words": [
+        "letter"
+      ],
+      "reward_words": [
+        "epistle",
+        "mother"
+      ]
+    },
+    {
+      "source": "Güçlü rüzgar çadırı uçurdu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "wind"
+      ],
+      "required_words": [
+        "gale",
+        "tent"
+      ],
+      "penalty_words": [
+        "wind"
+      ],
+      "reward_words": [
+        "gale",
+        "tent"
+      ]
+    },
+    {
+      "source": "Kapıyı açtı ve içeri girdi.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "door"
+      ],
+      "required_words": [
+        "doorway",
+        "inside"
+      ],
+      "penalty_words": [
+        "door"
+      ],
+      "reward_words": [
+        "doorway",
+        "inside"
+      ]
+    },
+    {
+      "source": "Lüks bir restoranda akşam yemeği yediler.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "restaurant"
+      ],
+      "required_words": [
+        "dinner",
+        "establishment"
+      ],
+      "penalty_words": [
+        "restaurant"
+      ],
+      "reward_words": [
+        "dinner",
+        "establishment"
+      ]
+    },
+    {
+      "source": "Mavi gökyüzü bulutlarla doluydu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "blue",
+        "sky"
+      ],
+      "required_words": [
+        "azure",
+        "clouds"
+      ],
+      "penalty_words": [
+        "blue",
+        "sky"
+      ],
+      "reward_words": [
+        "azure",
+        "clouds"
+      ]
+    },
+    {
+      "source": "Uluslararası uzay istasyonu dünyanın yörüngesinde dönüyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "orbit"
+      ],
+      "required_words": [
+        "orbital",
+        "station"
+      ],
+      "penalty_words": [
+        "orbit"
+      ],
+      "reward_words": [
+        "orbital",
+        "station"
+      ]
+    },
+    {
+      "source": "Makine çevirisi sinir ağlarını kullanır.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "translation"
+      ],
+      "required_words": [
+        "machine translation",
+        "neural networks"
+      ],
+      "penalty_words": [
+        "translation"
+      ],
+      "reward_words": [
+        "machine translation",
+        "neural networks"
+      ]
+    },
+    {
+      "source": "Merkez bankası faiz oranlarını artırdı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "rates"
+      ],
+      "required_words": [
+        "central bank",
+        "interest"
+      ],
+      "penalty_words": [
+        "rates"
+      ],
+      "reward_words": [
+        "central bank",
+        "interest"
+      ]
+    },
+    {
+      "source": "Arkeolojik kazı antik eserleri ortaya çıkardı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "dig"
+      ],
+      "required_words": [
+        "excavation",
+        "artifacts"
+      ],
+      "penalty_words": [
+        "dig"
+      ],
+      "reward_words": [
+        "excavation",
+        "artifacts"
+      ]
+    },
+    {
+      "source": "Yeni mevzuat vergi dilimlerini etkileyecek.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "law"
+      ],
+      "required_words": [
+        "legislation",
+        "tax"
+      ],
+      "penalty_words": [
+        "law"
+      ],
+      "reward_words": [
+        "legislation",
+        "tax"
+      ]
+    },
+    {
+      "source": "Sürdürülebilir tarım suyun korunmasına dayanır.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "agriculture"
+      ],
+      "required_words": [
+        "sustainable",
+        "conservation"
+      ],
+      "penalty_words": [
+        "agriculture"
+      ],
+      "reward_words": [
+        "sustainable",
+        "conservation"
+      ]
+    },
+    {
+      "source": "Hızlı kahverengi tilki tembel köpeğin üzerinden atlar.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "quick",
+        "brown"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "quick",
+        "brown"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Çevreyi korumalıyız.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "protect"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "protect"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Konser çok gürültülüydü.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "concert",
+        "very"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "concert",
+        "very"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Final sınavları için çalışıyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "studying"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "studying"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Şehir güzel mimarisiyle bilinir.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "beautiful"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "beautiful"
+      ],
+      "reward_words": []
+    },
+    {
+      "source": "Müze pazartesi günü kapalıydı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "closed"
+      ],
+      "required_words": [],
+      "penalty_words": [
+        "closed"
+      ],
+      "reward_words": []
+    }
+  ]
+}
