@@ -1,9 +1,5 @@
 """
 model_loader.py — Load and cache Helsinki-NLP MarianMT models for EN↔TR.
-
-Mirrors the caching pattern from the reference MachineTranslator class:
-  - Download from HuggingFace Hub on first run, save locally.
-  - Subsequent runs load from local path (local_files_only=True).
 """
 
 import os

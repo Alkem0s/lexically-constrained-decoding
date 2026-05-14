@@ -7,10 +7,6 @@ Key metrics extracted (per the project spec):
   - Magnitude of probability manipulation required to enforce constraints.
   - Beam trajectory changes summarised from step-level pending counts
     (for hard inclusion) or from logit deltas (for exclusion / soft).
-
-Fix #13: token_level_report() was dead code — defined but never called.
-It is now integrated into compare_analyses() as an optional detail block
-that fires automatically when a tokenizer is provided.
 """
 
 from typing import List, Dict, Optional

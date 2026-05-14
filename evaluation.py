@@ -10,18 +10,6 @@ Metrics:
   - Escalation count : how many samples needed tier-2 or tier-3 fallbacks to
     satisfy the constraint.  A mode with 100% satisfaction but high escalation
     count is relying on hard fallbacks, not its own soft nudges.
-
-Fix #7: When hard exclusion fails (forbidden word still present) and the
-output is identical to baseline (BLEU = 100), the metrics dict now also
-carries a 'constraint_violated_at_baseline' flag so callers can distinguish
-"constraint respected and output unchanged" from "constraint failed silently".
-
-Fix (escalation): aggregate_results now includes n_escalated per mode so
-callers can see how often a mode required tier-2/tier-3 fallbacks.
-
-Fix (ablation): SampleResult carries hard_inclusion_ablation, populated by
-main.py by calling hard_inclusion(..., _force_hard=True).  This measures pure
-HardInclusionProcessor behaviour independently of the soft-first gate.
 """
 
 import re

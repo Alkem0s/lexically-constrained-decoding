@@ -1,6 +1,5 @@
 """
-config.py — Central configuration for Lexically Constrained MT project.
-All hyperparameters, model names, and paths live here.
+config.py — Central configuration
 """
 
 import torch
