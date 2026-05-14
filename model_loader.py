@@ -191,18 +191,24 @@ class MTModel:
             id_set = set()
             for form in surface_forms:
                 word_lower = form.strip().lower()
+                sp_word_lower = chr(9601) + word_lower
                 
                 # Strict matching against the pre-built surface_map
-                strict_ids = [tid for tid, surface in surface_map.items()
-                              if surface and surface.startswith(word_lower)]
+                # Catch both raw words and SentencePiece-prefixed words
+                strict_ids = [
+                    tid for tid, surface in surface_map.items()
+                    if surface and (surface.startswith(word_lower) or surface.startswith(sp_word_lower))
+                ]
                 strict_ids = self.filter_ambiguous_tokens(strict_ids, word_lower, surface_map)
                 
                 if strict_ids:
                     id_set.update(strict_ids)
                 else:
                     # Fragment fallback
-                    fragment_ids = [tid for tid, surface in surface_map.items()
-                                    if surface and surface in word_lower]
+                    fragment_ids = [
+                        tid for tid, surface in surface_map.items()
+                        if surface and (surface in word_lower or surface in sp_word_lower)
+                    ]
                     if fragment_ids:
                         id_set.update(fragment_ids)
             
@@ -229,9 +235,26 @@ class MTModel:
                     form.lower()
                 ]
                 for variant in variants:
+                    # 1. Standard tokenization (may return subwords)
                     seq = self.tokenizer(variant, add_special_tokens=False).input_ids
                     if seq and seq not in group:
                         group.append(seq)
+                
+                # 2. Exhaustive Vocabulary Scan (Catch single-token representations)
+                # This fixes the bug where the model uses a single token that the 
+                # default tokenizer wouldn't choose for that specific variant.
+                # SentencePiece uses U+2581 (lower block) for space.
+                sp_space = chr(9601)
+                sp_variants = [v.replace(" ", sp_space) for v in variants]
+                possible_strings = set(variants) | set(sp_variants)
+                
+                # We only do this once per word form to keep it efficient
+                for i in range(self.tokenizer.vocab_size):
+                    token_text = self.tokenizer.convert_ids_to_tokens(i)
+                    if token_text in possible_strings:
+                        if [i] not in group:
+                            group.append([i])
+            
             if group:
                 word_groups.append(group)
         return word_groups

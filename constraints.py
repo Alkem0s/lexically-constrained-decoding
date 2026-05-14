@@ -201,10 +201,6 @@ class HardInclusionProcessor(LogitsProcessor):
             "tokens": {}, "pending_count": 0,
         }
 
-        target_len = max(1, self.src_len // 2)
-        progress_ratio = min(1.0, current_len / target_len)
-        dynamic_boost = 5.0 + (progress_ratio * (self.boost - 5.0))
-
         min_pending = 999
 
         for b in range(num_beams):
@@ -216,42 +212,43 @@ class HardInclusionProcessor(LogitsProcessor):
             for word_idx, variant_group in self.master_sequences.items():
                 found = False
                 
-                # Check if ANY of the casing variants exist in the generated text
+                # Check ALL possible starting positions for any variant
                 for seq in variant_group:
                     seq_len = len(seq)
-                    if len(beam_list) >= seq_len and beam_list[-seq_len:] == seq:
-                        found = True
-                        just_completed_any = True
-                        break
-                    else:
-                        for i in range(len(beam_list) - seq_len):
-                            if beam_list[i:i+seq_len] == seq:
-                                found = True
-                                break
+                    if len(beam_list) < seq_len:
+                        continue
+                        
+                    # Search entire history including the most recent tokens
+                    for i in range(len(beam_list) - seq_len + 1):
+                        if beam_list[i:i+seq_len] == seq:
+                            found = True
+                            # If it was just finished this step, mark for morphology check
+                            if i == len(beam_list) - seq_len:
+                                just_completed_any = True
+                            break
                     if found:
                         break
                             
                 if not found:
-                    # If missing, target the first variant (usually mid-sentence lowercase)
                     pending_for_beam[word_idx] = variant_group[0]
 
             min_pending = min(min_pending, len(pending_for_beam))
 
             # --- Babbling Escape Hatch ---
+            # If the sentence is getting too long, stop forcing and allow EOS.
             is_babbling = (current_len > self.src_len * 1.5)
             
             if pending_for_beam and self.eos_token_id is not None:
                 if not is_babbling:
-                    # Only block EOS if it hasn't completely lost its mind yet
-                    scores[b, self.eos_token_id] -= 50.0
+                    # Gradually reduce the EOS penalty as we approach max_length
+                    # to allow the model to finish naturally if it's stuck.
+                    eos_penalty = -20.0 if current_len > self.src_len else -50.0
+                    scores[b, self.eos_token_id] += eos_penalty
 
             # Morphological Escape Prevention 
             if just_completed_any and self.boundary_mask is not None and self.suffix_penalty < 0.0:
                 non_boundary = ~self.boundary_mask.to(scores.device)
                 scores[b, non_boundary] += self.suffix_penalty
-                
-            if pending_for_beam and self.eos_token_id is not None:
-                scores[b, self.eos_token_id] -= 50.0
 
             for word_idx, seq in pending_for_beam.items():
                 seq_len = len(seq)
@@ -267,11 +264,17 @@ class HardInclusionProcessor(LogitsProcessor):
                 
                 # ── Robust Context-Aware Logic ──
                 beam_logits  = original_scores[b]
+                max_logit    = beam_logits.max().item()
                 target_logit = beam_logits[target_token].item()
                 target_rank  = int((beam_logits > target_logit).sum().item()) + 1
                 
                 if is_continuation:
-                    applied_boost = 50.0 
+                    # Just enough to guarantee it's the top choice
+                    # ONLY apply if not already blocked by another processor
+                    if target_logit > float("-inf"):
+                        applied_boost = (max_logit + config.HARD_INCLUSION_BOOST) - target_logit
+                    else:
+                        applied_boost = 0.0
                 else:
                     is_early = current_len <= config.HARD_INCL_EARLY_TOKENS
                     
@@ -280,12 +283,12 @@ class HardInclusionProcessor(LogitsProcessor):
                     elif target_rank <= config.HARD_INCL_SWEET_RANK:
                         applied_boost = config.HARD_INCL_SWEET_BUFFER
                     else:
+                        # Dynamic Anchoring: Pull the token up from the depths
                         progress_multiplier = min(1.0, current_len / max(1, self.src_len * 0.8))
-                        max_logit = beam_logits.max().item()
                         
                         target_anchor = max_logit + config.HARD_INCL_ANCHOR_START + (config.HARD_INCL_ANCHOR_RANGE * progress_multiplier)
                         
-                        if target_logit < target_anchor:
+                        if target_logit > float("-inf") and target_logit < target_anchor:
                             applied_boost = target_anchor - target_logit
                         else:
                             applied_boost = 0.0

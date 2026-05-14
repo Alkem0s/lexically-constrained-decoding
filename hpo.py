@@ -21,17 +21,17 @@ SEED = 42
 
 def objective(trial, en_tr_model, tr_en_model, en_tr_cases, tr_en_cases):
     # 1. Suggest parameters
-    config.HARD_INCL_EARLY_TOKENS = trial.suggest_int("HARD_INCL_EARLY_TOKENS", 1, 6)
-    config.HARD_INCL_SWEET_RANK   = trial.suggest_int("HARD_INCL_SWEET_RANK", 50, 1000)
-    config.HARD_INCL_SWEET_BUFFER = trial.suggest_float("HARD_INCL_SWEET_BUFFER", 1.0, 15.0)
-    config.HARD_INCL_ANCHOR_START = trial.suggest_float("HARD_INCL_ANCHOR_START", -15.0, -2.0)
+    config.HARD_INCL_EARLY_TOKENS = trial.suggest_int("HARD_INCL_EARLY_TOKENS", 1, 4)
+    config.HARD_INCL_SWEET_RANK   = trial.suggest_int("HARD_INCL_SWEET_RANK", 50, 600)
+    config.HARD_INCL_SWEET_BUFFER = trial.suggest_float("HARD_INCL_SWEET_BUFFER", 1.0, 6.0)
+    config.HARD_INCL_ANCHOR_START = trial.suggest_float("HARD_INCL_ANCHOR_START", -20.0, -5.0)
     config.HARD_INCL_ANCHOR_RANGE = trial.suggest_float("HARD_INCL_ANCHOR_RANGE", 5.0, 25.0)
     
-    config.SOFT_REWARD_STRENGTH  = trial.suggest_float("SOFT_REWARD_STRENGTH", 1.0, 10.0)
-    config.SOFT_PENALTY_STRENGTH = trial.suggest_float("SOFT_PENALTY_STRENGTH", -20.0, -5.0)
+    config.SOFT_REWARD_STRENGTH  = trial.suggest_float("SOFT_REWARD_STRENGTH", 2.0, 12.0)
+    config.SOFT_PENALTY_STRENGTH = trial.suggest_float("SOFT_PENALTY_STRENGTH", -35.0, -10.0)
     config.ANCHOR_OFFSET         = trial.suggest_float("ANCHOR_OFFSET", -10.0, 0.0)
-    config.HARD_INCLUSION_BOOST  = trial.suggest_float("HARD_INCLUSION_BOOST", 15.0, 40.0)
-    config.SUFFIX_PENALTY_TR     = trial.suggest_float("SUFFIX_PENALTY_TR", -15.0, 0.0)
+    config.HARD_INCLUSION_BOOST  = trial.suggest_float("HARD_INCLUSION_BOOST", 2.0, 10.0) 
+    config.SUFFIX_PENALTY_TR     = trial.suggest_float("SUFFIX_PENALTY_TR", -15.0, -1.0)
 
     # 2. Run evaluation
     all_results = []

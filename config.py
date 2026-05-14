@@ -26,9 +26,9 @@ NUM_BEAMS       = 16
 NO_REPEAT_NGRAM = 3
 
 # ── Soft constraint strength ──────────────────────────────────────────────────
-SOFT_REWARD_STRENGTH  = 3.0355912478340863
-SOFT_PENALTY_STRENGTH = -15.581295320316896
-ANCHOR_OFFSET = -8.837039116805736            
+SOFT_REWARD_STRENGTH  = 3.749590628709145
+SOFT_PENALTY_STRENGTH = -34.92892403089141
+ANCHOR_OFFSET         = -5.936775780278513
 CONTEXTUAL_NUDGE = 2.0 
 
 # ── Curriculum reward escalation ─────────────────────────────────────────────
@@ -36,26 +36,26 @@ SOFT_REWARD_CURRICULUM_RATE = 0.25
 SOFT_REWARD_MAX             = 12.0
 
 # ── Hard inclusion: logit boost applied each step until word appears ──────────
-HARD_INCLUSION_BOOST  = 33.08079926252055
-SUFFIX_PENALTY_EN = -15.0
-SUFFIX_PENALTY_TR = -4.640683742356107
+HARD_INCLUSION_BOOST  = 6.92902186909871
+SUFFIX_PENALTY_EN = -5.0
+SUFFIX_PENALTY_TR = -2.4452592881812394
 READINESS_THRESHOLD = 200
 
 # ── Hard Inclusion Dynamic Anchoring ─────────────────────────────────────────
 # Tokens to skip before applying any pressure (prevents front-loading)
-HARD_INCL_EARLY_TOKENS = 2
+HARD_INCL_EARLY_TOKENS = 1
 
 # The rank threshold where the word is considered a "natural fit"
-HARD_INCL_SWEET_RANK   = 566
+HARD_INCL_SWEET_RANK   = 394
 
 # The logit buffer granted when the word falls in the sweet spot
-HARD_INCL_SWEET_BUFFER = 1.6805952237148933
+HARD_INCL_SWEET_BUFFER = 4.6627192291088315
 
 # Starting offset from max_logit at 0% sentence completion
-HARD_INCL_ANCHOR_START = -13.185777647780293
+HARD_INCL_ANCHOR_START = -16.542116372275053
 
 # Total logit climb from 0% to 100% completion
-HARD_INCL_ANCHOR_RANGE = 12.99703583319112
+HARD_INCL_ANCHOR_RANGE = 14.053981452324743
 
 # ── Combined-hard reranking ───────────────────────────────────────────────────
 COMBINED_HARD_RERANK_BEAMS = 16

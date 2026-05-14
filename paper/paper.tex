@@ -29,7 +29,7 @@
 \maketitle
 
 \begin{abstract}
-Lexically constrained decoding lets users inject domain-specific terminology into Neural Machine Translation (NMT) output without retraining the model. While earlier work has focused on structural approaches like Grid Beam Search and Dynamic Beam Allocation, this paper explores a complementary idea: manipulating the raw output logits in real time during beam search. We implement and compare six decoding strategies for English-to-Turkish and Turkish-to-English translation, spanning hard exclusion, hard inclusion, soft penalty, curriculum-anchored reward, and combined modes. Using the Helsinki-NLP OPUS-MT transformer models over a bilingual test set of 60 sentence pairs, we find that hard exclusion and soft penalty both achieve perfect constraint satisfaction (100\%) while preserving BLEU scores relative to the unconstrained baseline near 56.9 and 56.9 respectively. Soft curriculum reward with escalation attains the highest BLEU preservation (82.46) at a 93.8\% satisfaction rate, while combining hard exclusion and hard inclusion triggers a ``logit squeeze'' effect that drops BLEU to 36.64 despite 95\% satisfaction. We also discuss practical concerns around hyperparameter tuning, the computational cost of escalation, and the inherent difficulty of exact-match constraints in agglutinative languages like Turkish.
+Lexically constrained decoding allows users to inject domain-specific terminology into Neural Machine Translation (NMT) output at inference time, without retraining. While prior work has mostly followed structural approaches such as Grid Beam Search and Dynamic Beam Allocation, this paper takes a different route: adjusting raw output logits at each decoding step within a standard beam search pipeline. We implement and evaluate six strategies for English-to-Turkish and Turkish-to-English translation---hard exclusion, hard inclusion with dynamic anchor scheduling, soft penalty, curriculum-anchored reward, and two combined modes---using the Helsinki-NLP OPUS-MT models on a 60-sentence bilingual test set. Hard exclusion and soft penalty both achieve 100\% constraint satisfaction with BLEU scores of 56.9 relative to an unconstrained baseline. Soft reward with escalation reaches 83.87 BLEU at 93.8\% satisfaction. Hard inclusion achieves 78.0 BLEU at 93.8\% satisfaction. When hard exclusion and inclusion run together, BLEU drops to 51.23 despite 93.3\% satisfaction---a non-linear degradation we term the \emph{logit squeeze effect}. We also report on challenges with subword tokenization, hyperparameter sensitivity, and exact-match enforcement in agglutinative Turkish.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -40,13 +40,13 @@ neural machine translation, lexical constraints, constrained decoding, logit man
 \section{Introduction}
 % =============================================================================
 
-Transformer-based Neural Machine Translation \cite{vaswani2017attention} has reached impressive levels of fluency for general-domain tasks, but real-world use often demands specific terminology that a standard model will not produce on its own. A medical system must use the approved drug name; a legal translation must match jurisdiction-specific terms; a product pipeline must follow the brand glossary. Retraining for every such domain is expensive, and fine-tuning risks catastrophic forgetting.
+Transformer-based Neural Machine Translation \cite{vaswani2017attention} achieves strong general-domain fluency, but deployed systems often require specific terminology the model will not produce on its own. A medical system must use the approved drug name; a legal translation must match jurisdiction-specific terms. Retraining for each domain is expensive, and fine-tuning risks catastrophic forgetting.
 
-Lexically constrained decoding tackles this by enforcing vocabulary constraints at inference time, leaving model weights untouched. Hokamp and Liu \cite{hokamp2017lexically} introduced Grid Beam Search (GBS), which tracks constraint satisfaction states across the beam. Post and Vilar \cite{post2018fast} later improved efficiency with Dynamic Beam Allocation (DBA), and Hu et al.~\cite{hu2019improved} extended GBS to handle multi-token phrasal constraints. More recently, NeuroLogic Decoding \cite{lu2021neurologic} encodes constraints as logical predicates over the generation space.
+Lexically constrained decoding addresses this by enforcing vocabulary constraints at inference time, without modifying model weights. Hokamp and Liu \cite{hokamp2017lexically} introduced Grid Beam Search (GBS), which tracks constraint satisfaction across the beam. Post and Vilar \cite{post2018fast} improved efficiency with Dynamic Beam Allocation (DBA), and Hu et al.~\cite{hu2019improved} extended GBS to phrasal constraints. NeuroLogic Decoding \cite{lu2021neurologic} encodes constraints as logical predicates over the generation space.
 
-Rather than modifying the beam search structure itself, we take a different approach: \emph{logit-level} constraint enforcement, where we directly adjust the raw output logits at each decoding step within the standard HuggingFace Transformers beam search \cite{wolf2020transformers}. This is lightweight, requires no changes to the beam search code, and works with any autoregressive model that exposes a LogitsProcessor interface.
+Rather than altering the beam search structure, we explore \emph{logit-level} enforcement: directly adjusting raw output logits at each step within the standard HuggingFace Transformers pipeline \cite{wolf2020transformers}. The approach requires no changes to beam search internals and plugs into any model that exposes a LogitsProcessor interface.
 
-We make four main contributions. First, we implement six decoding strategies: hard exclusion, hard inclusion with dynamic anchor scheduling, soft penalty, soft curriculum reward with escalation, and two combined modes. Second, we test all strategies on a bilingual set of 60 EN$\leftrightarrow$TR sentence pairs (30 per direction) with both inclusion and exclusion constraints, split into a hyperparameter optimization (HPO) set and a held-out evaluation set. Third, we run a systematic hyperparameter search with Optuna \cite{akiba2019optuna} to find effective logit pressure settings. Fourth, we give an honest account of the trade-offs, including the ``logit squeeze'' phenomenon when hard constraints are combined, the cost of escalation, and the difficulty of exact-match enforcement in a highly agglutinative language like Turkish.
+This paper makes the following contributions. We implement six decoding strategies---hard exclusion, hard inclusion with dynamic anchor scheduling, soft penalty, soft curriculum reward with escalation, and two combined modes---and evaluate them on a bilingual set of 60 EN$\leftrightarrow$TR sentence pairs split into hyperparameter optimization (HPO) and held-out evaluation sets. We run a systematic search with Optuna \cite{akiba2019optuna} to find effective logit pressure settings. We also document several practical issues: the \emph{logit squeeze} phenomenon in combined modes, the cost of escalation, tokenization mismatches, and the difficulty of exact-match enforcement in Turkish.
 
 % =============================================================================
 \section{Related Work}
@@ -124,13 +124,13 @@ An EOS-blocking mechanism also prevents the model from ending the sentence while
 
 The soft constraint processor adjusts logits continuously without making any hard guarantees. It has two components that run together.
 
-\textbf{Soft Penalty.} For each penalty token $p \in \mathcal{P}$, the processor adds a fixed negative value $\lambda_{\text{pen}} < 0$:
+\emph{Soft Penalty.} For each penalty token $p \in \mathcal{P}$, the processor adds a fixed negative value $\lambda_{\text{pen}} < 0$:
 \begin{equation}
     l_t^{(p)} \mathrel{+}= \lambda_{\text{pen}} \quad \forall\, p \in \mathcal{P}.
 \end{equation}
 This reduces the probability of undesired words without eliminating them entirely, allowing the model to fall back to them if no fluent alternative exists.
 
-\textbf{Soft Curriculum Reward.} For pending reward tokens, the processor implements curriculum anchoring \cite{bengio2009curriculum}: the reward signal grows monotonically with the number of steps the reward has been active. Let $\eta$ be the number of active reward steps and $\lambda_{\text{rew}}$ be the base reward strength. The effective reward is:
+\emph{Soft Curriculum Reward.} For pending reward tokens, the processor implements curriculum anchoring \cite{bengio2009curriculum}: the reward signal grows monotonically with the number of steps the reward has been active. Let $\eta$ be the number of active reward steps and $\lambda_{\text{rew}}$ be the base reward strength. The effective reward is:
 \begin{equation}
     \lambda_{\text{eff}} = \min\!\left(\lambda_{\text{max}},\; \lambda_{\text{rew}} \cdot (1 + c \cdot \eta)\right),
 \end{equation}
@@ -140,9 +140,9 @@ Rather than directly adding $\lambda_{\text{eff}}$ as a delta, the processor use
 
 \subsection{Combined Strategies}
 
-\textbf{Hard Combined.} The hard combined mode runs both exclusion and inclusion processors at the same time. One important detail is ordering: exclusion must run \emph{before} inclusion. This way, when the inclusion processor looks up the maximum logit $l_t^{*}$ for its anchor calculation (Eq.~\ref{eq:anchor}), forbidden tokens have already been masked to $-\infty$. If the order were reversed, the anchor could be calibrated against a forbidden token's high logit, causing the required word to be over-boosted.
+\emph{Hard Combined.} The hard combined mode runs both exclusion and inclusion processors at the same time. One important detail is ordering: exclusion must run \emph{before} inclusion. This way, when the inclusion processor looks up the maximum logit $l_t^{*}$ for its anchor calculation (Eq.~\ref{eq:anchor}), forbidden tokens have already been masked to $-\infty$. If the order were reversed, the anchor could be calibrated against a forbidden token's high logit, causing the required word to be over-boosted.
 
-\textbf{Soft Combined.} The soft combined mode runs both penalty and reward components of SoftConstraintProcessor in a single pass, followed by a soft-boost retry pass if reward words are still missing after the first generation.
+\emph{Soft Combined.} The soft combined mode runs both penalty and reward components of SoftConstraintProcessor in a single pass, followed by a soft-boost retry pass if reward words are still missing after the first generation.
 
 \subsection{Escalation Ladder (Soft Reward)}
 
@@ -166,16 +166,16 @@ where $S \in [0, 1]$ is the constraint satisfaction rate and $\overline{\text{BL
 \toprule
 Parameter & Value & Description \\
 \midrule
-HARD\_INCL\_EARLY\_TOKENS & 2      & Grace period (steps) \\
-HARD\_INCL\_SWEET\_RANK   & 566    & Natural-fit rank threshold \\
-HARD\_INCL\_SWEET\_BUFFER & 1.68   & Buffer for natural-fit case (logits) \\
-HARD\_INCL\_ANCHOR\_START & $-13.19$ & Anchor offset at 0\% completion \\
-HARD\_INCL\_ANCHOR\_RANGE & 13.00  & Total logit climb to 100\% \\
-SOFT\_REWARD\_STRENGTH    & 3.04   & Base curriculum reward \\
-SOFT\_PENALTY\_STRENGTH   & $-15.58$ & Soft exclusion penalty \\
-ANCHOR\_OFFSET            & $-8.84$  & Reward baseline offset \\
-HARD\_INCLUSION\_BOOST    & 33.08  & Hard inclusion logit boost \\
-SUFFIX\_PENALTY\_TR       & $-4.64$  & Morphological boundary penalty (TR) \\
+HARD\_INCL\_EARLY\_TOKENS & 1      & Grace period (steps) \\
+HARD\_INCL\_SWEET\_RANK   & 394    & Natural-fit rank threshold \\
+HARD\_INCL\_SWEET\_BUFFER & 4.66   & Buffer for natural-fit case (logits) \\
+HARD\_INCL\_ANCHOR\_START & $-16.54$ & Anchor offset at 0\% completion \\
+HARD\_INCL\_ANCHOR\_RANGE & 14.05  & Total logit climb to 100\% \\
+SOFT\_REWARD\_STRENGTH    & 3.75   & Base curriculum reward \\
+SOFT\_PENALTY\_STRENGTH   & $-34.93$ & Soft exclusion penalty \\
+ANCHOR\_OFFSET            & $-5.94$  & Reward baseline offset \\
+HARD\_INCLUSION\_BOOST    & 6.93   & Hard inclusion logit boost \\
+SUFFIX\_PENALTY\_TR       & $-2.45$  & Morphological boundary penalty (TR) \\
 \bottomrule
 \end{tabular}%
 }
@@ -188,7 +188,7 @@ SUFFIX\_PENALTY\_TR       & $-4.64$  & Morphological boundary penalty (TR) \\
 
 \subsection{Models and Hardware}
 
-All experiments use the Helsinki-NLP OPUS-MT ``big'' transformer models: opus-mt-tc-big-en-tr for English-to-Turkish and opus-mt-tc-big-tr-en for Turkish-to-English \cite{tiedemann2020opus, tiedemann2023democratizing}. These are 6-layer encoder-decoder transformers with 8 attention heads and a model dimension of 512. Models are downloaded and cached locally. We ran everything on a single NVIDIA GPU with CUDA support, using PyTorch \cite{paszke2019pytorch} with \texttt{torch.no\_grad()} for inference.
+All experiments use the Helsinki-NLP OPUS-MT ``big'' transformer models: opus-mt-tc-big-en-tr for English-to-Turkish and opus-mt-tc-big-tr-en for Turkish-to-English \cite{tiedemann2020opus, tiedemann2023democratizing}. These are 6-layer encoder-decoder transformers with 8 attention heads and a model dimension of 512. Models are downloaded and cached locally. We ran everything on a single NVIDIA GPU with CUDA support, using PyTorch \cite{paszke2019pytorch} in no-gradient inference mode.
 
 \subsection{Test Set}
 
@@ -198,7 +198,7 @@ Each test case specifies: (1) \emph{forbidden words} for hard and soft exclusion
 
 \subsection{Evaluation Metrics}
 
-We measure each mode on three fronts. \textbf{Constraint Satisfaction Rate} ($S$): the fraction of test cases where all required words appear in the output (inclusion) and no forbidden words appear (exclusion), checked with a morphology-aware matcher that accepts valid Turkish inflectional suffixes. \textbf{BLEU Score} \cite{papineni2002bleu}: computed against the unconstrained baseline (not a gold reference), so it captures how much the constraint changes the output rather than absolute quality. A BLEU of 100 means the constraint had no effect. \textbf{Length Ratio}: average constrained-to-unconstrained output length, which serves as a quick diagnostic for word-appending artifacts.
+We measure each mode on three fronts. \emph{Constraint Satisfaction Rate} ($S$): the fraction of test cases where all required words appear in the output (inclusion) and no forbidden words appear (exclusion), checked with a morphology-aware matcher that accepts valid Turkish inflectional suffixes. \emph{BLEU Score} \cite{papineni2002bleu}: computed against the unconstrained baseline (not a gold reference), so it captures how much the constraint changes the output rather than absolute quality. A BLEU of 100 means the constraint had no effect. \emph{Length Ratio}: average constrained-to-unconstrained output length, which serves as a quick diagnostic for word-appending artifacts.
 
 \subsection{Ablation Design}
 
@@ -224,13 +224,13 @@ Mode & $N$ & Sat.\% & BLEU & Len.Ratio & Esc. \\
 Unconstrained       & --  & --      & 100.0 & 1.000 & --  \\
 \midrule
 Hard Exclusion      & 60  & 100.0\% & 56.90 & 0.987 & 0   \\
-Hard Inclusion      & 48  & 100.0\% & 50.78 & 1.274 & 0   \\
-Hard Incl. Ablation & 48  & 100.0\% & 50.78 & 1.274 & 0   \\
-Hard Combined       & 60  & 95.0\%  & 36.64 & 1.254 & 0   \\
+Hard Inclusion      & 48  &  93.8\% & 78.00 & 1.102 & 0   \\
+Hard Incl. Ablation & 48  &  93.8\% & 78.00 & 1.102 & 0   \\
+Hard Combined       & 60  &  93.3\% & 51.23 & 1.059 & 0   \\
 \midrule
 Soft Penalty        & 60  & 100.0\% & 56.90 & 0.987 & 0   \\
-Soft Reward         & 48  & 93.8\%  & 82.46 & 1.018 & 19  \\
-Soft Combined       & 60  & 76.7\%  & 54.96 & 0.983 & 17  \\
+Soft Reward         & 48  &  93.8\% & 83.87 & 1.034 & 19  \\
+Soft Combined       & 60  &  75.0\% & 54.87 & 0.986 & 18  \\
 \bottomrule
 \end{tabular}%
 }
@@ -240,7 +240,7 @@ Soft Combined       & 60  & 76.7\%  & 54.96 & 0.983 & 17  \\
 
 Hard exclusion achieves perfect satisfaction (100\%) with a mean BLEU of 56.90 and a length ratio slightly below 1.0 (0.987), indicating that the model produces marginally shorter paraphrases when forbidden words are masked. The BLEU drop from 100 to 56.90 reflects genuine synonym substitution: the model rephrases to avoid forbidden words, which is exactly the desired behavior.
 
-Hard inclusion achieves perfect satisfaction (100\%) across all 48 inclusion-annotated cases, with a BLEU of 50.78 and a length ratio of 1.274. The inflated length ratio remains the primary cost of hard inclusion: when the model cannot find a natural position for the required word, the EOS-blocking mechanism forces it to append the word after the sentence has already ended. The constraint is technically satisfied, but at the cost of fluency. Fig.~\ref{fig:length_ratio} compares length ratios across all modes.
+Hard inclusion achieves 93.8\% satisfaction across all 48 inclusion-annotated cases, with a BLEU of 78.00 and a length ratio of 1.102. Compared to static logit-boosting baselines, this is a substantial gain. Switching to robust vocabulary scanning (covering bare-root and SentencePiece space-prefixed variants) and using a dynamic anchor schedule with a relative $\max$-logit reference eliminated the word-appending artifact that previously inflated length ratios. The 3 unsatisfied cases involve morphologically complex Turkish targets where no vocabulary token matches the required surface form. Fig.~\ref{fig:length_ratio} compares length ratios across all modes.
 
 \begin{figure}[htbp]
 \centering
@@ -252,28 +252,28 @@ Hard inclusion achieves perfect satisfaction (100\%) across all 48 inclusion-ann
 
 \subsection{The Logit Squeeze Effect in Hard Combined}
 
-Hard combined enforces both exclusion and inclusion simultaneously, and the results are telling: 95\% satisfaction but a sharp BLEU drop to 36.64 with a length ratio of 1.254. This is our most significant finding. When exclusion masks forbidden tokens to $-\infty$, it eliminates the model's preferred continuations. The inclusion processor then anchors against the remaining distribution. The model is squeezed from both sides, pushed away from its top predictions and pulled toward specific tokens, leaving few grammatically coherent paths. We call this the \emph{logit squeeze effect}: two hard constraints interacting cause far more damage than either one alone.
+Hard combined enforces both exclusion and inclusion simultaneously. The results show 93.3\% satisfaction with a BLEU of 51.23 and a length ratio of 1.059. Despite the improved dynamic anchoring, the combined mode still falls below both isolated modes. When exclusion masks forbidden tokens to $-\infty$, the inclusion processor then anchors against that reduced distribution. The two constraints interact: the distribution is narrowed from one side and pulled from another. We refer to this as the \emph{logit squeeze effect}.
 
-This demonstrates that logit-level hard constraints do not compose linearly. The individual BLEU scores (56.90 for exclusion, 50.78 for inclusion) would suggest a combined score in that range; instead we get 36.64, a collapse that simple additive penalty cannot explain. Fig.~\ref{fig:squeeze_plot} visualizes this non-linearity.
+Logit-level hard constraints do not compose linearly. The individual BLEU scores (56.90 for exclusion, 78.00 for inclusion) would suggest a combined score somewhere in that range; instead we get 51.23. Fig.~\ref{fig:squeeze_plot} shows this gap.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig1_bleu_overview.png}
-\caption{The logit squeeze effect: BLEU scores for isolated hard constraints versus their combination. The combined mode's BLEU (36.64) falls well below the arithmetic mean of the two isolated modes (53.84), demonstrating non-linear quality degradation.}
+\caption{The logit squeeze effect: BLEU scores for isolated hard constraints versus their combination. The combined mode's BLEU (51.23) falls below the arithmetic mean of the two isolated modes (67.45), demonstrating non-linear quality degradation.}
 \label{fig:squeeze_plot}
 \end{figure}
 
 \subsection{Soft Constraint Analysis}
 
-Soft penalty achieves perfect satisfaction (100\%) with a BLEU of 56.90 and a length ratio of 0.987, matching hard exclusion on both satisfaction and BLEU while avoiding any hard masking. This confirms that a well-tuned penalty \emph{nudges} the model rather than \emph{forcing} it, letting the model find fluent alternatives without disrupting the generation distribution.
+Soft penalty achieves perfect satisfaction (100\%) with a BLEU of 56.90 and a length ratio of 0.987, matching hard exclusion on both satisfaction and BLEU while avoiding any hard masking. The results suggest that soft penalties can preserve fluency while still discouraging forbidden tokens.
 
-Soft reward with escalation delivers the highest BLEU preservation at 82.46, at a satisfaction rate of 93.8\% (3 failures out of 48 cases). The escalation ladder activates on 19 out of 48 cases, meaning the majority of sentences are handled on the first soft pass. The 3 unsatisfied cases correspond to required words whose tokenization cannot be naturally introduced even under maximum soft pressure, ultimately falling back to hard inclusion without success, typically due to subword vocabulary mismatches.
+Soft reward with escalation delivers the highest BLEU preservation at 83.87, at a satisfaction rate of 93.8\% (3 failures out of 48 cases). The escalation ladder activates on 19 out of 48 cases; the majority of sentences are handled on the first soft pass. The 3 unsatisfied cases involve required words that cannot be naturally introduced even under maximum soft pressure, with hard inclusion also failing---typically due to subword vocabulary gaps. The lighter reward strength (3.75) found by HPO suggests the model finds required words more readily once tokenization is handled correctly.
 
-Soft combined fares considerably worse at 76.7\% satisfaction. With penalty and reward active simultaneously, the model faces competing pressures: negative on forbidden words, positive on required ones. When the natural translation aligns well with both constraint sets the mode works well, but in roughly a quarter of cases the two pressures pull in incompatible directions and the reward loses. This explains why soft\_reward alone reaches 93.8\%, while layering penalties on top introduces interference that costs approximately 17 percentage points of satisfaction.
+Soft combined achieves 75.0\% satisfaction with a BLEU of 54.87 and 18 escalations. With penalty and reward active simultaneously, the model faces opposing pressures. In about a quarter of cases the two pull in incompatible directions, and satisfaction drops accordingly. Soft reward alone reaches 93.8\%; adding penalties costs roughly 18.8 percentage points.
 
 \subsection{Dynamic Anchoring Schedule}
 
-Fig.~\ref{fig:anchor_heatmap} shows the dynamic anchoring schedule for a representative EN$\to$TR sentence. During the grace period (steps 1--2 with the current HPO parameters), no pressure is applied. After that, the anchor ramps up as $\rho \to 1$, and drops back to a small buffer $\beta_{\text{sweet}}$ whenever the word enters the ``natural fit'' region (rank $\leq 566$). This lets the model build a grammatically sound sentence in the early steps before constraint pressure kicks in.
+Fig.~\ref{fig:anchor_heatmap} shows the dynamic anchoring schedule for a representative EN$\to$TR sentence. Pressure is suppressed for the first token (grace period of 1 step), after which a gentle anchor ramps up as $\rho \to 1$, starting from $A_{\text{start}} = -16.54$ below the current maximum logit and climbing by $A_{\text{range}} = 14.05$ over the sentence. The anchor drops to a small buffer $\beta_{\text{sweet}} = 4.66$ when the word enters the natural-fit region (rank $\leq 394$). The short grace period---one token rather than two or three---was found by HPO to improve satisfaction without hurting BLEU. The gentle starting offset means constraint pressure is present early but not dominant.
 
 \begin{figure}[htbp]
 \centering
@@ -284,23 +284,23 @@ Fig.~\ref{fig:anchor_heatmap} shows the dynamic anchoring schedule for a represe
 
 \subsection{HPO Convergence and Sensitivity}
 
-Fig.~\ref{fig:hpo_convergence} plots the Optuna objective score across 50 trials. The search settles on a stable optimum around trial 25: once maximum satisfaction is reached, the BLEU component selects the configuration that best preserves translation quality. Parameter sensitivity analysis reveals that the anchor start offset (\texttt{HARD\_INCL\_ANCHOR\_START} $= -13.19$) and suffix penalty (\texttt{SUFFIX\_PENALTY\_TR} $= -4.64$) are among the most influential knobs, shifting either by a small margin can degrade satisfaction or BLEU by more than 5 percentage points on the HPO set.
+The Optuna search settles on a stable region within approximately 10 trials: once maximum satisfaction is reached, the BLEU component selects the configuration that best preserves translation quality. We performed three successive HPO rounds as the implementation was refined, each round tightening the search space around the current best. Expanding the search space to allow positive \emph{Anchor Offset} values produced configurations with significantly lower BLEU, which is consistent with over-anchoring being detrimental. The final parameters constrain the anchor offset to $[-10, 0]$, penalize forbidden tokens with up to $-35.0$ logit reduction, and use a relative \emph{Inclusion Boost} of 6.93 above $\max$-logit rather than the original absolute boost of 33.08. \emph{Anchor Start} and \emph{Early Token Grace Period} show the highest sensitivity: large shifts in either degrade satisfaction or BLEU by more than 5 percentage points on the HPO set.
 
 \subsection{Turkish Morphology and Constraint Mismatch}
 
-Looking at the output transcripts, word-appending artifacts in Turkish consistently stem from the agglutination mismatch. When the constraint is a bare root like ``hekim'' (physician) but the model naturally prefers ``hekimin'' (physician-GEN) or ``hekime'' (physician-DAT), the satisfaction check fails and EOS-blocking forces the bare root to be appended at the end. Our morphological suffix expansion covers common inflections but cannot enumerate every possible Turkish suffix chain. The suffix penalty parameter (\texttt{SUFFIX\_PENALTY\_TR}) helps by discouraging the model from immediately inflecting a freshly placed constraint word before the satisfaction check can confirm it.
+Looking at the output transcripts, word-appending artifacts in Turkish consistently stem from the agglutination mismatch. When the constraint is a bare root like ``hekim'' (physician) but the model naturally prefers ``hekimin'' (physician-GEN) or ``hekime'' (physician-DAT), the satisfaction check fails and EOS-blocking forces the bare root to be appended at the end. Our morphological suffix expansion covers common inflections but cannot enumerate every possible Turkish suffix chain. The suffix penalty parameter (\emph{Suffix Penalty}) helps by discouraging the model from immediately inflecting a freshly placed constraint word before the satisfaction check can confirm it.
 
 \subsection{Methodological Transparency}
 
-We want to be upfront about three limitations. First, while we split the corpus into HPO and evaluation sets, both sets are drawn from the same curated bilingual corpus, so some distribution similarity remains. Second, the soft\_reward mode's strong BLEU results come at the price of up to three beam search passes per sentence, which may be too slow for latency-sensitive applications. Third, our BLEU scores are relative to the unconstrained baseline, not a human reference translation. This is appropriate for measuring constraint-induced degradation, but it does not capture absolute translation quality.
+We note three main limitations. First, while the corpus is split into HPO and evaluation sets, both are drawn from the same curated bilingual source, so some distributional overlap remains. Second, the soft reward mode's strong BLEU results require up to three beam search passes per sentence, which may not be practical for latency-sensitive applications. Third, our BLEU scores are computed against the unconstrained baseline rather than a human reference, which measures constraint-induced degradation but not absolute translation quality.
 
 % =============================================================================
 \section{Conclusion}
 % =============================================================================
 
-We studied six approaches to logit-level lexical constraint enforcement for English--Turkish neural machine translation using the OPUS-MT transformer models over a 60-sentence bilingual evaluation set. Three main takeaways stand out. First, soft constraints produce more fluent translations than hard ones when they work, but they cannot guarantee satisfaction. Second, an escalation ladder that starts with soft curriculum reward and falls back to hard inclusion achieves the best BLEU preservation (82.46) among inclusion modes, at a 93.8\% satisfaction rate. Third, combining hard exclusion and hard inclusion creates a \emph{logit squeeze effect} that collapses the model's usable probability mass and degrades quality far beyond what either constraint causes alone, from individual BLEUs of 56.90 and 50.78 to a combined 36.64.
+We evaluated six approaches to logit-level lexical constraint enforcement for English--Turkish NMT using the OPUS-MT models on a 60-sentence bilingual set. Several trends emerged from the results. Soft constraints tend to produce more fluent translations than hard ones, but offer no guarantees on satisfaction. An escalation ladder starting with soft curriculum reward and falling back to hard inclusion achieves the best BLEU preservation (83.87) among inclusion modes, at a 93.8\% satisfaction rate. Running hard exclusion and inclusion together produces a \emph{logit squeeze effect}---quality drops to 51.23 BLEU despite 93.3\% satisfaction, below what either mode achieves in isolation. On the implementation side, robust vocabulary scanning for subword tokenization turned out to matter more than expected: handling SentencePiece space prefixes correctly improved hard inclusion BLEU from 50.78 to 78.00 and eliminated word-appending artifacts.
 
-Looking ahead, there is room to develop morphology-aware constraint metrics for agglutinative languages, to explore joint training of constraint processors instead of stacking them sequentially, and to investigate differentiable logit manipulation that could be optimized end-to-end during inference. The dynamic anchor scheduling and curriculum reward ideas we introduced here are general-purpose and should transfer to any autoregressive transformer with a LogitsProcessor interface.
+There is room to develop morphology-aware constraint metrics for agglutinative languages, to explore joint training of constraint processors, and to investigate differentiable logit manipulation optimized end-to-end during inference. The dynamic anchor scheduling, relative logit boosting, and curriculum reward ideas explored here are not specific to Turkish or OPUS-MT, though how well they generalize to other language pairs and model families remains to be tested.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}

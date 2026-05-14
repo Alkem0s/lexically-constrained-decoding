@@ -158,16 +158,19 @@ def fig_bleu_overview():
                colors="crimson", linewidths=2, linestyles="--", zorder=5)
     ax1.annotate(f"Expected\n({mean_hard:.1f})",
                  xy=(combined_idx, mean_hard),
-                 xytext=(combined_idx + 0.55, mean_hard + 2),
+                 xytext=(combined_idx - 0.7, mean_hard + 18),
+                 ha="center", va="bottom",
                  fontsize=7.5, color="crimson",
-                 arrowprops=dict(arrowstyle="-", color="crimson", lw=1))
+                 fontweight="bold",
+                 arrowprops=dict(arrowstyle="->", color="crimson", lw=1.0,
+                                 connectionstyle="arc3,rad=-0.3"))
 
     # Satisfaction markers as secondary axis
     ax2 = ax1.twinx()
     ax2.plot(x, sat, "D--", color="#2E4057", markersize=6,
              linewidth=1.4, label="Satisfaction %", zorder=6)
     ax2.set_ylabel("Constraint Satisfaction (%)", fontsize=10)
-    ax2.set_ylim(0, 115)
+    ax2.set_ylim(0, 140)
     ax2.yaxis.label.set_color("#2E4057")
 
     # Annotate bars
@@ -179,7 +182,7 @@ def fig_bleu_overview():
     ax1.set_xticks(x)
     ax1.set_xticklabels(labels, fontsize=9)
     ax1.set_ylabel("BLEU (vs. Unconstrained Baseline)", fontsize=10)
-    ax1.set_ylim(0, 100)
+    ax1.set_ylim(0, 110)
     ax1.grid(axis="y", linestyle=":", alpha=0.6, zorder=0)
     ax1.set_title("BLEU Score and Constraint Satisfaction by Decoding Mode", fontsize=11)
 

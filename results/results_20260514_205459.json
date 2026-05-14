@@ -4,9 +4,9 @@
     "direction": "EN→TR",
     "unconstrained": "Kuş uzun ağacın üzerinden uçtu.",
     "hard_exclusion": "Kuş uzun ağacın üzerinden geçti.",
-    "hard_inclusion": "Kuş, uzun ağacın üstünden uçtu. kuş.",
-    "hard_inclusion_ablation": "Kuş, uzun ağacın üstünden uçtu. kuş.",
-    "hard_combined": "Kuş, uzun ağacın üstünden uçup gitti. kuş.",
+    "hard_inclusion": "Kuş uzun ağacın üzerinden uçtu.",
+    "hard_inclusion_ablation": "Kuş uzun ağacın üzerinden uçtu.",
+    "hard_combined": "Kuş uzun ağacın üzerinden geçti.",
     "soft_penalty": "Kuş uzun ağacın üzerinden geçti.",
     "soft_reward": "Kuş uzun ağacın üzerinden uçtu.",
     "soft_combined": "Kuş uzun ağacın üzerinden geçti.",
@@ -49,8 +49,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 14.26,
-        "length_ratio": 1.2,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -63,8 +63,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 14.26,
-        "length_ratio": 1.2,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -87,8 +87,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 9.98,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 53.73,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -300,9 +300,9 @@
     "direction": "EN→TR",
     "unconstrained": "Arkadaşlarıyla futbol oynuyor.",
     "hard_exclusion": "Dostlarıyla futbol oynuyor.",
-    "hard_inclusion": "Arkadaşlarıyla futbol oynuyor. futbol oynuyor.",
-    "hard_inclusion_ablation": "Arkadaşlarıyla futbol oynuyor. futbol oynuyor.",
-    "hard_combined": "Dostlarıyla futbol oynuyor. futbol oynuyor.",
+    "hard_inclusion": "Arkadaşlarıyla futbol oynuyor.",
+    "hard_inclusion_ablation": "Arkadaşlarıyla futbol oynuyor.",
+    "hard_combined": "Dostlarıyla futbol oynuyor.",
     "soft_penalty": "Dostlarıyla futbol oynuyor.",
     "soft_reward": "Arkadaşlarıyla futbol oynuyor.",
     "soft_combined": "Dostlarıyla futbol oynuyor.",
@@ -345,8 +345,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 41.11,
-        "length_ratio": 1.667,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -359,8 +359,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 41.11,
-        "length_ratio": 1.667,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -383,8 +383,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 24.45,
-        "length_ratio": 1.667,
+        "bleu_vs_baseline": 59.46,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -744,9 +744,9 @@
     "direction": "EN→TR",
     "unconstrained": "Kitap masanın üzerinde.",
     "hard_exclusion": "Kitap sofranın üzerindedir.",
-    "hard_inclusion": "Kitap masanın üzerinde. kitap.",
-    "hard_inclusion_ablation": "Kitap masanın üzerinde. kitap.",
-    "hard_combined": "Kitap, sofranın üzerindedir kitap.",
+    "hard_inclusion": "Kitap masanın üzerinde.",
+    "hard_inclusion_ablation": "Kitap masanın üzerinde.",
+    "hard_combined": "Kitap sofranın üzerindedir.",
     "soft_penalty": "Kitap sofranın üzerindedir.",
     "soft_reward": "Kitap masanın üzerinde.",
     "soft_combined": "Kitap sofranın üzerindedir.",
@@ -789,8 +789,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 50.81,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -803,8 +803,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 50.81,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -827,8 +827,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 9.65,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 19.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -892,11 +892,11 @@
     "direction": "EN→TR",
     "unconstrained": "Hastanın acil ameliyata ihtiyacı vardır.",
     "hard_exclusion": "Hastanın acil cerrahi müdahaleye ihtiyacı vardır.",
-    "hard_inclusion": "Hastanın acil ameliyata ihtiyacı operasyon.",
-    "hard_inclusion_ablation": "Hastanın acil ameliyata ihtiyacı operasyon.",
-    "hard_combined": "Hastanın acil cerrahi müdahaleye operasyon ihtiyacı vardır.",
+    "hard_inclusion": "Hastanın acil ameliyata ihtiyacı var. operasyon.",
+    "hard_inclusion_ablation": "Hastanın acil ameliyata ihtiyacı var. operasyon.",
+    "hard_combined": "Hastanın acil cerrahi müdahaleye ihtiyacı var. operasyon.",
     "soft_penalty": "Hastanın acil cerrahi müdahaleye ihtiyacı vardır.",
-    "soft_reward": "Hastanın acil ameliyata ihtiyacı operasyon.",
+    "soft_reward": "Hastanın acil ameliyata ihtiyacı var. operasyon.",
     "soft_combined": "Hastanın acil cerrahi müdahaleye ihtiyacı vardır.",
     "forbidden_words": [
       "ameliyat"
@@ -940,8 +940,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 36.56,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -954,8 +954,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 36.56,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -978,7 +978,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 25.85,
+        "bleu_vs_baseline": 11.34,
         "length_ratio": 1.4,
         "n_escalated": 0
       },
@@ -1007,8 +1007,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 36.56,
+        "length_ratio": 1.2,
         "n_escalated": 1
       },
       "soft_combined": {
@@ -1043,9 +1043,9 @@
     "direction": "EN→TR",
     "unconstrained": "CEO dün istifa etti.",
     "hard_exclusion": "CEO dün istifa etti.",
-    "hard_inclusion": "CEO dün istifa etti. istifa etti.",
-    "hard_inclusion_ablation": "CEO dün istifa etti. istifa etti.",
-    "hard_combined": "CEO dün istifa etti. istifa etti.",
+    "hard_inclusion": "CEO dün istifa etti.",
+    "hard_inclusion_ablation": "CEO dün istifa etti.",
+    "hard_combined": "CEO dün istifa etti.",
     "soft_penalty": "CEO dün istifa etti.",
     "soft_reward": "CEO dün istifa etti.",
     "soft_combined": "CEO dün istifa etti.",
@@ -1088,8 +1088,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 51.7,
-        "length_ratio": 1.5,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -1102,8 +1102,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 51.7,
-        "length_ratio": 1.5,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -1126,8 +1126,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 51.7,
-        "length_ratio": 1.5,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -1191,9 +1191,9 @@
     "direction": "EN→TR",
     "unconstrained": "Kuantum hesaplama geleceğimizdir.",
     "hard_exclusion": "Kuantum hesaplama geleceğimizdir.",
-    "hard_inclusion": "Kuantum hesaplama, geleceğin ta kendisidir. kuantum hesaplama, gelecektir.",
-    "hard_inclusion_ablation": "Kuantum hesaplama, geleceğin ta kendisidir. kuantum hesaplama, gelecektir.",
-    "hard_combined": "Kuantum hesaplama, geleceğin ta kendisidir. kuantum hesaplama ise geleceğin ta kendisi.",
+    "hard_inclusion": "Kuantum hesaplama geleceğimizdir.",
+    "hard_inclusion_ablation": "Kuantum hesaplama geleceğimizdir.",
+    "hard_combined": "Kuantum hesaplama geleceğimizdir.",
     "soft_penalty": "Kuantum hesaplama geleceğimizdir.",
     "soft_reward": "Kuantum hesaplama geleceğimizdir.",
     "soft_combined": "Kuantum hesaplama geleceğimizdir.",
@@ -1236,8 +1236,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 7.5,
-        "length_ratio": 2.667,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -1250,8 +1250,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 7.5,
-        "length_ratio": 2.667,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -1274,8 +1274,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 6.29,
-        "length_ratio": 3.667,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -1339,9 +1339,9 @@
     "direction": "EN→TR",
     "unconstrained": "Borsa çöktü.",
     "hard_exclusion": "Borsa çöktü.",
-    "hard_inclusion": "Borsa çöktü. borsa çöktü.",
-    "hard_inclusion_ablation": "Borsa çöktü. borsa çöktü.",
-    "hard_combined": "Borsa çöktü borsa.",
+    "hard_inclusion": "Borsa çöktü.",
+    "hard_inclusion_ablation": "Borsa çöktü.",
+    "hard_combined": "Borsa çöktü.",
     "soft_penalty": "Borsa çöktü.",
     "soft_reward": "Borsa çöktü.",
     "soft_combined": "Borsa çöktü.",
@@ -1384,8 +1384,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 30.21,
-        "length_ratio": 2.0,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -1398,8 +1398,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 30.21,
-        "length_ratio": 2.0,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -1422,8 +1422,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 35.36,
-        "length_ratio": 1.5,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -1487,9 +1487,9 @@
     "direction": "EN→TR",
     "unconstrained": "Yenilenebilir enerji sektörü büyüyor.",
     "hard_exclusion": "Yenilenebilir elektrik sektörü büyüyor.",
-    "hard_inclusion": "Yenilenebilir enerji sektörü büyüyor. yenilenebilir.",
-    "hard_inclusion_ablation": "Yenilenebilir enerji sektörü büyüyor. yenilenebilir.",
-    "hard_combined": "Yenilenebilir elektrik sektörü büyüyor. yenilenebilir.",
+    "hard_inclusion": "Yenilenebilir enerji sektörü büyüyor.",
+    "hard_inclusion_ablation": "Yenilenebilir enerji sektörü büyüyor.",
+    "hard_combined": "Yenilenebilir elektrik sektörü büyüyor.",
     "soft_penalty": "Yenilenebilir elektrik sektörü büyüyor.",
     "soft_reward": "Yenilenebilir enerji sektörü büyüyor.",
     "soft_combined": "Yenilenebilir elektrik sektörü büyüyor.",
@@ -1532,8 +1532,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 61.48,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -1546,8 +1546,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 61.48,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -1570,8 +1570,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 26.27,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 42.73,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -1635,9 +1635,9 @@
     "direction": "EN→TR",
     "unconstrained": "Dedektif çok önemli bir ipucu buldu.",
     "hard_exclusion": "Dedektif çok önemli bir ipucu bulmuş.",
-    "hard_inclusion": "Dedektif çok önemli bir ipucu buldu. ipucu.",
-    "hard_inclusion_ablation": "Dedektif çok önemli bir ipucu buldu. ipucu.",
-    "hard_combined": "Dedektif çok önemli bir ipucu bulmuş ipucu.",
+    "hard_inclusion": "Dedektif çok önemli bir ipucu buldu.",
+    "hard_inclusion_ablation": "Dedektif çok önemli bir ipucu buldu.",
+    "hard_combined": "Dedektif çok önemli bir ipucu bulmuş.",
     "soft_penalty": "Dedektif çok önemli bir ipucu bulmuş.",
     "soft_reward": "Dedektif çok önemli bir ipucu buldu.",
     "soft_combined": "Dedektif çok önemli bir ipucu bulmuş.",
@@ -1680,8 +1680,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 72.6,
-        "length_ratio": 1.167,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -1694,8 +1694,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 72.6,
-        "length_ratio": 1.167,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -1718,8 +1718,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 54.11,
-        "length_ratio": 1.167,
+        "bleu_vs_baseline": 64.35,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -1783,9 +1783,9 @@
     "direction": "EN→TR",
     "unconstrained": "Küçük bir köpek büyük kediye havladı.",
     "hard_exclusion": "Büyük kediye havlayan küçük bir kedi.",
-    "hard_inclusion": "Büyük kediye havlayan küçük bir köpek küçük kedi.",
-    "hard_inclusion_ablation": "Büyük kediye havlayan küçük bir köpek küçük kedi.",
-    "hard_combined": "Büyük kediye havlayan küçük bir kedi. kedi. küçük.",
+    "hard_inclusion": "Büyük kediye havlayan küçük bir köpek.",
+    "hard_inclusion_ablation": "Büyük kediye havlayan küçük bir köpek.",
+    "hard_combined": "Küçük bir kedi büyük kediye havladı.",
     "soft_penalty": "Büyük kediye havlayan küçük bir kedi.",
     "soft_reward": "Küçük bir köpek büyük kediye havladı.",
     "soft_combined": "Büyük kediye havlayan küçük bir kedi.",
@@ -1834,8 +1834,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 11.34,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 15.62,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -1852,8 +1852,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 11.34,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 15.62,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -1880,8 +1880,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 4.93,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 48.89,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -1953,9 +1953,9 @@
     "direction": "EN→TR",
     "unconstrained": "Annesine bir mektup yazdı.",
     "hard_exclusion": "Annesine bir mektup yazmış.",
-    "hard_inclusion": "Annesine bir mektup yazdı. mektup.",
-    "hard_inclusion_ablation": "Annesine bir mektup yazdı. mektup.",
-    "hard_combined": "Annesine bir mektup yazmış. mektup.",
+    "hard_inclusion": "Annesine bir mektup yazdı.",
+    "hard_inclusion_ablation": "Annesine bir mektup yazdı.",
+    "hard_combined": "Annesine bir mektup yazmış.",
     "soft_penalty": "Annesine bir mektup yazmış.",
     "soft_reward": "Annesine bir mektup yazdı.",
     "soft_combined": "Annesine bir mektup yazmış.",
@@ -2004,8 +2004,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 61.48,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -2022,8 +2022,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 61.48,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -2050,8 +2050,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 26.27,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 42.73,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -2123,9 +2123,9 @@
     "direction": "EN→TR",
     "unconstrained": "Güçlü rüzgar çadırı uçurdu.",
     "hard_exclusion": "Kuvvetli rüzgar çadırı uçurdu.",
-    "hard_inclusion": "Güçlü rüzgar çadırı uçurdu. rüzgar çadır.",
-    "hard_inclusion_ablation": "Güçlü rüzgar çadırı uçurdu. rüzgar çadır.",
-    "hard_combined": "Şiddetli rüzgar çadırı uçurdu. rüzgar çadır.",
+    "hard_inclusion": "Güçlü rüzgar çadırı uçurdu.",
+    "hard_inclusion_ablation": "Güçlü rüzgar çadırı uçurdu.",
+    "hard_combined": "Kuvvetli rüzgar çadırı uçurdu.",
     "soft_penalty": "Kuvvetli rüzgar çadırı uçurdu.",
     "soft_reward": "Güçlü rüzgar çadırı uçurdu.",
     "soft_combined": "Kuvvetli rüzgar çadırı uçurdu.",
@@ -2174,8 +2174,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 51.7,
-        "length_ratio": 1.5,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -2192,8 +2192,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 51.7,
-        "length_ratio": 1.5,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -2220,8 +2220,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 34.57,
-        "length_ratio": 1.5,
+        "bleu_vs_baseline": 66.87,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -2293,9 +2293,9 @@
     "direction": "EN→TR",
     "unconstrained": "Kapıyı açtı ve içeri girdi.",
     "hard_exclusion": "Kapıyı açıp içeri girdi.",
-    "hard_inclusion": "Kapıyı açtı ve içeri girdi. içeri kapı.",
-    "hard_inclusion_ablation": "Kapıyı açtı ve içeri girdi. içeri kapı.",
-    "hard_combined": "Kapıyı açıp içeri girdi. içeri kapı.",
+    "hard_inclusion": "Kapıyı açtı ve içeri girdi.",
+    "hard_inclusion_ablation": "Kapıyı açtı ve içeri girdi.",
+    "hard_combined": "Kapıyı açıp içeri girdi.",
     "soft_penalty": "Kapıyı açıp içeri girdi.",
     "soft_reward": "Kapıyı açtı ve içeri girdi.",
     "soft_combined": "Kapıyı açıp içeri girdi.",
@@ -2344,8 +2344,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 58.74,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -2362,8 +2362,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 58.74,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -2390,8 +2390,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 22.09,
-        "length_ratio": 1.2,
+        "bleu_vs_baseline": 34.98,
+        "length_ratio": 0.8,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -2463,9 +2463,9 @@
     "direction": "EN→TR",
     "unconstrained": "Süslü bir restoranda akşam yemeği yediler.",
     "hard_exclusion": "Şık bir restoranda akşam yemeği yediler.",
-    "hard_inclusion": "Şık bir restoranda akşam yemeği yedi akşam. restoran.",
-    "hard_inclusion_ablation": "Şık bir restoranda akşam yemeği yedi akşam. restoran.",
-    "hard_combined": "Süslü bir restoranda akşam yemeği restoran akşam.",
+    "hard_inclusion": "Süslü bir restoranda akşam yemeği yediler.",
+    "hard_inclusion_ablation": "Süslü bir restoranda akşam yemeği yediler.",
+    "hard_combined": "Şık bir restoranda akşam yemeği yediler.",
     "soft_penalty": "Şık bir restoranda akşam yemeği yediler.",
     "soft_reward": "Süslü bir restoranda akşam yemeği yediler.",
     "soft_combined": "Şık bir restoranda akşam yemeği yediler.",
@@ -2514,8 +2514,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 27.78,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -2532,8 +2532,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 27.78,
-        "length_ratio": 1.333,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -2560,8 +2560,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 54.11,
-        "length_ratio": 1.167,
+        "bleu_vs_baseline": 80.91,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -2633,9 +2633,9 @@
     "direction": "EN→TR",
     "unconstrained": "Mavi gökyüzü bulutlarla doluydu.",
     "hard_exclusion": "Mavi göğü bulutlarla doluydu.",
-    "hard_inclusion": "Mavi gökyüzü bulutlarla doluydu bulut.",
-    "hard_inclusion_ablation": "Mavi gökyüzü bulutlarla doluydu bulut.",
-    "hard_combined": "Mavi göğü bulutlarla doluydu bulut.",
+    "hard_inclusion": "Mavi gökyüzü bulutlarla doluydu.",
+    "hard_inclusion_ablation": "Mavi gökyüzü bulutlarla doluydu.",
+    "hard_combined": "Mavi göğü bulutlarla doluydu.",
     "soft_penalty": "Mavi göğü bulutlarla doluydu.",
     "soft_reward": "Mavi gökyüzü bulutlarla doluydu.",
     "soft_combined": "Mavi göğü bulutlarla doluydu.",
@@ -2684,8 +2684,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -2702,8 +2702,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -2730,8 +2730,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 19.3,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 42.73,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -2803,9 +2803,9 @@
     "direction": "EN→TR",
     "unconstrained": "Uluslararası uzay istasyonu Dünya'nın yörüngesindedir.",
     "hard_exclusion": "Uluslararası uzay istasyonu yerkürenin yörüngesindedir.",
-    "hard_inclusion": "Uluslararası uzay istasyonu Dünya'nın yörünge yörünge uzay istasyonu.",
-    "hard_inclusion_ablation": "Uluslararası uzay istasyonu Dünya'nın yörünge yörünge uzay istasyonu.",
-    "hard_combined": "Uluslararası uzay istasyonu yerkürenin yörünge uzay istasyonu.",
+    "hard_inclusion": "Uluslararası uzay istasyonu Dünya uzay istasyonu etrafında dönmektedir.",
+    "hard_inclusion_ablation": "Uluslararası uzay istasyonu Dünya uzay istasyonu etrafında dönmektedir.",
+    "hard_combined": "Uluslararası uzay istasyonu uzay istasyonu etrafında döner. yörünge.",
     "soft_penalty": "Uluslararası uzay istasyonu yerkürenin yörüngesindedir.",
     "soft_reward": "Uluslararası uzay istasyonu Dünya'nın yörüngesindedir.",
     "soft_combined": "Uluslararası uzay istasyonu yerkürenin yörüngesindedir.",
@@ -2842,37 +2842,37 @@
       },
       "hard_inclusion": {
         "satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "uzay istasyonu": {
               "present": true,
               "satisfied": true
             },
             "yörünge": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "bleu_vs_baseline": 31.56,
+        "bleu_vs_baseline": 19.07,
         "length_ratio": 1.6,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
         "satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "uzay istasyonu": {
               "present": true,
               "satisfied": true
             },
             "yörünge": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "bleu_vs_baseline": 31.56,
+        "bleu_vs_baseline": 19.07,
         "length_ratio": 1.6,
         "n_escalated": 0
       },
@@ -2900,8 +2900,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 22.09,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 16.78,
+        "length_ratio": 1.6,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -2973,9 +2973,9 @@
     "direction": "EN→TR",
     "unconstrained": "Makine çevirisi sinir ağları kullanır.",
     "hard_exclusion": "Makine tercümesi sinir ağları kullanır.",
-    "hard_inclusion": "Makine çevirisi makine çevirisi sinir ağları kullanır.",
-    "hard_inclusion_ablation": "Makine çevirisi makine çevirisi sinir ağları kullanır.",
-    "hard_combined": "Makine tercümesinde makine çelik sinir ağları maksadıyla makinistlik maksatlı olarak makyöz ağlar maktulü maklü nöral ağ makslü!)",
+    "hard_inclusion": "Makine çevirisi sinir ağları kullanır makine çevirisi.",
+    "hard_inclusion_ablation": "Makine çevirisi sinir ağları kullanır makine çevirisi.",
+    "hard_combined": "Makine tercümesi makine çevelerini kullanır.",
     "soft_penalty": "Makine tercümesi sinir ağları kullanır.",
     "soft_reward": "Makine çevirisi sinir ağları kullanır.",
     "soft_combined": "Makine tercümesi sinir ağları kullanır.",
@@ -3026,7 +3026,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 57.21,
+        "bleu_vs_baseline": 54.11,
         "length_ratio": 1.4,
         "n_escalated": 0
       },
@@ -3044,7 +3044,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 57.21,
+        "bleu_vs_baseline": 54.11,
         "length_ratio": 1.4,
         "n_escalated": 0
       },
@@ -3066,14 +3066,14 @@
               "satisfied": false
             },
             "sinir ağları": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
         "overall_satisfaction": false,
-        "bleu_vs_baseline": 4.48,
-        "length_ratio": 3.4,
+        "bleu_vs_baseline": 17.97,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -3145,9 +3145,9 @@
     "direction": "EN→TR",
     "unconstrained": "Merkez bankası faiz oranlarını yükseltti.",
     "hard_exclusion": "Merkez bankası faizleri artırdı.",
-    "hard_inclusion": "Merkez Bankası faiz oranlarını yükseltti merkez bankası. faiz oranlarını yükseltti.",
-    "hard_inclusion_ablation": "Merkez Bankası faiz oranlarını yükseltti merkez bankası. faiz oranlarını yükseltti.",
-    "hard_combined": "Merkez bankası faizleri artırdı merkez bankası. faiz.",
+    "hard_inclusion": "Merkez bankası faiz oranlarını yükseltti. merkez bankası.",
+    "hard_inclusion_ablation": "Merkez bankası faiz oranlarını yükseltti. merkez bankası.",
+    "hard_combined": "Merkez bankası faizleri yükseltti. merkez bankası faizleri artırdı.",
     "soft_penalty": "Merkez bankası faizleri artırdı.",
     "soft_reward": "Merkez bankası faiz oranlarını yükseltti.",
     "soft_combined": "Merkez bankası faizleri artırdı.",
@@ -3196,8 +3196,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 23.46,
-        "length_ratio": 2.0,
+        "bleu_vs_baseline": 58.74,
+        "length_ratio": 1.4,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -3214,8 +3214,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 23.46,
-        "length_ratio": 2.0,
+        "bleu_vs_baseline": 58.74,
+        "length_ratio": 1.4,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -3242,8 +3242,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 11.34,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 11.87,
+        "length_ratio": 1.6,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -3315,9 +3315,9 @@
     "direction": "EN→TR",
     "unconstrained": "Arkeolojik kazıda antik eserler ortaya çıktı.",
     "hard_exclusion": "Arkeolojik araştırma, antik eserleri ortaya çıkardı.",
-    "hard_inclusion": "Arkeolojik kazıda antik eserler ortaya eserler arkeolojik.",
-    "hard_inclusion_ablation": "Arkeolojik kazıda antik eserler ortaya eserler arkeolojik.",
-    "hard_combined": "Arkeolojik araştırma, antik eserleri arkeolojik olarak eserler.",
+    "hard_inclusion": "Arkeolojik kazıda antik eserler ortaya çıktı arkeolojik.",
+    "hard_inclusion_ablation": "Arkeolojik kazıda antik eserler ortaya çıktı arkeolojik.",
+    "hard_combined": "Arkeolojik araştırma, antik eserleri ortaya çıkardı arkeolojik.",
     "soft_penalty": "Arkeolojik araştırma, antik eserleri ortaya çıkardı.",
     "soft_reward": "Arkeolojik kazıda antik eserler ortaya çıktı.",
     "soft_combined": "Arkeolojik araştırma, antik eserleri ortaya çıkardı.",
@@ -3366,7 +3366,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 54.11,
+        "bleu_vs_baseline": 70.71,
         "length_ratio": 1.167,
         "n_escalated": 0
       },
@@ -3384,7 +3384,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 54.11,
+        "bleu_vs_baseline": 70.71,
         "length_ratio": 1.167,
         "n_escalated": 0
       },
@@ -3485,11 +3485,11 @@
     "direction": "EN→TR",
     "unconstrained": "Yeni yasa vergi parantezlerini etkileyecek.",
     "hard_exclusion": "Bu yasa vergi parantezlerini etkileyecektir.",
-    "hard_inclusion": "Yeni yasa vergi parantezlerini etkileyecek mevzuat. vergi.",
-    "hard_inclusion_ablation": "Yeni yasa vergi parantezlerini etkileyecek mevzuat. vergi.",
-    "hard_combined": "Bu yasa vergi parantezlerini etkileyecek. mevzuat. vergi.",
+    "hard_inclusion": "Yeni yasa vergi parantezlerini etkileyecek. mevzuat",
+    "hard_inclusion_ablation": "Yeni yasa vergi parantezlerini etkileyecek. mevzuat",
+    "hard_combined": "Bu yasa, vergi mevzuatını etkileyecektir.",
     "soft_penalty": "Bu yasa vergi parantezlerini etkileyecektir.",
-    "soft_reward": "Yeni yasa vergi parantezlerini etkileyecek mevzuat.",
+    "soft_reward": "Yeni yasa vergi parantezlerini etkileyecek. mevzuat",
     "soft_combined": "Bu yasa vergi parantezlerini etkileyecektir.",
     "forbidden_words": [
       "yeni"
@@ -3539,8 +3539,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 46.71,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 80.91,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -3557,8 +3557,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 46.71,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 80.91,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -3585,8 +3585,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 39.28,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 8.64,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -3618,7 +3618,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
+        "bleu_vs_baseline": 80.91,
         "length_ratio": 1.2,
         "n_escalated": 1
       },
@@ -3658,11 +3658,11 @@
     "direction": "EN→TR",
     "unconstrained": "Sürdürülebilir tarım su tasarrufuna dayanır.",
     "hard_exclusion": "Sürdürülebilir ziraat su tasarrufuna dayanır.",
-    "hard_inclusion": "Sürdürülebilir tarım su tasarrufuna dayanır sürdürülebilir koruma.",
-    "hard_inclusion_ablation": "Sürdürülebilir tarım su tasarrufuna dayanır sürdürülebilir koruma.",
-    "hard_combined": "Sürdürülebilir ziraat su tasarrufuna dayanır. sürdürülebilir koruma.",
+    "hard_inclusion": "Sürdürülebilir tarım su tasarrufuna dayanır koruma.",
+    "hard_inclusion_ablation": "Sürdürülebilir tarım su tasarrufuna dayanır koruma.",
+    "hard_combined": "Sürdürülebilir ziraat su tasarrufuna dayanır koruma.",
     "soft_penalty": "Sürdürülebilir ziraat su tasarrufuna dayanır.",
-    "soft_reward": "Sürdürülebilir tarım, su tasarrufuna dayanır koruma.",
+    "soft_reward": "Sürdürülebilir tarım su tasarrufuna dayanır koruma.",
     "soft_combined": "Sürdürülebilir ziraat su tasarrufuna dayanır.",
     "forbidden_words": [
       "tarım"
@@ -3712,8 +3712,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 54.11,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 64.35,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -3730,8 +3730,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 54.11,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 64.35,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -3758,8 +3758,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 31.56,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 27.78,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -3791,7 +3791,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 27.05,
+        "bleu_vs_baseline": 64.35,
         "length_ratio": 1.2,
         "n_escalated": 1
       },
@@ -4419,11 +4419,11 @@
     "direction": "TR→EN",
     "unconstrained": "The bird flew over the tall tree.",
     "hard_exclusion": "The owl flew over the tall tree.",
-    "hard_inclusion": "The bird flew over the avian tree.",
-    "hard_inclusion_ablation": "The bird flew over the avian tree.",
-    "hard_combined": "The owl flew over the tall avian tree.",
+    "hard_inclusion": "The bird flew over the tall tree. avian:",
+    "hard_inclusion_ablation": "The bird flew over the tall tree. avian:",
+    "hard_combined": "The owl flew over the tall tree. avian:",
     "soft_penalty": "The owl flew over the tall tree.",
-    "soft_reward": "The bird flew over the avian tree.",
+    "soft_reward": "The bird flew over the tall tree. avian:",
     "soft_combined": "The owl flew over the tall tree.",
     "forbidden_words": [
       "bird"
@@ -4467,8 +4467,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 59.46,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 75.98,
+        "length_ratio": 1.143,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -4481,8 +4481,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 59.46,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 75.98,
+        "length_ratio": 1.143,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -4505,7 +4505,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 36.89,
+        "bleu_vs_baseline": 53.73,
         "length_ratio": 1.143,
         "n_escalated": 0
       },
@@ -4534,8 +4534,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 59.46,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 75.98,
+        "length_ratio": 1.143,
         "n_escalated": 1
       },
       "soft_combined": {
@@ -4570,11 +4570,11 @@
     "direction": "TR→EN",
     "unconstrained": "I drink water every morning.",
     "hard_exclusion": "I take water every morning.",
-    "hard_inclusion": "I drink water every morning consume.",
-    "hard_inclusion_ablation": "I drink water every morning consume.",
-    "hard_combined": "I water every morning. consume.",
+    "hard_inclusion": "I drink water every morning. consume.",
+    "hard_inclusion_ablation": "I drink water every morning. consume.",
+    "hard_combined": "I take water every morning. consume.",
     "soft_penalty": "I take water every morning.",
-    "soft_reward": "I drink water every morning consume.",
+    "soft_reward": "I drink water every morning. consume.",
     "soft_combined": "I take water every morning.",
     "forbidden_words": [
       "drink"
@@ -4618,7 +4618,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
+        "bleu_vs_baseline": 68.04,
         "length_ratio": 1.2,
         "n_escalated": 0
       },
@@ -4632,7 +4632,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
+        "bleu_vs_baseline": 68.04,
         "length_ratio": 1.2,
         "n_escalated": 0
       },
@@ -4656,8 +4656,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 43.47,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 36.56,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -4685,7 +4685,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
+        "bleu_vs_baseline": 68.04,
         "length_ratio": 1.2,
         "n_escalated": 1
       },
@@ -4721,11 +4721,11 @@
     "direction": "TR→EN",
     "unconstrained": "He plays football with his friends.",
     "hard_exclusion": "He plays soccer with his friends.",
-    "hard_inclusion": "He plays football with his soccer.",
-    "hard_inclusion_ablation": "He plays football with his soccer.",
-    "hard_combined": "He plays soccer with his soccer.",
+    "hard_inclusion": "He plays soccer with his friends.",
+    "hard_inclusion_ablation": "He plays soccer with his friends.",
+    "hard_combined": "He plays soccer with his friends.",
     "soft_penalty": "He plays soccer with his friends.",
-    "soft_reward": "He plays football with his soccer.",
+    "soft_reward": "He plays soccer with his friends.",
     "soft_combined": "He plays soccer with his friends.",
     "forbidden_words": [
       "football"
@@ -4768,7 +4768,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
+        "bleu_vs_baseline": 48.89,
         "length_ratio": 1.0,
         "n_escalated": 0
       },
@@ -4782,7 +4782,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
+        "bleu_vs_baseline": 48.89,
         "length_ratio": 1.0,
         "n_escalated": 0
       },
@@ -4806,7 +4806,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 19.64,
+        "bleu_vs_baseline": 48.89,
         "length_ratio": 1.0,
         "n_escalated": 0
       },
@@ -4835,7 +4835,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
+        "bleu_vs_baseline": 48.89,
         "length_ratio": 1.0,
         "n_escalated": 1
       },
@@ -4871,9 +4871,9 @@
     "direction": "TR→EN",
     "unconstrained": "He likes to watch movies.",
     "hard_exclusion": "He likes to watch films.",
-    "hard_inclusion": "He likes cinema.",
-    "hard_inclusion_ablation": "He likes cinema.",
-    "hard_combined": "He likes cinema.",
+    "hard_inclusion": "He likes to watch movies.",
+    "hard_inclusion_ablation": "He likes to watch movies.",
+    "hard_combined": "He likes to watch films.",
     "soft_penalty": "He likes to watch films.",
     "soft_reward": "He likes to Cinema.",
     "soft_combined": "He likes to Cinema.",
@@ -4911,30 +4911,30 @@
       },
       "hard_inclusion": {
         "satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "cinema": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "bleu_vs_baseline": 21.44,
-        "length_ratio": 0.6,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
         "satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "cinema": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "bleu_vs_baseline": 21.44,
-        "length_ratio": 0.6,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -4948,17 +4948,17 @@
           }
         },
         "inclusion_satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "cinema": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "overall_satisfaction": true,
-        "bleu_vs_baseline": 21.44,
-        "length_ratio": 0.6,
+        "overall_satisfaction": false,
+        "bleu_vs_baseline": 53.73,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -5024,7 +5024,7 @@
     "hard_exclusion": "The train arrived delayed.",
     "hard_inclusion": "The train arrived late. delayed.",
     "hard_inclusion_ablation": "The train arrived late. delayed.",
-    "hard_combined": "The train arrived early. delayed.",
+    "hard_combined": "The train arrived delayed.",
     "soft_penalty": "The train arrived delayed.",
     "soft_reward": "The train arrived late delayed.",
     "soft_combined": "The train arrived delayed.",
@@ -5107,8 +5107,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 26.27,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 42.73,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -5172,11 +5172,11 @@
     "direction": "TR→EN",
     "unconstrained": "The book is on the table.",
     "hard_exclusion": "It's on the table.",
-    "hard_inclusion": "The book is on the novel.",
-    "hard_inclusion_ablation": "The book is on the novel.",
-    "hard_combined": "It's on the table novel.",
+    "hard_inclusion": "The book is on the table novel.",
+    "hard_inclusion_ablation": "The book is on the table novel.",
+    "hard_combined": "It's on the table. novel.",
     "soft_penalty": "It's on the table.",
-    "soft_reward": "The book is on the novel.",
+    "soft_reward": "The book is on the table novel.",
     "soft_combined": "It's on the table.",
     "forbidden_words": [
       "book"
@@ -5220,8 +5220,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 70.71,
+        "length_ratio": 1.167,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -5234,8 +5234,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 70.71,
+        "length_ratio": 1.167,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -5258,7 +5258,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 27.48,
+        "bleu_vs_baseline": 41.11,
         "length_ratio": 0.833,
         "n_escalated": 0
       },
@@ -5287,8 +5287,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 70.71,
+        "length_ratio": 1.167,
         "n_escalated": 1
       },
       "soft_combined": {
@@ -5323,9 +5323,9 @@
     "direction": "TR→EN",
     "unconstrained": "The patient must have emergency surgery.",
     "hard_exclusion": "The patient must have emergency surgery.",
-    "hard_inclusion": "The patient must have surgery surgery.",
-    "hard_inclusion_ablation": "The patient must have surgery surgery.",
-    "hard_combined": "The patient must have surgery surgery.",
+    "hard_inclusion": "The patient must have emergency surgery.",
+    "hard_inclusion_ablation": "The patient must have emergency surgery.",
+    "hard_combined": "The patient must have emergency surgery.",
     "soft_penalty": "The patient must have emergency surgery.",
     "soft_reward": "The patient must have emergency surgery.",
     "soft_combined": "The patient must have emergency surgery.",
@@ -5368,7 +5368,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 48.89,
+        "bleu_vs_baseline": 100.0,
         "length_ratio": 1.0,
         "n_escalated": 0
       },
@@ -5382,7 +5382,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 48.89,
+        "bleu_vs_baseline": 100.0,
         "length_ratio": 1.0,
         "n_escalated": 0
       },
@@ -5406,7 +5406,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 48.89,
+        "bleu_vs_baseline": 100.0,
         "length_ratio": 1.0,
         "n_escalated": 0
       },
@@ -5471,9 +5471,9 @@
     "direction": "TR→EN",
     "unconstrained": "The CEO resigned yesterday.",
     "hard_exclusion": "The CEO resigned yesterday.",
-    "hard_inclusion": "The CEO resigned yesterday resigned.",
-    "hard_inclusion_ablation": "The CEO resigned yesterday resigned.",
-    "hard_combined": "The CEO resigned yesterday resigned.",
+    "hard_inclusion": "The CEO resigned yesterday.",
+    "hard_inclusion_ablation": "The CEO resigned yesterday.",
+    "hard_combined": "The CEO resigned yesterday.",
     "soft_penalty": "The CEO resigned yesterday.",
     "soft_reward": "The CEO resigned yesterday.",
     "soft_combined": "The CEO resigned yesterday.",
@@ -5516,8 +5516,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -5530,8 +5530,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -5554,8 +5554,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 53.73,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -5619,11 +5619,11 @@
     "direction": "TR→EN",
     "unconstrained": "Quantum computers will come.",
     "hard_exclusion": "Quantum computing will come.",
-    "hard_inclusion": "Quantum computers will computing.",
-    "hard_inclusion_ablation": "Quantum computers will computing.",
-    "hard_combined": "Quantum computing!)",
+    "hard_inclusion": "Quantum computers will come. computing.",
+    "hard_inclusion_ablation": "Quantum computers will come. computing.",
+    "hard_combined": "Quantum computing will come.",
     "soft_penalty": "Quantum computing will come.",
-    "soft_reward": "Quantum computers will computing.",
+    "soft_reward": "Quantum computers will come. computing.",
     "soft_combined": "Quantum computing will come.",
     "forbidden_words": [
       "computers"
@@ -5666,8 +5666,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 42.73,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 61.48,
+        "length_ratio": 1.25,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -5680,8 +5680,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 42.73,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 61.48,
+        "length_ratio": 1.25,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -5704,8 +5704,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 12.44,
-        "length_ratio": 0.5,
+        "bleu_vs_baseline": 42.73,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -5733,8 +5733,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 42.73,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 61.48,
+        "length_ratio": 1.25,
         "n_escalated": 1
       },
       "soft_combined": {
@@ -5920,9 +5920,9 @@
     "direction": "TR→EN",
     "unconstrained": "The renewable energy sector is growing.",
     "hard_exclusion": "The renewable energy sector is growing.",
-    "hard_inclusion": "The renewable energy sector is boom renewable.",
-    "hard_inclusion_ablation": "The renewable energy sector is boom renewable.",
-    "hard_combined": "The renewable energy sector is boom renewable.",
+    "hard_inclusion": "The renewable energy sector is growing.",
+    "hard_inclusion_ablation": "The renewable energy sector is growing.",
+    "hard_combined": "The renewable energy sector is growing.",
     "soft_penalty": "The renewable energy sector is growing.",
     "soft_reward": "The renewable energy sector is growing.",
     "soft_combined": "The renewable energy sector is growing.",
@@ -5965,8 +5965,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 54.11,
-        "length_ratio": 1.167,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -5979,8 +5979,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 54.11,
-        "length_ratio": 1.167,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -6003,8 +6003,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 54.11,
-        "length_ratio": 1.167,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -6068,9 +6068,9 @@
     "direction": "TR→EN",
     "unconstrained": "The detective found an important lead.",
     "hard_exclusion": "The detective found an important lead.",
-    "hard_inclusion": "The detective found an important evidence.",
-    "hard_inclusion_ablation": "The detective found an important evidence.",
-    "hard_combined": "The detective found an important evidence.",
+    "hard_inclusion": "The detective found an important lead. evidence:",
+    "hard_inclusion_ablation": "The detective found an important lead. evidence:",
+    "hard_combined": "The detective found an important lead. evidence:",
     "soft_penalty": "The detective found an important lead.",
     "soft_reward": "Detective found an important evidence.",
     "soft_combined": "Detective found an important evidence.",
@@ -6116,8 +6116,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 72.6,
+        "length_ratio": 1.167,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -6130,8 +6130,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 64.35,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 72.6,
+        "length_ratio": 1.167,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -6154,8 +6154,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 64.35,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 72.6,
+        "length_ratio": 1.167,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -6219,11 +6219,11 @@
     "direction": "TR→EN",
     "unconstrained": "The little dog barked at the big cat.",
     "hard_exclusion": "The little dog barked at the big kitty.",
-    "hard_inclusion": "The little dog barked at the big cat. feline tiny.",
-    "hard_inclusion_ablation": "The little dog barked at the big cat. feline tiny.",
-    "hard_combined": "The little dog barked at feline tiny.",
+    "hard_inclusion": "The little dog tiny barked at the big cat.",
+    "hard_inclusion_ablation": "The little dog tiny barked at the big cat.",
+    "hard_combined": "The little dog tiny barked at the big feline.",
     "soft_penalty": "The little dog barked at the big kitty.",
-    "soft_reward": "The little dog barked at the big cat. feline tiny.",
+    "soft_reward": "The little dog tiny barked at the big cat.",
     "soft_combined": "The little dog barked at the big kitty.",
     "forbidden_words": [
       "small",
@@ -6267,38 +6267,38 @@
       },
       "hard_inclusion": {
         "satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "tiny": {
               "present": true,
               "satisfied": true
             },
             "feline": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "bleu_vs_baseline": 71.03,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 65.8,
+        "length_ratio": 1.125,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
         "satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "tiny": {
               "present": true,
               "satisfied": true
             },
             "feline": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "bleu_vs_baseline": 71.03,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 65.8,
+        "length_ratio": 1.125,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -6329,8 +6329,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 47.75,
-        "length_ratio": 0.875,
+        "bleu_vs_baseline": 39.28,
+        "length_ratio": 1.125,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -6354,20 +6354,20 @@
       },
       "soft_reward": {
         "satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "tiny": {
               "present": true,
               "satisfied": true
             },
             "feline": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "bleu_vs_baseline": 71.03,
-        "length_ratio": 1.25,
+        "bleu_vs_baseline": 65.8,
+        "length_ratio": 1.125,
         "n_escalated": 1
       },
       "soft_combined": {
@@ -6410,11 +6410,11 @@
     "direction": "TR→EN",
     "unconstrained": "He wrote a letter to his mother.",
     "hard_exclusion": "He wrote a note to his mother.",
-    "hard_inclusion": "He wrote a letter to his epistle. mother.",
-    "hard_inclusion_ablation": "He wrote a letter to his epistle. mother.",
-    "hard_combined": "He wrote to his mother mother epistle.",
+    "hard_inclusion": "He wrote a letter to his mother. epistle:",
+    "hard_inclusion_ablation": "He wrote a letter to his mother. epistle:",
+    "hard_combined": "He wrote a epistle to his mother.",
     "soft_penalty": "He wrote a note to his mother.",
-    "soft_reward": "He wrote a letter to his epistle.",
+    "soft_reward": "He wrote a letter to his mother epistle.",
     "soft_combined": "He wrote a note to his mother.",
     "forbidden_words": [
       "letter"
@@ -6464,7 +6464,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 58.14,
+        "bleu_vs_baseline": 75.98,
         "length_ratio": 1.143,
         "n_escalated": 0
       },
@@ -6482,7 +6482,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 58.14,
+        "bleu_vs_baseline": 75.98,
         "length_ratio": 1.143,
         "n_escalated": 0
       },
@@ -6510,7 +6510,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 27.05,
+        "bleu_vs_baseline": 50.0,
         "length_ratio": 1.0,
         "n_escalated": 0
       },
@@ -6531,20 +6531,20 @@
       },
       "soft_reward": {
         "satisfaction": {
-          "overall": false,
+          "overall": true,
           "details": {
             "epistle": {
               "present": true,
               "satisfied": true
             },
             "mother": {
-              "present": false,
-              "satisfied": false
+              "present": true,
+              "satisfied": true
             }
           }
         },
-        "bleu_vs_baseline": 70.71,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 75.06,
+        "length_ratio": 1.143,
         "n_escalated": 1
       },
       "soft_combined": {
@@ -6583,11 +6583,11 @@
     "direction": "TR→EN",
     "unconstrained": "The strong wind blew the tent.",
     "hard_exclusion": "The strong breeze blew the tent.",
-    "hard_inclusion": "The strong wind blew the gale. tent.",
-    "hard_inclusion_ablation": "The strong wind blew the gale. tent.",
-    "hard_combined": "The strong breeze blew the gale. tent.",
+    "hard_inclusion": "The strong wind blew the tent. gale.",
+    "hard_inclusion_ablation": "The strong wind blew the tent. gale.",
+    "hard_combined": "The strong breeze blew the tent. gale.",
     "soft_penalty": "The strong breeze blew the tent.",
-    "soft_reward": "The strong wind blew the tent gale.",
+    "soft_reward": "The strong wind blew the tent. gale.",
     "soft_combined": "The strong breeze blew the tent.",
     "forbidden_words": [
       "wind"
@@ -6637,7 +6637,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 51.33,
+        "bleu_vs_baseline": 72.6,
         "length_ratio": 1.167,
         "n_escalated": 0
       },
@@ -6655,7 +6655,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 51.33,
+        "bleu_vs_baseline": 72.6,
         "length_ratio": 1.167,
         "n_escalated": 0
       },
@@ -6683,7 +6683,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 16.52,
+        "bleu_vs_baseline": 35.49,
         "length_ratio": 1.167,
         "n_escalated": 0
       },
@@ -6716,7 +6716,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 70.71,
+        "bleu_vs_baseline": 72.6,
         "length_ratio": 1.167,
         "n_escalated": 1
       },
@@ -6929,12 +6929,12 @@
     "direction": "TR→EN",
     "unconstrained": "They had dinner at a luxury restaurant.",
     "hard_exclusion": "They had dinner at a luxury diner.",
-    "hard_inclusion": "They had dinner at a luxury restaurant dinner. establishment.",
-    "hard_inclusion_ablation": "They had dinner at a luxury restaurant dinner. establishment.",
-    "hard_combined": "They had dinner at a fancy dinner establishment.",
+    "hard_inclusion": "They had dinner at a luxury restaurant. establishment.",
+    "hard_inclusion_ablation": "They had dinner at a luxury restaurant. establishment.",
+    "hard_combined": "They had dinner at a luxury diner. establishment.",
     "soft_penalty": "They had dinner at a luxury diner.",
     "soft_reward": "They had dinner at establishment restaurant.",
-    "soft_combined": "They had dinner at a luxury establishment.",
+    "soft_combined": "They had dinner at a luxury diner.",
     "forbidden_words": [
       "restaurant"
     ],
@@ -6950,7 +6950,8 @@
       "establishment"
     ],
     "escalation_counts": {
-      "soft_reward": 1
+      "soft_reward": 1,
+      "soft_combined": 2
     },
     "metrics": {
       "hard_exclusion": {
@@ -6982,8 +6983,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 59.0,
-        "length_ratio": 1.286,
+        "bleu_vs_baseline": 75.98,
+        "length_ratio": 1.143,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -7000,8 +7001,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 59.0,
-        "length_ratio": 1.286,
+        "bleu_vs_baseline": 75.98,
+        "length_ratio": 1.143,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -7028,7 +7029,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 46.71,
+        "bleu_vs_baseline": 53.73,
         "length_ratio": 1.143,
         "n_escalated": 0
       },
@@ -7076,23 +7077,23 @@
           }
         },
         "reward_satisfaction": {
-          "overall": true,
+          "overall": false,
           "details": {
             "dinner": {
               "present": true,
               "satisfied": true
             },
             "establishment": {
-              "present": true,
-              "satisfied": true
+              "present": false,
+              "satisfied": false
             }
           }
         },
-        "overall_satisfaction": true,
+        "overall_satisfaction": false,
         "bleu_vs_baseline": 70.71,
         "length_ratio": 1.0,
         "constraint_violated_at_baseline": false,
-        "n_escalated": 0
+        "n_escalated": 2
       }
     }
   },
@@ -7101,9 +7102,9 @@
     "direction": "TR→EN",
     "unconstrained": "The blue sky was full of clouds.",
     "hard_exclusion": "The skies were full of clouds.",
-    "hard_inclusion": "The blue sky was full of clouds. azure clouds.",
-    "hard_inclusion_ablation": "The blue sky was full of clouds. azure clouds.",
-    "hard_combined": "The skies were full of clouds. azure clouds.",
+    "hard_inclusion": "The blue sky was clouds. azure.",
+    "hard_inclusion_ablation": "The blue sky was clouds. azure.",
+    "hard_combined": "The skies were full of clouds. azure.",
     "soft_penalty": "The skies were full of clouds.",
     "soft_reward": "The blue sky was Azure.",
     "soft_combined": "The skies were filled Azure with clouds.",
@@ -7161,8 +7162,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 67.87,
-        "length_ratio": 1.286,
+        "bleu_vs_baseline": 41.11,
+        "length_ratio": 0.857,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -7179,8 +7180,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 67.87,
-        "length_ratio": 1.286,
+        "bleu_vs_baseline": 41.11,
+        "length_ratio": 0.857,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -7211,8 +7212,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 27.78,
-        "length_ratio": 1.143,
+        "bleu_vs_baseline": 31.56,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -7292,12 +7293,12 @@
     "direction": "TR→EN",
     "unconstrained": "The international space station orbits the Earth.",
     "hard_exclusion": "The international space station revolves around the Earth.",
-    "hard_inclusion": "The International Space Station orbits the Earth. orbital.",
-    "hard_inclusion_ablation": "The International Space Station orbits the Earth. orbital.",
-    "hard_combined": "The international space station revolves around the Earth's trajectory. ordinarily, it's orientated in the orific orific!)",
+    "hard_inclusion": "The international space station orbits the Earth. orbital.",
+    "hard_inclusion_ablation": "The international space station orbits the Earth. orbital.",
+    "hard_combined": "The international space station revolves around the Earth's trajectory.",
     "soft_penalty": "The international space station revolves around the Earth.",
     "soft_reward": "The international space station orbits the Earth. orbital.",
-    "soft_combined": "The international space station revolves around the Earth.",
+    "soft_combined": "The international space station orbitally rotates around the Earth.",
     "forbidden_words": [
       "orbit"
     ],
@@ -7346,7 +7347,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 27.78,
+        "bleu_vs_baseline": 75.98,
         "length_ratio": 1.143,
         "n_escalated": 0
       },
@@ -7364,7 +7365,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 27.78,
+        "bleu_vs_baseline": 75.98,
         "length_ratio": 1.143,
         "n_escalated": 0
       },
@@ -7392,8 +7393,8 @@
           }
         },
         "overall_satisfaction": false,
-        "bleu_vs_baseline": 13.26,
-        "length_ratio": 2.286,
+        "bleu_vs_baseline": 29.07,
+        "length_ratio": 1.286,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -7453,8 +7454,8 @@
           }
         },
         "overall_satisfaction": false,
-        "bleu_vs_baseline": 43.17,
-        "length_ratio": 1.143,
+        "bleu_vs_baseline": 37.99,
+        "length_ratio": 1.286,
         "constraint_violated_at_baseline": false,
         "n_escalated": 2
       }
@@ -7465,9 +7466,9 @@
     "direction": "TR→EN",
     "unconstrained": "Machine translation uses neural networks.",
     "hard_exclusion": "Machine translating uses neural networks.",
-    "hard_inclusion": "Machine translation uses neural networks machine translation. neural networks.",
-    "hard_inclusion_ablation": "Machine translation uses neural networks machine translation. neural networks.",
-    "hard_combined": "Machine translating uses neural networks. neural networks. machine. machinations. majids.!)",
+    "hard_inclusion": "Machine translation uses neural networks. neural networks.",
+    "hard_inclusion_ablation": "Machine translation uses neural networks. neural networks.",
+    "hard_combined": "Machine translating uses neural networks. neural networks.",
     "soft_penalty": "Machine translating uses neural networks.",
     "soft_reward": "Machine translation uses neural networks.",
     "soft_combined": "Machine translating uses neural networks.",
@@ -7518,8 +7519,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 41.72,
-        "length_ratio": 1.8,
+        "bleu_vs_baseline": 58.74,
+        "length_ratio": 1.4,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -7536,8 +7537,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 41.72,
-        "length_ratio": 1.8,
+        "bleu_vs_baseline": 58.74,
+        "length_ratio": 1.4,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -7564,8 +7565,8 @@
           }
         },
         "overall_satisfaction": false,
-        "bleu_vs_baseline": 15.14,
-        "length_ratio": 2.0,
+        "bleu_vs_baseline": 31.56,
+        "length_ratio": 1.4,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -7637,9 +7638,9 @@
     "direction": "TR→EN",
     "unconstrained": "The central bank raised interest rates.",
     "hard_exclusion": "The central bank increased interest ratios.",
-    "hard_inclusion": "Central bank increased interest rates interest.",
-    "hard_inclusion_ablation": "Central bank increased interest rates interest.",
-    "hard_combined": "The central bank has raised interest levels interest central bank.",
+    "hard_inclusion": "The central bank raised interest rates central bank.",
+    "hard_inclusion_ablation": "The central bank raised interest rates central bank.",
+    "hard_combined": "The central bank increased interest central bank.",
     "soft_penalty": "The central bank increased interest ratios.",
     "soft_reward": "The central bank raised interest rates.",
     "soft_combined": "The central bank increased interest ratios.",
@@ -7688,8 +7689,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 15.62,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 61.05,
+        "length_ratio": 1.333,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -7706,8 +7707,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 15.62,
-        "length_ratio": 1.0,
+        "bleu_vs_baseline": 61.05,
+        "length_ratio": 1.333,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -7734,8 +7735,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 18.36,
-        "length_ratio": 1.667,
+        "bleu_vs_baseline": 23.36,
+        "length_ratio": 1.167,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -7807,9 +7808,9 @@
     "direction": "TR→EN",
     "unconstrained": "Archaeological excavation uncovered ancient artifacts.",
     "hard_exclusion": "The archaeological excavation revealed ancient artifacts.",
-    "hard_inclusion": "The archaeological excavation revealed ancient artifacts excavation.",
-    "hard_inclusion_ablation": "The archaeological excavation revealed ancient artifacts excavation.",
-    "hard_combined": "The archaeological excavation revealed ancient artifacts excavation.",
+    "hard_inclusion": "Archaeological excavation uncovered ancient artifacts.",
+    "hard_inclusion_ablation": "Archaeological excavation uncovered ancient artifacts.",
+    "hard_combined": "The archaeological excavation revealed ancient artifacts.",
     "soft_penalty": "The archaeological excavation revealed ancient artifacts.",
     "soft_reward": "Archaeological excavation uncovered ancient artifacts.",
     "soft_combined": "The archaeological excavation revealed ancient artifacts.",
@@ -7858,8 +7859,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 13.13,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -7876,8 +7877,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 13.13,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -7904,8 +7905,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 13.13,
-        "length_ratio": 1.4,
+        "bleu_vs_baseline": 26.27,
+        "length_ratio": 1.2,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -7977,9 +7978,9 @@
     "direction": "TR→EN",
     "unconstrained": "The new legislation will affect tax slices.",
     "hard_exclusion": "The new legislation will affect tax slices.",
-    "hard_inclusion": "The new legislation will affect tax legislation tax.",
-    "hard_inclusion_ablation": "The new legislation will affect tax legislation tax.",
-    "hard_combined": "The new legislation will affect tax legislation tax.",
+    "hard_inclusion": "The new legislation will affect tax slices.",
+    "hard_inclusion_ablation": "The new legislation will affect tax slices.",
+    "hard_combined": "The new legislation will affect tax slices.",
     "soft_penalty": "The new legislation will affect tax slices.",
     "soft_reward": "The new legislation will affect tax slices.",
     "soft_combined": "The new legislation will affect tax slices.",
@@ -8028,8 +8029,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 61.05,
-        "length_ratio": 1.143,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_inclusion_ablation": {
@@ -8046,8 +8047,8 @@
             }
           }
         },
-        "bleu_vs_baseline": 61.05,
-        "length_ratio": 1.143,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "hard_combined": {
@@ -8074,8 +8075,8 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 61.05,
-        "length_ratio": 1.143,
+        "bleu_vs_baseline": 100.0,
+        "length_ratio": 1.0,
         "n_escalated": 0
       },
       "soft_penalty": {
@@ -8147,9 +8148,9 @@
     "direction": "TR→EN",
     "unconstrained": "Sustainable agriculture is based on water conservation.",
     "hard_exclusion": "Sustainable farming relies on water conservation.",
-    "hard_inclusion": "Sustainable agriculture is based sustainable. conservation.",
-    "hard_inclusion_ablation": "Sustainable agriculture is based sustainable. conservation.",
-    "hard_combined": "Sustainable farming is based sustainable. conservation.",
+    "hard_inclusion": "Sustainable agriculture relies on water conservation.",
+    "hard_inclusion_ablation": "Sustainable agriculture relies on water conservation.",
+    "hard_combined": "Sustainable farming relies on water conservation.",
     "soft_penalty": "Sustainable farming relies on water conservation.",
     "soft_reward": "Sustainable agriculture is based on water conservation.",
     "soft_combined": "Sustainable farming relies on water conservation.",
@@ -8198,7 +8199,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 41.11,
+        "bleu_vs_baseline": 42.38,
         "length_ratio": 0.857,
         "n_escalated": 0
       },
@@ -8216,7 +8217,7 @@
             }
           }
         },
-        "bleu_vs_baseline": 41.11,
+        "bleu_vs_baseline": 42.38,
         "length_ratio": 0.857,
         "n_escalated": 0
       },
@@ -8244,7 +8245,7 @@
           }
         },
         "overall_satisfaction": true,
-        "bleu_vs_baseline": 16.52,
+        "bleu_vs_baseline": 37.68,
         "length_ratio": 0.857,
         "n_escalated": 0
       },
