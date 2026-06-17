@@ -1,5 +1,8 @@
 # Lexically Constrained and Interpretable Decoding for Neural Machine Translation
 
+**Author:** Alkım Gönenç Efe  
+**Affiliation:** Department of Computer Engineering, İzmir Katip Çelebi University, İzmir, Turkey
+
 This project focuses on the evaluation and methodology of logit-level lexical constraint enforcement for Neural Machine Translation (NMT), as presented in the paper **"Lexically Constrained and Interpretable Decoding for Neural Machine Translation"**.
 
 Instead of modifying model weights or restructuring beam search pipelines (e.g., Grid Beam Search or Dynamic Beam Allocation), this research investigates controlling NMT output by directly manipulating raw output logits at each decoding step. The proposed strategies are evaluated using Helsinki-NLP OPUS-MT models on English-to-Turkish (EN $\leftrightarrow$ TR) translation.
