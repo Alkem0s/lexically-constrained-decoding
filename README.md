@@ -118,19 +118,5 @@ Turkish morphology presents a significant challenge for exact-match lexical cons
 *   **Suffix Expansion:** Required words are expanded to accept common inflected suffixes during scanning.
 *   **Suffix Boundary Penalty:** A negative boundary penalty is applied to tokens immediately following constraint roots to prevent the model from inflecting them prematurely.
 
-### Hyperparameter Optimization (HPO)
-Using Optuna, the logit pressure settings were optimized using a lexicographic objective: $1000 \cdot S + \overline{\text{BLEU}}$, prioritizing satisfaction before translation similarity. The search converged rapidly within 10 iterations.
-
-![HPO Convergence](figures/fig2_hpo_convergence.png)
-
-The optimal hyperparameters found include:
-*   **Starting Anchor Offset ($A_{\text{start}}$):** $-16.54$
-*   **Logit Range Climb ($A_{\text{range}}$):** $14.05$
-*   **Curriculum Reward Base ($\lambda_{\text{rew}}$):** $3.75$
-*   **Soft Exclusion Penalty ($\lambda_{\text{pen}}$):** $-34.93$
-*   **Turkish Suffix Boundary Penalty ($\gamma_{\text{suffix}}$):** $-2.45$
-
----
-
 ## Conclusion
 Logit-level manipulation provides a flexible, lightweight alternative to structural constrained decoding. Soft constraint scheduling paired with an escalation fallback framework yields the highest translation fidelity (83.87 BLEU) while maintaining high satisfaction (93.8%). Combining constraints highlights the logit squeeze effect, indicating that multi-constraint control does not scale linearly. Addressing agglutinative morphology via robust suffix boundaries is critical to performing constrained generation on languages like Turkish.
