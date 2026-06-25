@@ -483,6 +483,486 @@
         "kapalı"
       ],
       "reward_words": []
+    },
+    {
+      "source": "The doctor prescribed a broad-spectrum antibiotic.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "doktor"
+      ],
+      "required_words": [
+        "hekim"
+      ],
+      "penalty_words": [
+        "doktor"
+      ],
+      "reward_words": [
+        "hekim"
+      ]
+    },
+    {
+      "source": "We must reduce our carbon footprint.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "düşürmeliyiz"
+      ],
+      "required_words": [
+        "azaltmalıyız"
+      ],
+      "penalty_words": [
+        "düşürmeliyiz"
+      ],
+      "reward_words": [
+        "azaltmalıyız"
+      ]
+    },
+    {
+      "source": "The company signed a non-disclosure agreement.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "anlaşma"
+      ],
+      "required_words": [
+        "gizlilik sözleşmesi"
+      ],
+      "penalty_words": [
+        "anlaşma"
+      ],
+      "reward_words": [
+        "gizlilik sözleşmesi"
+      ]
+    },
+    {
+      "source": "Inflation affects the purchasing power of consumers.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "etkiler"
+      ],
+      "required_words": [
+        "satın alma gücü"
+      ],
+      "penalty_words": [
+        "etkiler"
+      ],
+      "reward_words": [
+        "satın alma gücü"
+      ]
+    },
+    {
+      "source": "The court issued a search warrant.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "çıkardı"
+      ],
+      "required_words": [
+        "arama kararı"
+      ],
+      "penalty_words": [
+        "çıkardı"
+      ],
+      "reward_words": [
+        "arama kararı"
+      ]
+    },
+    {
+      "source": "Artificial neural networks simulate the human brain.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "beyin"
+      ],
+      "required_words": [
+        "yapay sinir ağları"
+      ],
+      "penalty_words": [
+        "beyin"
+      ],
+      "reward_words": [
+        "yapay sinir ağları"
+      ]
+    },
+    {
+      "source": "The volcanic eruption caused widespread panic.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "patlama"
+      ],
+      "required_words": [
+        "volkanik"
+      ],
+      "penalty_words": [
+        "patlama"
+      ],
+      "reward_words": [
+        "volkanik"
+      ]
+    },
+    {
+      "source": "Photosynthesis converts solar energy into chemical energy.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "güneş"
+      ],
+      "required_words": [
+        "fotosentez"
+      ],
+      "penalty_words": [
+        "güneş"
+      ],
+      "reward_words": [
+        "fotosentez"
+      ]
+    },
+    {
+      "source": "The central bank regulates the money supply.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "düzenler"
+      ],
+      "required_words": [
+        "para arzı"
+      ],
+      "penalty_words": [
+        "düzenler"
+      ],
+      "reward_words": [
+        "para arzı"
+      ]
+    },
+    {
+      "source": "We visited an ancient temple yesterday.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "eski"
+      ],
+      "required_words": [
+        "kadim"
+      ],
+      "penalty_words": [
+        "eski"
+      ],
+      "reward_words": [
+        "kadim"
+      ]
+    },
+    {
+      "source": "The scientist proposed a new hypothesis.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yeni"
+      ],
+      "required_words": [
+        "hipotez"
+      ],
+      "penalty_words": [
+        "yeni"
+      ],
+      "reward_words": [
+        "hipotez"
+      ]
+    },
+    {
+      "source": "The software update fixed several vulnerabilities.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yazılım"
+      ],
+      "required_words": [
+        "güvenlik açığı"
+      ],
+      "penalty_words": [
+        "yazılım"
+      ],
+      "reward_words": [
+        "güvenlik açığı"
+      ]
+    },
+    {
+      "source": "The government implemented a strict quarantine.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "sıkı"
+      ],
+      "required_words": [
+        "karantina"
+      ],
+      "penalty_words": [
+        "sıkı"
+      ],
+      "reward_words": [
+        "karantina"
+      ]
+    },
+    {
+      "source": "The teacher explained the grammatical rules.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "öğretmen"
+      ],
+      "required_words": [
+        "dilbilgisi"
+      ],
+      "penalty_words": [
+        "öğretmen"
+      ],
+      "reward_words": [
+        "dilbilgisi"
+      ]
+    },
+    {
+      "source": "The heavy rain caused severe flooding.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yağmur"
+      ],
+      "required_words": [
+        "şiddetli"
+      ],
+      "penalty_words": [
+        "yağmur"
+      ],
+      "reward_words": [
+        "şiddetli"
+      ]
+    },
+    {
+      "source": "They are conducting a double-blind clinical trial.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "klinik"
+      ],
+      "required_words": [
+        "çift kör"
+      ],
+      "penalty_words": [
+        "klinik"
+      ],
+      "reward_words": [
+        "çift kör"
+      ]
+    },
+    {
+      "source": "The astronaut repaired the space telescope.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "onardı"
+      ],
+      "required_words": [
+        "uzay teleskobu"
+      ],
+      "penalty_words": [
+        "onardı"
+      ],
+      "reward_words": [
+        "uzay teleskobu"
+      ]
+    },
+    {
+      "source": "The primary source of energy is the sun.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "enerji"
+      ],
+      "required_words": [
+        "birincil"
+      ],
+      "penalty_words": [
+        "enerji"
+      ],
+      "reward_words": [
+        "birincil"
+      ]
+    },
+    {
+      "source": "The new laptop has long battery life.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "yeni"
+      ],
+      "required_words": [
+        "dizüstü bilgisayar"
+      ],
+      "penalty_words": [
+        "yeni"
+      ],
+      "reward_words": [
+        "dizüstü bilgisayar"
+      ]
+    },
+    {
+      "source": "The company announced a significant merger.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "şirket"
+      ],
+      "required_words": [
+        "birleşme"
+      ],
+      "penalty_words": [
+        "şirket"
+      ],
+      "reward_words": [
+        "birleşme"
+      ]
+    },
+    {
+      "source": "The children played in the sandy playground.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "çocuklar"
+      ],
+      "required_words": [
+        "oyun alanı"
+      ],
+      "penalty_words": [
+        "çocuklar"
+      ],
+      "reward_words": [
+        "oyun alanı"
+      ]
+    },
+    {
+      "source": "Water freezes at zero degrees Celsius.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "derece"
+      ],
+      "required_words": [
+        "santigrat"
+      ],
+      "penalty_words": [
+        "derece"
+      ],
+      "reward_words": [
+        "santigrat"
+      ]
+    },
+    {
+      "source": "He works as a financial analyst.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "finansal"
+      ],
+      "required_words": [
+        "mali"
+      ],
+      "penalty_words": [
+        "finansal"
+      ],
+      "reward_words": [
+        "mali"
+      ]
+    },
+    {
+      "source": "The library contains rare medieval manuscripts.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "kütüphane"
+      ],
+      "required_words": [
+        "ortaçağ"
+      ],
+      "penalty_words": [
+        "kütüphane"
+      ],
+      "reward_words": [
+        "ortaçağ"
+      ]
+    },
+    {
+      "source": "The patient recovery was remarkably fast.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "hızlıydı"
+      ],
+      "required_words": [
+        "iyileşmesi"
+      ],
+      "penalty_words": [
+        "hızlıydı"
+      ],
+      "reward_words": [
+        "iyileşmesi"
+      ]
+    },
+    {
+      "source": "Global trade decreased during the recession.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "küresel"
+      ],
+      "required_words": [
+        "durgunluk"
+      ],
+      "penalty_words": [
+        "küresel"
+      ],
+      "reward_words": [
+        "durgunluk"
+      ]
+    },
+    {
+      "source": "The engineer inspected the structural integrity of the bridge.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "mühendis"
+      ],
+      "required_words": [
+        "yapısal bütünlük"
+      ],
+      "penalty_words": [
+        "mühendis"
+      ],
+      "reward_words": [
+        "yapısal bütünlük"
+      ]
+    },
+    {
+      "source": "The museum showcases ancient Greek sculptures.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "müze"
+      ],
+      "required_words": [
+        "heykellerini"
+      ],
+      "penalty_words": [
+        "müze"
+      ],
+      "reward_words": [
+        "heykellerini"
+      ]
+    },
+    {
+      "source": "The committee approved the budget proposal.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "onayladı"
+      ],
+      "required_words": [
+        "bütçe teklifi"
+      ],
+      "penalty_words": [
+        "onayladı"
+      ],
+      "reward_words": [
+        "bütçe teklifi"
+      ]
+    },
+    {
+      "source": "The forest fires destroyed precious biodiversity.",
+      "direction": "EN→TR",
+      "forbidden_words": [
+        "orman"
+      ],
+      "required_words": [
+        "biyoçeşitliliği"
+      ],
+      "penalty_words": [
+        "orman"
+      ],
+      "reward_words": [
+        "biyoçeşitliliği"
+      ]
     }
   ],
   "TR_EN": [
@@ -973,6 +1453,486 @@
         "closed"
       ],
       "reward_words": []
+    },
+    {
+      "source": "Hekim geniş spektrumlu bir antibiyotik reçete etti.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "doctor"
+      ],
+      "required_words": [
+        "physician"
+      ],
+      "penalty_words": [
+        "doctor"
+      ],
+      "reward_words": [
+        "physician"
+      ]
+    },
+    {
+      "source": "Karbon ayak izimizi azaltmalıyız.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "impact"
+      ],
+      "required_words": [
+        "footprint"
+      ],
+      "penalty_words": [
+        "impact"
+      ],
+      "reward_words": [
+        "footprint"
+      ]
+    },
+    {
+      "source": "Şirket bir gizlilik sözleşmesi imzaladı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "contract"
+      ],
+      "required_words": [
+        "non-disclosure"
+      ],
+      "penalty_words": [
+        "contract"
+      ],
+      "reward_words": [
+        "non-disclosure"
+      ]
+    },
+    {
+      "source": "Enflasyon tüketicilerin satın alma gücünü etkiler.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "affects"
+      ],
+      "required_words": [
+        "purchasing power"
+      ],
+      "penalty_words": [
+        "affects"
+      ],
+      "reward_words": [
+        "purchasing power"
+      ]
+    },
+    {
+      "source": "Mahkeme bir arama kararı çıkardı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "decision"
+      ],
+      "required_words": [
+        "warrant"
+      ],
+      "penalty_words": [
+        "decision"
+      ],
+      "reward_words": [
+        "warrant"
+      ]
+    },
+    {
+      "source": "Yapay sinir ağları insan beynini simüle eder.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "brain"
+      ],
+      "required_words": [
+        "neural networks"
+      ],
+      "penalty_words": [
+        "brain"
+      ],
+      "reward_words": [
+        "neural networks"
+      ]
+    },
+    {
+      "source": "Volkanik patlama geniş çaplı paniğe yol açtı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "volcanic"
+      ],
+      "required_words": [
+        "eruption"
+      ],
+      "penalty_words": [
+        "volcanic"
+      ],
+      "reward_words": [
+        "eruption"
+      ]
+    },
+    {
+      "source": "Fotosentez güneş enerjisini kimyasal enerjiye dönüştürür.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "solar"
+      ],
+      "required_words": [
+        "photosynthesis"
+      ],
+      "penalty_words": [
+        "solar"
+      ],
+      "reward_words": [
+        "photosynthesis"
+      ]
+    },
+    {
+      "source": "Merkez bankası para arzını düzenler.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "regulates"
+      ],
+      "required_words": [
+        "money supply"
+      ],
+      "penalty_words": [
+        "regulates"
+      ],
+      "reward_words": [
+        "money supply"
+      ]
+    },
+    {
+      "source": "Dün kadim bir tapınağı ziyaret ettik.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "old"
+      ],
+      "required_words": [
+        "ancient"
+      ],
+      "penalty_words": [
+        "old"
+      ],
+      "reward_words": [
+        "ancient"
+      ]
+    },
+    {
+      "source": "Bilim insanı yeni bir hipotez önerdi.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "new"
+      ],
+      "required_words": [
+        "hypothesis"
+      ],
+      "penalty_words": [
+        "new"
+      ],
+      "reward_words": [
+        "hypothesis"
+      ]
+    },
+    {
+      "source": "Yazılım güncellemesi birkaç güvenlik açığını giderdi.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "software"
+      ],
+      "required_words": [
+        "vulnerabilities"
+      ],
+      "penalty_words": [
+        "software"
+      ],
+      "reward_words": [
+        "vulnerabilities"
+      ]
+    },
+    {
+      "source": "Hükümet sıkı bir karantina uyguladı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "strict"
+      ],
+      "required_words": [
+        "quarantine"
+      ],
+      "penalty_words": [
+        "strict"
+      ],
+      "reward_words": [
+        "quarantine"
+      ]
+    },
+    {
+      "source": "Öğretmen dilbilgisi kurallarını açıkladı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "teacher"
+      ],
+      "required_words": [
+        "grammar"
+      ],
+      "penalty_words": [
+        "teacher"
+      ],
+      "reward_words": [
+        "grammar"
+      ]
+    },
+    {
+      "source": "Ciddi sele neden olan şey şiddetli yağmurdu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "heavy"
+      ],
+      "required_words": [
+        "severe"
+      ],
+      "penalty_words": [
+        "heavy"
+      ],
+      "reward_words": [
+        "severe"
+      ]
+    },
+    {
+      "source": "Çift kör bir klinik çalışma yürütüyorlar.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "clinical"
+      ],
+      "required_words": [
+        "double-blind"
+      ],
+      "penalty_words": [
+        "clinical"
+      ],
+      "reward_words": [
+        "double-blind"
+      ]
+    },
+    {
+      "source": "Astronot uzay teleskobunu onardı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "repaired"
+      ],
+      "required_words": [
+        "telescope"
+      ],
+      "penalty_words": [
+        "repaired"
+      ],
+      "reward_words": [
+        "telescope"
+      ]
+    },
+    {
+      "source": "Birincil enerji kaynağı güneştir.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "energy"
+      ],
+      "required_words": [
+        "primary"
+      ],
+      "penalty_words": [
+        "energy"
+      ],
+      "reward_words": [
+        "primary"
+      ]
+    },
+    {
+      "source": "Yeni dizüstü bilgisayarın uzun pil ömrü var.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "new"
+      ],
+      "required_words": [
+        "laptop"
+      ],
+      "penalty_words": [
+        "new"
+      ],
+      "reward_words": [
+        "laptop"
+      ]
+    },
+    {
+      "source": "Şirket önemli bir birleşme duyurdu.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "company"
+      ],
+      "required_words": [
+        "merger"
+      ],
+      "penalty_words": [
+        "company"
+      ],
+      "reward_words": [
+        "merger"
+      ]
+    },
+    {
+      "source": "Çocuklar kumlu oyun alanında oynadılar.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "children"
+      ],
+      "required_words": [
+        "playground"
+      ],
+      "penalty_words": [
+        "children"
+      ],
+      "reward_words": [
+        "playground"
+      ]
+    },
+    {
+      "source": "Su sıfır santigrat derecede donar.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "degree"
+      ],
+      "required_words": [
+        "celsius"
+      ],
+      "penalty_words": [
+        "degree"
+      ],
+      "reward_words": [
+        "celsius"
+      ]
+    },
+    {
+      "source": "Mali analist olarak çalışıyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "fiscal"
+      ],
+      "required_words": [
+        "financial"
+      ],
+      "penalty_words": [
+        "fiscal"
+      ],
+      "reward_words": [
+        "financial"
+      ]
+    },
+    {
+      "source": "Kütüphane nadir ortaçağ el yazmaları içerir.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "library"
+      ],
+      "required_words": [
+        "medieval"
+      ],
+      "penalty_words": [
+        "library"
+      ],
+      "reward_words": [
+        "medieval"
+      ]
+    },
+    {
+      "source": "Hastanın iyileşmesi dikkat çekici derecede hızlıydı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "fast"
+      ],
+      "required_words": [
+        "recovery"
+      ],
+      "penalty_words": [
+        "fast"
+      ],
+      "reward_words": [
+        "recovery"
+      ]
+    },
+    {
+      "source": "Küresel ticaret durgunluk döneminde azaldı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "global"
+      ],
+      "required_words": [
+        "recession"
+      ],
+      "penalty_words": [
+        "global"
+      ],
+      "reward_words": [
+        "recession"
+      ]
+    },
+    {
+      "source": "Mühendis köprünün yapısal bütünlüğünü inceledi.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "engineer"
+      ],
+      "required_words": [
+        "structural integrity"
+      ],
+      "penalty_words": [
+        "engineer"
+      ],
+      "reward_words": [
+        "structural integrity"
+      ]
+    },
+    {
+      "source": "Müze antik Yunan heykellerini sergiliyor.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "museum"
+      ],
+      "required_words": [
+        "sculptures"
+      ],
+      "penalty_words": [
+        "museum"
+      ],
+      "reward_words": [
+        "sculptures"
+      ]
+    },
+    {
+      "source": "Komite bütçe teklifini onayladı.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "approved"
+      ],
+      "required_words": [
+        "budget proposal"
+      ],
+      "penalty_words": [
+        "approved"
+      ],
+      "reward_words": [
+        "budget proposal"
+      ]
+    },
+    {
+      "source": "Orman yangınları değerli biyoçeşitliliği yok etti.",
+      "direction": "TR→EN",
+      "forbidden_words": [
+        "forest"
+      ],
+      "required_words": [
+        "biodiversity"
+      ],
+      "penalty_words": [
+        "forest"
+      ],
+      "reward_words": [
+        "biodiversity"
+      ]
     }
   ]
 }

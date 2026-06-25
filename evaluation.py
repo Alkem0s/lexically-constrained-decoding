@@ -18,13 +18,27 @@ from dataclasses import dataclass, field
 
 
 # ── sacrebleu import (optional — graceful fallback if not installed) ──────────
+_bleu_scorer = None
+_chrf_scorer = None
 try:
-    from sacrebleu.metrics import BLEU
+    from sacrebleu.metrics import BLEU, CHRF
     _BLEU_AVAILABLE = True
+    _bleu_scorer = BLEU(effective_order=True)
+    _chrf_scorer = CHRF()
 except ImportError:
     _BLEU_AVAILABLE = False
-    print("[evaluation] sacrebleu not found — BLEU scores will be skipped. "
+    print("[evaluation] sacrebleu not found — BLEU and ChrF scores will be skipped. "
           "Install with: pip install sacrebleu")
+
+
+def compute_chrf(hypothesis: str, reference: str) -> Optional[float]:
+    """
+    Compute sentence-level ChrF of `hypothesis` against `reference`.
+    """
+    if not _BLEU_AVAILABLE or not hypothesis or not reference:
+        return None
+    score = _chrf_scorer.sentence_score(hypothesis, [reference])
+    return round(score.score, 2)
 
 
 # ── Result dataclass ──────────────────────────────────────────────────────────
@@ -35,6 +49,7 @@ class SampleResult:
     source          : str
     direction       : str                   # e.g. "EN→TR"
     unconstrained   : str = ""
+    reference       : str = ""
 
     # Per-mode translations
     hard_exclusion          : str = ""
@@ -45,6 +60,7 @@ class SampleResult:
     soft_penalty    : str = ""             # penalty only (isolated, no escalation)
     soft_reward     : str = ""             # reward only (isolated, with escalation)
     soft_combined   : str = ""             # simultaneous penalty + reward, pure soft
+    huggingface_dba : str = ""             # HF native DBA baseline
 
     # Constraint specs
     forbidden_words : List[str] = field(default_factory=list)
@@ -58,6 +74,10 @@ class SampleResult:
     # Escalation events per mode (filled in by run_sample before evaluate_sample)
     # Keys match the metrics mode names; value = count of escalation events in that log.
     escalation_counts : Dict = field(default_factory=dict)
+    
+    # Timing and generation pass metrics
+    latencies         : Dict = field(default_factory=dict)
+    pass_counts       : Dict = field(default_factory=dict)
 
 
 # ── Constraint satisfaction ────────────────────────────────────────────────────
@@ -103,8 +123,7 @@ def compute_bleu(hypothesis: str, reference: str) -> Optional[float]:
     """
     if not _BLEU_AVAILABLE or not hypothesis or not reference:
         return None
-    bleu = BLEU(effective_order=True)
-    score = bleu.sentence_score(hypothesis, [reference])
+    score = _bleu_scorer.sentence_score(hypothesis, [reference])
     return round(score.score, 2)
 
 
@@ -150,45 +169,73 @@ def evaluate_sample(result: SampleResult) -> Dict:
     Returns the metrics dict for convenience.
     """
     baseline = result.unconstrained
+    reference = result.reference
     metrics  = {}
     
     # Check if the target language is Turkish based on the direction string (e.g., "EN→TR")
     is_tr_target = "→TR" in result.direction or "en-tr" in result.direction.lower()
 
-    # ── Hard exclusion ────────────────────────────────────────────────────────
+    # Helper to populate metrics dict
+    def populate_mode(mode_key, translation, satisfaction, extra_sat_dict=None):
+        if not translation:
+            return
+        
+        # Determine satisfaction
+        sat_val = satisfaction
+            
+        bleu_base = compute_bleu(translation, baseline)
+        bleu_ref = compute_bleu(translation, reference)
+        chrf_ref = compute_chrf(translation, reference)
+        
+        m = {
+            "bleu_vs_baseline" : bleu_base,
+            "bleu_ref"         : bleu_ref,
+            "chrf_ref"         : chrf_ref,
+            "length_ratio"     : length_ratio(translation, baseline),
+            "n_escalated"      : result.escalation_counts.get(mode_key, 0),
+            "latency_ms"       : result.latencies.get(mode_key, 0.0),
+            "pass_count"       : result.pass_counts.get(mode_key, 1),
+        }
+        
+        if extra_sat_dict is not None:
+            # Combined modes
+            m.update(extra_sat_dict)
+            m["overall_satisfaction"] = sat_val
+        else:
+            # Simple modes
+            m["satisfaction"] = {"overall": sat_val}
+            
+        metrics[mode_key] = m
+
+    # 0. Unconstrained baseline
+    metrics["unconstrained"] = {
+        "bleu_vs_baseline" : 100.0,
+        "bleu_ref"         : compute_bleu(baseline, reference),
+        "chrf_ref"         : compute_chrf(baseline, reference),
+        "length_ratio"     : 1.0,
+        "n_escalated"      : 0,
+        "latency_ms"       : result.latencies.get("unconstrained", 0.0),
+        "pass_count"       : 1,
+        "satisfaction"     : {"overall": True}
+    }
+
+    # 1. Hard exclusion
     if result.hard_exclusion and result.forbidden_words:
         sat  = satisfaction_exclusion(result.hard_exclusion, result.forbidden_words, is_tr_target)
-        bleu = compute_bleu(result.hard_exclusion, baseline)
-        violated_at_baseline = (not sat["overall"]) and (bleu is not None and bleu >= 99.9)
-        metrics["hard_exclusion"] = {
-            "satisfaction"                   : sat,
-            "bleu_vs_baseline"               : bleu,
-            "length_ratio"                   : length_ratio(result.hard_exclusion, baseline),
-            "constraint_violated_at_baseline": violated_at_baseline,
-            "n_escalated"                    : result.escalation_counts.get("hard_exclusion", 0),
-        }
+        populate_mode("hard_exclusion", result.hard_exclusion, sat["overall"])
+        metrics["hard_exclusion"]["constraint_violated_at_baseline"] = (not sat["overall"]) and (metrics["hard_exclusion"]["bleu_vs_baseline"] is not None and metrics["hard_exclusion"]["bleu_vs_baseline"] >= 99.9)
 
-    # ── Hard inclusion (soft-first gate) ──────────────────────────────────────
+    # 2. Hard inclusion
     if result.hard_inclusion and result.required_words:
         sat = satisfaction_inclusion(result.hard_inclusion, result.required_words, is_tr_target)
-        metrics["hard_inclusion"] = {
-            "satisfaction"    : sat,
-            "bleu_vs_baseline": compute_bleu(result.hard_inclusion, baseline),
-            "length_ratio"    : length_ratio(result.hard_inclusion, baseline),
-            "n_escalated"     : result.escalation_counts.get("hard_inclusion", 0),
-        }
+        populate_mode("hard_inclusion", result.hard_inclusion, sat["overall"])
 
-    # ── Hard inclusion ablation (pure hard boost, no soft gate) ───────────────
+    # 3. Hard inclusion ablation
     if result.hard_inclusion_ablation and result.required_words:
         sat = satisfaction_inclusion(result.hard_inclusion_ablation, result.required_words, is_tr_target)
-        metrics["hard_inclusion_ablation"] = {
-            "satisfaction"    : sat,
-            "bleu_vs_baseline": compute_bleu(result.hard_inclusion_ablation, baseline),
-            "length_ratio"    : length_ratio(result.hard_inclusion_ablation, baseline),
-            "n_escalated"     : result.escalation_counts.get("hard_inclusion_ablation", 0),
-        }
+        populate_mode("hard_inclusion_ablation", result.hard_inclusion_ablation, sat["overall"])
 
-    # ── Hard combined (exclusion + inclusion simultaneously) ──────────────────
+    # 4. Hard combined
     if result.hard_combined and (result.forbidden_words or result.required_words):
         excl_sat = (
             satisfaction_exclusion(result.hard_combined, result.forbidden_words, is_tr_target)
@@ -198,40 +245,24 @@ def evaluate_sample(result: SampleResult) -> Dict:
             satisfaction_inclusion(result.hard_combined, result.required_words, is_tr_target)
             if result.required_words else {"overall": True, "details": {}}
         )
-        bleu = compute_bleu(result.hard_combined, baseline)
-        metrics["hard_combined"] = {
+        overall_sat = excl_sat["overall"] and incl_sat["overall"]
+        populate_mode("hard_combined", result.hard_combined, overall_sat, {
             "exclusion_satisfaction": excl_sat,
             "inclusion_satisfaction": incl_sat,
-            "overall_satisfaction"  : excl_sat["overall"] and incl_sat["overall"],
-            "bleu_vs_baseline"      : bleu,
-            "length_ratio"          : length_ratio(result.hard_combined, baseline),
-            "n_escalated"           : result.escalation_counts.get("hard_combined", 0),
-        }
+        })
 
-    # ── Soft penalty (isolated — no reward, no escalation) ────────────────────
+    # 5. Soft penalty
     if result.soft_penalty and result.penalty_words:
         sat  = satisfaction_exclusion(result.soft_penalty, result.penalty_words, is_tr_target)
-        bleu = compute_bleu(result.soft_penalty, baseline)
-        violated_at_baseline = (not sat["overall"]) and (bleu is not None and bleu >= 99.9)
-        metrics["soft_penalty"] = {
-            "satisfaction"                   : sat,
-            "bleu_vs_baseline"               : bleu,
-            "length_ratio"                   : length_ratio(result.soft_penalty, baseline),
-            "constraint_violated_at_baseline": violated_at_baseline,
-            "n_escalated"                    : result.escalation_counts.get("soft_penalty", 0),
-        }
+        populate_mode("soft_penalty", result.soft_penalty, sat["overall"])
+        metrics["soft_penalty"]["constraint_violated_at_baseline"] = (not sat["overall"]) and (metrics["soft_penalty"]["bleu_vs_baseline"] is not None and metrics["soft_penalty"]["bleu_vs_baseline"] >= 99.9)
 
-    # ── Soft reward (isolated — with escalation ladder) ───────────────────────
+    # 6. Soft reward
     if result.soft_reward and result.reward_words:
         sat = satisfaction_inclusion(result.soft_reward, result.reward_words, is_tr_target)
-        metrics["soft_reward"] = {
-            "satisfaction"    : sat,
-            "bleu_vs_baseline": compute_bleu(result.soft_reward, baseline),
-            "length_ratio"    : length_ratio(result.soft_reward, baseline),
-            "n_escalated"     : result.escalation_counts.get("soft_reward", 0),
-        }
+        populate_mode("soft_reward", result.soft_reward, sat["overall"])
 
-    # ── Soft combined (pure soft — no escalation) ─────────────────────────────
+    # 7. Soft combined
     if result.soft_combined and (result.penalty_words or result.reward_words):
         pen_sat = (
             satisfaction_exclusion(result.soft_combined, result.penalty_words, is_tr_target)
@@ -241,17 +272,28 @@ def evaluate_sample(result: SampleResult) -> Dict:
             satisfaction_inclusion(result.soft_combined, result.reward_words, is_tr_target)
             if result.reward_words else {"overall": True, "details": {}}
         )
-        bleu = compute_bleu(result.soft_combined, baseline)
-        violated_at_baseline = (not pen_sat["overall"]) and (bleu is not None and bleu >= 99.9)
-        metrics["soft_combined"] = {
-            "penalty_satisfaction"           : pen_sat,
-            "reward_satisfaction"            : rew_sat,
-            "overall_satisfaction"           : pen_sat["overall"] and rew_sat["overall"],
-            "bleu_vs_baseline"               : bleu,
-            "length_ratio"                   : length_ratio(result.soft_combined, baseline),
-            "constraint_violated_at_baseline": violated_at_baseline,
-            "n_escalated"                    : result.escalation_counts.get("soft_combined", 0),
-        }
+        overall_sat = pen_sat["overall"] and rew_sat["overall"]
+        populate_mode("soft_combined", result.soft_combined, overall_sat, {
+            "penalty_satisfaction": pen_sat,
+            "reward_satisfaction": rew_sat,
+        })
+        metrics["soft_combined"]["constraint_violated_at_baseline"] = (not pen_sat["overall"]) and (metrics["soft_combined"]["bleu_vs_baseline"] is not None and metrics["soft_combined"]["bleu_vs_baseline"] >= 99.9)
+
+    # 8. HuggingFace DBA baseline
+    if result.huggingface_dba:
+        excl_sat = (
+            satisfaction_exclusion(result.huggingface_dba, result.forbidden_words, is_tr_target)
+            if result.forbidden_words else {"overall": True, "details": {}}
+        )
+        incl_sat = (
+            satisfaction_inclusion(result.huggingface_dba, result.required_words, is_tr_target)
+            if result.required_words else {"overall": True, "details": {}}
+        )
+        overall_sat = excl_sat["overall"] and incl_sat["overall"]
+        populate_mode("huggingface_dba", result.huggingface_dba, overall_sat, {
+            "exclusion_satisfaction": excl_sat,
+            "inclusion_satisfaction": incl_sat,
+        })
 
     result.metrics = metrics
     return metrics
@@ -262,17 +304,32 @@ def evaluate_sample(result: SampleResult) -> Dict:
 def aggregate_results(results: List[SampleResult]) -> Dict:
     """
     Compute aggregate metrics across all samples.
-    Returns a dict: mode → {avg_satisfaction, avg_bleu, avg_length_ratio,
-                             n_violated_at_baseline, n_escalated}.
-
-    n_escalated: how many samples needed any tier-2/tier-3 fallback to satisfy
-    the constraint.  High n_escalated with 100% satisfaction means the mode
-    is relying on its escalation chain, not its own nudge.
-
-    For combined modes (hard_combined, soft_combined) overall_satisfaction is
-    used (both sub-constraints must pass).
     """
     agg = {}
+
+    # Unconstrained baseline first
+    unconstrained_bleus, unconstrained_chrfs, unconstrained_latencies = [], [], []
+    for r in results:
+        m = r.metrics.get("unconstrained")
+        if m is not None:
+            if m["bleu_ref"] is not None:
+                unconstrained_bleus.append(m["bleu_ref"])
+            if m["chrf_ref"] is not None:
+                unconstrained_chrfs.append(m["chrf_ref"])
+            if m.get("latency_ms") is not None:
+                unconstrained_latencies.append(m["latency_ms"])
+    agg["unconstrained"] = {
+        "n_samples"              : len(results),
+        "avg_satisfaction"       : None,
+        "avg_bleu_vs_base"       : 100.00,
+        "avg_bleu_vs_ref"        : round(sum(unconstrained_bleus) / len(unconstrained_bleus), 2) if unconstrained_bleus else None,
+        "avg_chrf_vs_ref"        : round(sum(unconstrained_chrfs) / len(unconstrained_chrfs), 2) if unconstrained_chrfs else None,
+        "avg_length_ratio"       : 1.000,
+        "n_violated_at_baseline" : 0,
+        "n_escalated"            : 0,
+        "avg_latency_ms"         : round(sum(unconstrained_latencies) / len(unconstrained_latencies), 1) if unconstrained_latencies else None,
+        "avg_passes"             : 1.0,
+    }
 
     # Modes that use a single "satisfaction.overall" key
     simple_modes = [
@@ -283,10 +340,10 @@ def aggregate_results(results: List[SampleResult]) -> Dict:
         "soft_reward",
     ]
     # Combined modes that use "overall_satisfaction" key
-    combined_modes = ["hard_combined", "soft_combined"]
+    combined_modes = ["hard_combined", "soft_combined", "huggingface_dba"]
 
     for mode in simple_modes:
-        sats, bleus, ratios = [], [], []
+        sats, bleus, ratios, ref_bleus, ref_chrfs, latencies, passes = [], [], [], [], [], [], []
         n_violated_at_baseline = 0
         n_escalated            = 0
         for r in results:
@@ -302,6 +359,14 @@ def aggregate_results(results: List[SampleResult]) -> Dict:
                 n_violated_at_baseline += 1
             if m.get("n_escalated", 0) > 0:
                 n_escalated += 1
+            if m.get("bleu_ref") is not None:
+                ref_bleus.append(m["bleu_ref"])
+            if m.get("chrf_ref") is not None:
+                ref_chrfs.append(m["chrf_ref"])
+            if m.get("latency_ms") is not None:
+                latencies.append(m["latency_ms"])
+            if m.get("pass_count") is not None:
+                passes.append(m["pass_count"])
 
         if not sats:
             continue
@@ -310,13 +375,17 @@ def aggregate_results(results: List[SampleResult]) -> Dict:
             "n_samples"              : len(sats),
             "avg_satisfaction"       : round(sum(sats) / len(sats), 3),
             "avg_bleu_vs_base"       : round(sum(bleus) / len(bleus), 2) if bleus else None,
+            "avg_bleu_vs_ref"        : round(sum(ref_bleus) / len(ref_bleus), 2) if ref_bleus else None,
+            "avg_chrf_vs_ref"        : round(sum(ref_chrfs) / len(ref_chrfs), 2) if ref_chrfs else None,
             "avg_length_ratio"       : round(sum(ratios) / len(ratios), 3) if ratios else None,
             "n_violated_at_baseline" : n_violated_at_baseline,
             "n_escalated"            : n_escalated,
+            "avg_latency_ms"         : round(sum(latencies) / len(latencies), 1) if latencies else None,
+            "avg_passes"             : round(sum(passes) / len(passes), 2) if passes else 1.0,
         }
 
     for mode in combined_modes:
-        sats, bleus, ratios = [], [], []
+        sats, bleus, ratios, ref_bleus, ref_chrfs, latencies, passes = [], [], [], [], [], [], []
         n_violated_at_baseline = 0
         n_escalated            = 0
         for r in results:
@@ -332,6 +401,14 @@ def aggregate_results(results: List[SampleResult]) -> Dict:
                 n_violated_at_baseline += 1
             if m.get("n_escalated", 0) > 0:
                 n_escalated += 1
+            if m.get("bleu_ref") is not None:
+                ref_bleus.append(m["bleu_ref"])
+            if m.get("chrf_ref") is not None:
+                ref_chrfs.append(m["chrf_ref"])
+            if m.get("latency_ms") is not None:
+                latencies.append(m["latency_ms"])
+            if m.get("pass_count") is not None:
+                passes.append(m["pass_count"])
 
         if not sats:
             continue
@@ -340,9 +417,13 @@ def aggregate_results(results: List[SampleResult]) -> Dict:
             "n_samples"              : len(sats),
             "avg_satisfaction"       : round(sum(sats) / len(sats), 3),
             "avg_bleu_vs_base"       : round(sum(bleus) / len(bleus), 2) if bleus else None,
+            "avg_bleu_vs_ref"        : round(sum(ref_bleus) / len(ref_bleus), 2) if ref_bleus else None,
+            "avg_chrf_vs_ref"        : round(sum(ref_chrfs) / len(ref_chrfs), 2) if ref_chrfs else None,
             "avg_length_ratio"       : round(sum(ratios) / len(ratios), 3) if ratios else None,
             "n_violated_at_baseline" : n_violated_at_baseline,
             "n_escalated"            : n_escalated,
+            "avg_latency_ms"         : round(sum(latencies) / len(latencies), 1) if latencies else None,
+            "avg_passes"             : round(sum(passes) / len(passes), 2) if passes else 1.0,
         }
 
     return agg
@@ -363,6 +444,7 @@ def print_sample_result(result: SampleResult) -> None:
         ("Soft Penalty"       , result.soft_penalty            , "soft_penalty"),
         ("Soft Reward"        , result.soft_reward             , "soft_reward"),
         ("Soft Combined"      , result.soft_combined           , "soft_combined"),
+        ("HuggingFace DBA"    , result.huggingface_dba         , "huggingface_dba"),
     ]
 
     for label, translation, mode_key in rows:
@@ -371,47 +453,55 @@ def print_sample_result(result: SampleResult) -> None:
         m = result.metrics.get(mode_key, {})
         esc_flag = f"  ↑escalated×{m['n_escalated']}" if m.get("n_escalated", 0) > 0 else ""
 
-        if mode_key in ("hard_combined", "soft_combined"):
+        if mode_key in ("hard_combined", "soft_combined", "huggingface_dba"):
             overall   = m.get("overall_satisfaction", "—")
             bleu_val  = m.get("bleu_vs_baseline", "—")
+            bleu_ref  = m.get("bleu_ref", "—")
+            chrf_ref  = m.get("chrf_ref", "—")
             lr_val    = m.get("length_ratio", "—")
+            lat_val   = f"{m.get('latency_ms', 0.0):.1f}ms"
             viol_flag = "  ⚠ violated at baseline" if m.get("constraint_violated_at_baseline") else ""
             print(
                 f"  {label:<22}: {translation}\n"
-                f"    ↳ overall_satisfied={overall}  bleu_vs_base={bleu_val}  "
-                f"len_ratio={lr_val}{viol_flag}{esc_flag}"
+                f"    ↳ overall_satisfied={overall}  bleu_vs_base={bleu_val}  bleu_ref={bleu_ref}  chrf_ref={chrf_ref}  "
+                f"len_ratio={lr_val}  latency={lat_val}{viol_flag}{esc_flag}"
             )
         else:
             sat_val   = m.get("satisfaction", {}).get("overall", "—")
             bleu_val  = m.get("bleu_vs_baseline", "—")
+            bleu_ref  = m.get("bleu_ref", "—")
+            chrf_ref  = m.get("chrf_ref", "—")
             lr_val    = m.get("length_ratio", "—")
+            lat_val   = f"{m.get('latency_ms', 0.0):.1f}ms"
             viol_flag = "  ⚠ violated at baseline" if m.get("constraint_violated_at_baseline") else ""
             print(
                 f"  {label:<22}: {translation}\n"
-                f"    ↳ satisfied={sat_val}  bleu_vs_base={bleu_val}  "
-                f"len_ratio={lr_val}{viol_flag}{esc_flag}"
+                f"    ↳ satisfied={sat_val}  bleu_vs_base={bleu_val}  bleu_ref={bleu_ref}  chrf_ref={chrf_ref}  "
+                f"len_ratio={lr_val}  latency={lat_val}{viol_flag}{esc_flag}"
             )
 
 
 def print_aggregate(agg: Dict) -> None:
     """Print a formatted aggregate results table."""
-    print("\n" + "="*82)
+    print("\n" + "="*112)
     print("AGGREGATE RESULTS")
-    print("="*82)
+    print("="*112)
     header = (
-        f"  {'Mode':<24}  {'N':>4}  {'Sat%':>6}  {'BLEU':>6}  "
-        f"{'LenRatio':>9}  {'ViolBase':>8}  {'Escalated':>9}"
+        f"  {'Mode':<24}  {'N':>4}  {'Sat%':>6}  {'BLEU_Base':>9}  {'BLEU_Ref':>8}  "
+        f"{'ChrF_Ref':>8}  {'LenRatio':>9}  {'Latency_ms':>10}  {'Passes':>6}"
     )
     print(header)
-    print("  " + "-" * 76)
+    print("  " + "-" * 106)
     for mode, vals in agg.items():
         sat  = f"{vals['avg_satisfaction']*100:.1f}%" if vals['avg_satisfaction'] is not None else "  N/A"
-        bleu = f"{vals['avg_bleu_vs_base']:.2f}"      if vals['avg_bleu_vs_base']  is not None else "  N/A"
+        bleu_base = f"{vals['avg_bleu_vs_base']:.2f}" if vals['avg_bleu_vs_base']  is not None else "  N/A"
+        bleu_ref = f"{vals['avg_bleu_vs_ref']:.2f}"   if vals['avg_bleu_vs_ref']   is not None else "  N/A"
+        chrf_ref = f"{vals['avg_chrf_vs_ref']:.2f}"   if vals['avg_chrf_vs_ref']   is not None else "  N/A"
         lr   = f"{vals['avg_length_ratio']:.3f}"      if vals['avg_length_ratio']  is not None else "  N/A"
-        vab  = str(vals.get('n_violated_at_baseline', 'N/A'))
-        esc  = str(vals.get('n_escalated', 'N/A'))
+        lat  = f"{vals['avg_latency_ms']:.1f}"        if vals['avg_latency_ms']    is not None else "  N/A"
+        passes = f"{vals['avg_passes']:.2f}"          if vals['avg_passes']        is not None else " 1.00"
         print(
-            f"  {mode:<24}  {vals['n_samples']:>4}  {sat:>6}  {bleu:>6}  "
-            f"{lr:>9}  {vab:>8}  {esc:>9}"
+            f"  {mode:<24}  {vals['n_samples']:>4}  {sat:>6}  {bleu_base:>9}  {bleu_ref:>8}  "
+            f"{chrf_ref:>8}  {lr:>9}  {lat:>10}  {passes:>6}"
         )
-    print("="*82)
+    print("="*112)

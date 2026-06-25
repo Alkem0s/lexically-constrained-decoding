@@ -26,6 +26,7 @@ import json
 import random
 import numpy as np
 import torch
+import time
 from datetime import datetime
 from typing import List, Dict
 from tqdm import tqdm
@@ -80,12 +81,15 @@ def load_test_cases(path: str = "test_cases.json") -> tuple:
 
     en_tr = data.get("EN_TR", [])
     tr_en = data.get("TR_EN", [])
+    
+    # Inject references from the paired opposite direction
+    for en, tr in zip(en_tr, tr_en):
+        en["reference"] = tr["source"]
+        tr["reference"] = en["source"]
+        
     print(f"  Loaded {len(en_tr)} EN→TR cases and {len(tr_en)} TR→EN cases "
           f"from '{path}'")
     return en_tr, tr_en
-
-
-EN_TR_CASES, TR_EN_CASES = load_test_cases("test_cases_eval.json")
 
 
 # ── Per-sample runner ─────────────────────────────────────────────────────────
@@ -117,58 +121,111 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> tuple:
         required_words  = case.get("required_words",  []),
         penalty_words   = case.get("penalty_words",   []),
         reward_words    = case.get("reward_words",    []),
+        reference       = case.get("reference",       ""),
     )
 
     # 1. Unconstrained baseline
+    t0 = time.perf_counter()
     result.unconstrained, _ = decoding.unconstrained(model_wrapper, src)
+    result.latencies["unconstrained"] = (time.perf_counter() - t0) * 1000.0
+    result.pass_counts["unconstrained"] = 1
 
     # 2. Hard exclusion (isolated)
+    t0 = time.perf_counter()
     excl_trans, excl_log = decoding.hard_exclusion(
         model_wrapper, src, case.get("forbidden_words", [])
     )
+    result.latencies["hard_exclusion"] = (time.perf_counter() - t0) * 1000.0
     result.hard_exclusion = excl_trans
+    result.pass_counts["hard_exclusion"] = 1
 
     # 3. Hard inclusion — production mode (soft-first gate)
+    t0 = time.perf_counter()
     incl_trans, incl_log = decoding.hard_inclusion(
         model_wrapper, src, case.get("required_words", [])
     )
+    result.latencies["hard_inclusion"] = (time.perf_counter() - t0) * 1000.0
     result.hard_inclusion = incl_trans
+    result.pass_counts["hard_inclusion"] = 1
 
     # 4. Hard inclusion ablation — bypasses soft gate entirely for fair comparison
+    t0 = time.perf_counter()
     hincl_abl_trans, hincl_abl_log = decoding.hard_inclusion(
         model_wrapper, src, case.get("required_words", []), _force_hard=True
     )
+    result.latencies["hard_inclusion_ablation"] = (time.perf_counter() - t0) * 1000.0
     result.hard_inclusion_ablation = hincl_abl_trans
+    result.pass_counts["hard_inclusion_ablation"] = 1
 
     # 5. Hard combined (exclusion + inclusion simultaneously)
+    t0 = time.perf_counter()
     hcomb_trans, hcomb_excl_log, hcomb_incl_log = decoding.combined_hard(
         model_wrapper, src,
         forbidden_words = case.get("forbidden_words", []),
         required_words  = case.get("required_words",  []),
     )
+    result.latencies["hard_combined"] = (time.perf_counter() - t0) * 1000.0
     result.hard_combined = hcomb_trans
+    result.pass_counts["hard_combined"] = 1
 
     # 6. Soft penalty only (isolated, pure soft — no escalation)
+    t0 = time.perf_counter()
     spen_trans, spen_log = decoding.soft_penalty_only(
         model_wrapper, src,
         penalty_words = case.get("penalty_words", []),
     )
+    result.latencies["soft_penalty"] = (time.perf_counter() - t0) * 1000.0
     result.soft_penalty = spen_trans
+    result.pass_counts["soft_penalty"] = 1
 
     # 7. Soft reward only (isolated, with escalation ladder)
+    t0 = time.perf_counter()
     srew_trans, srew_log = decoding.soft_reward_only(
         model_wrapper, src,
         reward_words = case.get("reward_words", []),
     )
+    result.latencies["soft_reward"] = (time.perf_counter() - t0) * 1000.0
     result.soft_reward = srew_trans
+    
+    # Calculate passes for soft reward
+    srew_passes = 1
+    for entry in srew_log:
+        if isinstance(entry, dict):
+            if entry.get("escalated") == "hard_inclusion":
+                srew_passes = 3
+                break
+            elif entry.get("escalated") == "soft_boost":
+                srew_passes = 2
+    result.pass_counts["soft_reward"] = srew_passes
 
     # 8. Soft combined — pure soft, no hard fallback (see combined_soft docstring)
+    t0 = time.perf_counter()
     scomb_trans, scomb_log = decoding.combined_soft(
         model_wrapper, src,
         penalty_words = case.get("penalty_words", []),
         reward_words  = case.get("reward_words",  []),
     )
+    result.latencies["soft_combined"] = (time.perf_counter() - t0) * 1000.0
     result.soft_combined = scomb_trans
+    
+    # Calculate passes for soft combined
+    scomb_passes = 1
+    for entry in scomb_log:
+        if isinstance(entry, dict) and entry.get("escalated") in ("soft_boost", "soft_boost_failed"):
+            scomb_passes = 2
+            break
+    result.pass_counts["soft_combined"] = scomb_passes
+
+    # 9. HuggingFace DBA baseline
+    t0 = time.perf_counter()
+    dba_trans, dba_log = decoding.huggingface_dba(
+        model_wrapper, src,
+        required_words  = case.get("required_words",  []),
+        forbidden_words = case.get("forbidden_words", []),
+    )
+    result.latencies["huggingface_dba"] = (time.perf_counter() - t0) * 1000.0
+    result.huggingface_dba = dba_trans
+    result.pass_counts["huggingface_dba"] = 1
 
     # ── Escalation counting ───────────────────────────────────────────────────
     # Count how many tier-2/tier-3 fallback events appear in each mode's log.
@@ -202,6 +259,7 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> tuple:
         "soft_pen"        : spen_log,
         "soft_rew"        : srew_log,
         "soft_comb"       : scomb_log,
+        "huggingface_dba" : dba_log,
     }
     analyses = {
         "hard_excl"      : interpretability.analyse_log(excl_log,       "hard_exclusion"),
@@ -212,6 +270,7 @@ def run_sample(model_wrapper, case: Dict, interp_logs: List) -> tuple:
         "soft_pen"       : interpretability.analyse_log(spen_log,       "soft_penalty"),
         "soft_rew"       : interpretability.analyse_log(srew_log,       "soft_reward"),
         "soft_comb"      : interpretability.analyse_log(scomb_log,      "soft_combined"),
+        "huggingface_dba": interpretability.analyse_log(dba_log,        "huggingface_dba"),
     }
     interp_logs.append({
         "source"   : src,
@@ -269,11 +328,14 @@ def _serialise_result(r: SampleResult) -> Dict:
         "soft_penalty"            : r.soft_penalty,
         "soft_reward"             : r.soft_reward,
         "soft_combined"           : r.soft_combined,
+        "huggingface_dba"         : r.huggingface_dba,
         "forbidden_words"         : r.forbidden_words,
         "required_words"          : r.required_words,
         "penalty_words"           : r.penalty_words,
         "reward_words"            : r.reward_words,
         "escalation_counts"       : r.escalation_counts,
+        "latencies"               : r.latencies,
+        "pass_counts"             : r.pass_counts,
         "metrics"                 : r.metrics,
     }
 
@@ -291,11 +353,14 @@ def _serialise_debug_result(r: SampleResult) -> Dict:
         "soft_penalty"            : r.soft_penalty,
         "soft_reward"             : r.soft_reward,
         "soft_combined"           : r.soft_combined,
+        "huggingface_dba"         : r.huggingface_dba,
         "forbidden_words"         : r.forbidden_words,
         "required_words"          : r.required_words,
         "penalty_words"           : r.penalty_words,
         "reward_words"            : r.reward_words,
         "escalation_counts"       : r.escalation_counts,
+        "latencies"               : r.latencies,
+        "pass_counts"             : r.pass_counts,
     }
 
 
@@ -333,7 +398,35 @@ def save_results(all_results: List[SampleResult], all_interp: List[Dict], run_id
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
+
+def _average_aggregates(agg_list: List[Dict]) -> Dict:
+    """
+    Given a list of aggregate dicts (one per seed), return a new dict where
+    every numeric leaf is replaced by the mean across all seeds.
+    Non-numeric values (e.g. None) are passed through from the first dict.
+    """
+    if len(agg_list) == 1:
+        return agg_list[0]
+
+    merged: Dict = {}
+    for mode in agg_list[0]:
+        merged[mode] = {}
+        for key in agg_list[0][mode]:
+            vals = [a[mode][key] for a in agg_list if mode in a and a[mode][key] is not None]
+            if vals and isinstance(vals[0], (int, float)):
+                merged[mode][key] = sum(vals) / len(vals)
+            else:
+                merged[mode][key] = agg_list[0][mode][key]
+    return merged
+
+
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Lexically Constrained MT Evaluation Pipeline")
+    parser.add_argument("--data", type=str, default="test_cases_eval.json",
+                        help="Path to evaluation test cases JSON file")
+    args = parser.parse_args()
+
     print("="*70)
     print("  Lexically Constrained & Interpretable Decoding for NMT")
     print("="*70)
@@ -343,57 +436,85 @@ def main():
         print(f"  GPU      : {torch.cuda.get_device_name(0)}")
     else:
         print("  ⚠  No CUDA device detected — see config.py for reinstall instructions.")
+    seeds = config.EVAL_SEEDS
+    print(f"  Seeds    : {seeds} ({len(seeds)} run(s) will be averaged)")
     print("="*70)
 
-    set_seeds()
-    run_id      = datetime.now().strftime("%Y%m%d_%H%M%S")
-    all_results = []
-    all_interp  = []
+    # Load test cases dynamically
+    en_tr_cases, tr_en_cases = load_test_cases(args.data)
 
-    # ── EN → TR ───────────────────────────────────────────────────────────────
-    print("\n[Step 1] Loading EN→TR model...")
-    en_tr_model = model_loader.load_en_tr()
+    run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+    n_seeds = len(seeds)
 
-    if EN_TR_CASES:
-        en_tr_results, en_tr_interp = run_direction(en_tr_model, EN_TR_CASES, "EN→TR")
-        all_results.extend(en_tr_results)
-        all_interp.extend(en_tr_interp)
-    else:
-        print("  [SKIP] No EN→TR cases loaded.")
+    seed_aggregates: List[Dict] = []
+    last_all_results: List[SampleResult] = []
+    last_all_interp:  List[Dict] = []
 
-    del en_tr_model
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+    for seed_idx, seed in enumerate(seeds):
+        print(f"\n{'='*70}")
+        print(f"  Seed run {seed_idx + 1}/{n_seeds}  (seed={seed})")
+        print(f"{'='*70}")
+        set_seeds(seed)
 
-    # ── TR → EN ───────────────────────────────────────────────────────────────
-    print("\n[Step 2] Loading TR→EN model...")
-    tr_en_model = model_loader.load_tr_en()
+        all_results: List[SampleResult] = []
+        all_interp:  List[Dict] = []
 
-    if TR_EN_CASES:
-        tr_en_results, tr_en_interp = run_direction(tr_en_model, TR_EN_CASES, "TR→EN")
-        all_results.extend(tr_en_results)
-        all_interp.extend(tr_en_interp)
-    else:
-        print("  [SKIP] No TR→EN cases loaded.")
+        # ── EN → TR ───────────────────────────────────────────────────────────
+        if seed_idx == 0:
+            print("\n[Step 1] Loading EN→TR model...")
+        en_tr_model = model_loader.load_en_tr()
 
-    del tr_en_model
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+        if en_tr_cases:
+            en_tr_results, en_tr_interp = run_direction(en_tr_model, en_tr_cases, "EN→TR")
+            all_results.extend(en_tr_results)
+            all_interp.extend(en_tr_interp)
+        else:
+            print("  [SKIP] No EN→TR cases loaded.")
 
-    # ── Aggregate evaluation ──────────────────────────────────────────────────
-    print("\n[Step 3] Aggregating results...")
-    agg = evaluation.aggregate_results(all_results)
-    evaluation.print_aggregate(agg)
+        del en_tr_model
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
-    # Save aggregate
+        # ── TR → EN ───────────────────────────────────────────────────────────
+        if seed_idx == 0:
+            print("\n[Step 2] Loading TR→EN model...")
+        tr_en_model = model_loader.load_tr_en()
+
+        if tr_en_cases:
+            tr_en_results, tr_en_interp = run_direction(tr_en_model, tr_en_cases, "TR→EN")
+            all_results.extend(tr_en_results)
+            all_interp.extend(tr_en_interp)
+        else:
+            print("  [SKIP] No TR→EN cases loaded.")
+
+        del tr_en_model
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+        # Aggregate this seed's results
+        print(f"\n[Seed {seed_idx + 1}] Aggregating...")
+        agg = evaluation.aggregate_results(all_results)
+        evaluation.print_aggregate(agg)
+        seed_aggregates.append(agg)
+
+        last_all_results = all_results
+        last_all_interp  = all_interp
+
+    # ── Average across seeds ───────────────────────────────────────────────────
+    print(f"\n{'='*70}")
+    print(f"  Final averaged aggregate over {n_seeds} seed(s): {seeds}")
+    print(f"{'='*70}")
+    agg_final = _average_aggregates(seed_aggregates)
+    evaluation.print_aggregate(agg_final)
+
     os.makedirs(config.RESULTS_DIR, exist_ok=True)
     agg_path = os.path.join(config.RESULTS_DIR, f"aggregate_{run_id}.json")
-    with open(agg_path, "w", encoding="utf-8") as f:
-        json.dump(agg, f, indent=2)
-    print(f"  Saved aggregate → {agg_path}")
+    with open(agg_path, "w") as f:
+        json.dump(agg_final, f, indent=2)
+    print(f"  Saved averaged aggregate → {agg_path}")
 
-    # ── Save full results ─────────────────────────────────────────────────────
-    save_results(all_results, all_interp, run_id)
+    # Save last seed's full translations for qualitative review
+    save_results(last_all_results, last_all_interp, run_id)
 
     print("\n  Done.\n")
 

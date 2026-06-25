@@ -43,10 +43,12 @@ class SoftConstraintProcessor(LogitsProcessor):
         self,
         reward_token_groups : List[List[int]],
         penalty_ids         : List[int],
-        reward_val          : float = config.SOFT_REWARD_STRENGTH,
-        penalty_val         : float = config.SOFT_PENALTY_STRENGTH,
-        curriculum_rate     : float = config.SOFT_REWARD_CURRICULUM_RATE,
-        max_reward          : float = config.SOFT_REWARD_MAX,
+        reward_val          : float = 3.75,
+        penalty_val         : float = -34.93,
+        curriculum_rate     : float = 0.25,
+        max_reward          : float = 12.0,
+        anchor_offset       : float = -5.94,
+        contextual_nudge    : float = 2.0,
         log_store           : List[Dict] = None,
     ):
         self.pending_rewards = {i: ids for i, ids in enumerate(reward_token_groups)} if reward_token_groups else {}
@@ -55,6 +57,8 @@ class SoftConstraintProcessor(LogitsProcessor):
         self.penalty_val     = penalty_val
         self.curriculum_rate = curriculum_rate
         self.max_reward      = max_reward
+        self.anchor_offset   = anchor_offset
+        self.contextual_nudge = contextual_nudge
         self.log_store       = log_store if log_store is not None else []
         self._step           = 0
         self._reward_steps_active = 0
@@ -121,7 +125,7 @@ class SoftConstraintProcessor(LogitsProcessor):
                     current_logit = scores[b, tid].item()
                     
                     # Baseline incorporates the silenced or active curriculum reward
-                    target_baseline = max_logits[b, 0].item() + config.ANCHOR_OFFSET + eff_reward
+                    target_baseline = max_logits[b, 0].item() + self.anchor_offset + eff_reward
                     
                     if current_logit < target_baseline:
                         # The token is buried: Pull it exactly to the curriculum baseline
@@ -129,8 +133,8 @@ class SoftConstraintProcessor(LogitsProcessor):
                         delta_applied = target_baseline - current_logit
                     else:
                         # The token is already highly probable organically: Just nudge it to win
-                        scores[b, tid] += config.CONTEXTUAL_NUDGE
-                        delta_applied = config.CONTEXTUAL_NUDGE
+                        scores[b, tid] += self.contextual_nudge
+                        delta_applied = self.contextual_nudge
                     
                     step_log["tokens"][tid] = {
                         "logit"               : scores[b, tid].item(),
@@ -158,10 +162,15 @@ class HardInclusionProcessor(LogitsProcessor):
         src_len                  : int,
         eos_token_id             : int,
         boundary_mask            : torch.Tensor,
-        boost                    : float = config.HARD_INCLUSION_BOOST,
+        boost                    : float = 7.0,
         log_store                : List[Dict] = None,
         min_content_tokens       : int = 3,
         suffix_penalty           : float = 0.0,
+        early_tokens             : int = 1,
+        sweet_rank               : int = 394,
+        sweet_buffer             : float = 4.66,
+        anchor_start             : float = -16.54,
+        anchor_range             : float = 14.05,
     ):
         self.master_sequences     = {i: seq for i, seq in enumerate(required_token_sequences)}
         self.src_len              = src_len
@@ -172,6 +181,11 @@ class HardInclusionProcessor(LogitsProcessor):
         self._step                = 0
         self.min_content_tokens   = min_content_tokens
         self.suffix_penalty       = suffix_penalty
+        self.early_tokens         = early_tokens
+        self.sweet_rank           = sweet_rank
+        self.sweet_buffer         = sweet_buffer
+        self.anchor_start         = anchor_start
+        self.anchor_range         = anchor_range
 
     def __call__(
         self,
@@ -272,21 +286,21 @@ class HardInclusionProcessor(LogitsProcessor):
                     # Just enough to guarantee it's the top choice
                     # ONLY apply if not already blocked by another processor
                     if target_logit > float("-inf"):
-                        applied_boost = (max_logit + config.HARD_INCLUSION_BOOST) - target_logit
+                        applied_boost = (max_logit + self.boost) - target_logit
                     else:
                         applied_boost = 0.0
                 else:
-                    is_early = current_len <= config.HARD_INCL_EARLY_TOKENS
+                    is_early = current_len <= self.early_tokens
                     
                     if is_early:
                         applied_boost = 0.0
-                    elif target_rank <= config.HARD_INCL_SWEET_RANK:
-                        applied_boost = config.HARD_INCL_SWEET_BUFFER
+                    elif target_rank <= self.sweet_rank:
+                        applied_boost = self.sweet_buffer
                     else:
                         # Dynamic Anchoring: Pull the token up from the depths
                         progress_multiplier = min(1.0, current_len / max(1, self.src_len * 0.8))
                         
-                        target_anchor = max_logit + config.HARD_INCL_ANCHOR_START + (config.HARD_INCL_ANCHOR_RANGE * progress_multiplier)
+                        target_anchor = max_logit + self.anchor_start + (self.anchor_range * progress_multiplier)
                         
                         if target_logit > float("-inf") and target_logit < target_anchor:
                             applied_boost = target_anchor - target_logit
