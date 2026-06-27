@@ -19,75 +19,75 @@ def objective_generic(trial, mode, direction, en_tr_model, tr_en_model, en_tr_ca
     # 1. Suggest parameters based on mode and direction
     if mode == "hard_inclusion":
         if direction in ["en-tr", "both"]:
-            config.HARD_INCLUSION_BOOST_TR  = trial.suggest_float("HARD_INCLUSION_BOOST_TR", 2.0, 25.0)
-            config.SUFFIX_PENALTY_TR        = trial.suggest_float("SUFFIX_PENALTY_TR", -25.0, -1.0)
+            config.HARD_INCLUSION_BOOST_TR  = trial.suggest_float("HARD_INCLUSION_BOOST_TR", 2.0, 45.0)
+            config.SUFFIX_PENALTY_TR        = trial.suggest_float("SUFFIX_PENALTY_TR", -40.0, -1.0)
             config.HARD_INCL_EARLY_TOKENS_TR = trial.suggest_int("HARD_INCL_EARLY_TOKENS_TR", 0, 10)
-            config.HARD_INCL_SWEET_RANK_TR   = trial.suggest_int("HARD_INCL_SWEET_RANK_TR", 50, 600)
+            config.HARD_INCL_SWEET_RANK_TR   = trial.suggest_int("HARD_INCL_SWEET_RANK_TR", 50, 1000)
             config.HARD_INCL_SWEET_BUFFER_TR = trial.suggest_float("HARD_INCL_SWEET_BUFFER_TR", 1.0, 15.0)
             config.HARD_INCL_ANCHOR_START_TR = trial.suggest_float("HARD_INCL_ANCHOR_START_TR", -40.0, 5.0)
-            config.HARD_INCL_ANCHOR_RANGE_TR = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_TR", 5.0, 35.0)
+            config.HARD_INCL_ANCHOR_RANGE_TR = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_TR", 1.0, 70.0)
             
         if direction in ["tr-en", "both"]:
-            config.HARD_INCLUSION_BOOST_EN  = trial.suggest_float("HARD_INCLUSION_BOOST_EN", 2.0, 25.0)
-            config.SUFFIX_PENALTY_EN        = trial.suggest_float("SUFFIX_PENALTY_EN", -25.0, -1.0)
+            config.HARD_INCLUSION_BOOST_EN  = trial.suggest_float("HARD_INCLUSION_BOOST_EN", 2.0, 45.0)
+            config.SUFFIX_PENALTY_EN        = trial.suggest_float("SUFFIX_PENALTY_EN", -40.0, -1.0)
             config.HARD_INCL_EARLY_TOKENS_EN = trial.suggest_int("HARD_INCL_EARLY_TOKENS_EN", 0, 10)
-            config.HARD_INCL_SWEET_RANK_EN   = trial.suggest_int("HARD_INCL_SWEET_RANK_EN", 50, 600)
+            config.HARD_INCL_SWEET_RANK_EN   = trial.suggest_int("HARD_INCL_SWEET_RANK_EN", 50, 1000)
             config.HARD_INCL_SWEET_BUFFER_EN = trial.suggest_float("HARD_INCL_SWEET_BUFFER_EN", 1.0, 15.0)
             config.HARD_INCL_ANCHOR_START_EN = trial.suggest_float("HARD_INCL_ANCHOR_START_EN", -40.0, 5.0)
-            config.HARD_INCL_ANCHOR_RANGE_EN = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_EN", 5.0, 35.0)
+            config.HARD_INCL_ANCHOR_RANGE_EN = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_EN", 1.0, 70.0)
 
     elif mode == "hard_combined":
         if direction in ["en-tr", "both"]:
-            config.HARD_COMBINED_BOOST_TR  = trial.suggest_float("HARD_COMBINED_BOOST_TR", 2.0, 25.0)
-            config.HARD_COMBINED_SUFFIX_PENALTY_TR = trial.suggest_float("HARD_COMBINED_SUFFIX_PENALTY_TR", -25.0, -1.0)
+            config.HARD_COMBINED_BOOST_TR  = trial.suggest_float("HARD_COMBINED_BOOST_TR", 2.0, 45.0)
+            config.HARD_COMBINED_SUFFIX_PENALTY_TR = trial.suggest_float("HARD_COMBINED_SUFFIX_PENALTY_TR", -40.0, -1.0)
             config.HARD_COMBINED_EARLY_TOKENS_TR = trial.suggest_int("HARD_COMBINED_EARLY_TOKENS_TR", 0, 10)
-            config.HARD_COMBINED_SWEET_RANK_TR   = trial.suggest_int("HARD_COMBINED_SWEET_RANK_TR", 50, 600)
+            config.HARD_COMBINED_SWEET_RANK_TR   = trial.suggest_int("HARD_COMBINED_SWEET_RANK_TR", 50, 1000)
             config.HARD_COMBINED_SWEET_BUFFER_TR = trial.suggest_float("HARD_COMBINED_SWEET_BUFFER_TR", 1.0, 15.0)
             config.HARD_COMBINED_ANCHOR_START_TR = trial.suggest_float("HARD_COMBINED_ANCHOR_START_TR", -40.0, 5.0)
-            config.HARD_COMBINED_ANCHOR_RANGE_TR = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_TR", 5.0, 35.0)
+            config.HARD_COMBINED_ANCHOR_RANGE_TR = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_TR", 1.0, 70.0)
             
         if direction in ["tr-en", "both"]:
-            config.HARD_COMBINED_BOOST_EN  = trial.suggest_float("HARD_COMBINED_BOOST_EN", 2.0, 25.0)
-            config.HARD_COMBINED_SUFFIX_PENALTY_EN = trial.suggest_float("HARD_COMBINED_SUFFIX_PENALTY_EN", -25.0, -1.0)
+            config.HARD_COMBINED_BOOST_EN  = trial.suggest_float("HARD_COMBINED_BOOST_EN", 2.0, 45.0)
+            config.HARD_COMBINED_SUFFIX_PENALTY_EN = trial.suggest_float("HARD_COMBINED_SUFFIX_PENALTY_EN", -40.0, -1.0)
             config.HARD_COMBINED_EARLY_TOKENS_EN = trial.suggest_int("HARD_COMBINED_EARLY_TOKENS_EN", 0, 10)
-            config.HARD_COMBINED_SWEET_RANK_EN   = trial.suggest_int("HARD_COMBINED_SWEET_RANK_EN", 50, 600)
+            config.HARD_COMBINED_SWEET_RANK_EN   = trial.suggest_int("HARD_COMBINED_SWEET_RANK_EN", 50, 1000)
             config.HARD_COMBINED_SWEET_BUFFER_EN = trial.suggest_float("HARD_COMBINED_SWEET_BUFFER_EN", 1.0, 15.0)
             config.HARD_COMBINED_ANCHOR_START_EN = trial.suggest_float("HARD_COMBINED_ANCHOR_START_EN", -40.0, 5.0)
-            config.HARD_COMBINED_ANCHOR_RANGE_EN = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_EN", 5.0, 35.0)
+            config.HARD_COMBINED_ANCHOR_RANGE_EN = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_EN", 1.0, 70.0)
             
     elif mode == "soft_reward":
         if direction in ["en-tr", "both"]:
-            config.SOFT_REWARD_STRENGTH_TR  = trial.suggest_float("SOFT_REWARD_STRENGTH_TR", 2.0, 12.0)
-            config.SOFT_REWARD_MAX_TR       = trial.suggest_float("SOFT_REWARD_MAX_TR", 5.0, 25.0)
-            config.SOFT_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_TR", 0.05, 2.0)
-            config.ANCHOR_OFFSET_TR         = trial.suggest_float("ANCHOR_OFFSET_TR", -20.0, 0.0)
+            config.SOFT_REWARD_STRENGTH_TR  = trial.suggest_float("SOFT_REWARD_STRENGTH_TR", 2.0, 20.0)
+            config.SOFT_REWARD_MAX_TR       = trial.suggest_float("SOFT_REWARD_MAX_TR", 5.0, 40.0)
+            config.SOFT_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_TR", 0.05, 6.0)
+            config.ANCHOR_OFFSET_TR         = trial.suggest_float("ANCHOR_OFFSET_TR", -60.0, 0.0)
             
         if direction in ["tr-en", "both"]:
-            config.SOFT_REWARD_STRENGTH_EN  = trial.suggest_float("SOFT_REWARD_STRENGTH_EN", 2.0, 12.0)
-            config.SOFT_REWARD_MAX_EN       = trial.suggest_float("SOFT_REWARD_MAX_EN", 5.0, 25.0)
-            config.SOFT_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_EN", 0.05, 2.0)
-            config.ANCHOR_OFFSET_EN         = trial.suggest_float("ANCHOR_OFFSET_EN", -20.0, 0.0)
+            config.SOFT_REWARD_STRENGTH_EN  = trial.suggest_float("SOFT_REWARD_STRENGTH_EN", 2.0, 20.0)
+            config.SOFT_REWARD_MAX_EN       = trial.suggest_float("SOFT_REWARD_MAX_EN", 5.0, 40.0)
+            config.SOFT_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_EN", 0.05, 6.0)
+            config.ANCHOR_OFFSET_EN         = trial.suggest_float("ANCHOR_OFFSET_EN", -60.0, 0.0)
             
     elif mode == "soft_penalty":
         if direction in ["en-tr", "both"]:
-            config.SOFT_PENALTY_STRENGTH_TR = trial.suggest_float("SOFT_PENALTY_STRENGTH_TR", -100.0, -10.0)
+            config.SOFT_PENALTY_STRENGTH_TR = trial.suggest_float("SOFT_PENALTY_STRENGTH_TR", -200.0, -10.0)
         if direction in ["tr-en", "both"]:
-            config.SOFT_PENALTY_STRENGTH_EN = trial.suggest_float("SOFT_PENALTY_STRENGTH_EN", -100.0, -10.0)
+            config.SOFT_PENALTY_STRENGTH_EN = trial.suggest_float("SOFT_PENALTY_STRENGTH_EN", -200.0, -10.0)
             
     elif mode == "soft_combined":
         if direction in ["en-tr", "both"]:
-            config.SOFT_COMBINED_REWARD_STRENGTH_TR = trial.suggest_float("SOFT_COMBINED_REWARD_STRENGTH_TR", 2.0, 12.0)
-            config.SOFT_COMBINED_REWARD_MAX_TR      = trial.suggest_float("SOFT_COMBINED_REWARD_MAX_TR", 5.0, 40.0)
-            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR", 0.05, 2.0)
-            config.SOFT_COMBINED_ANCHOR_OFFSET_TR   = trial.suggest_float("SOFT_COMBINED_ANCHOR_OFFSET_TR", -20.0, 0.0)
-            config.SOFT_COMBINED_PENALTY_STRENGTH_TR = trial.suggest_float("SOFT_COMBINED_PENALTY_STRENGTH_TR", -120.0, 0.0)
+            config.SOFT_COMBINED_REWARD_STRENGTH_TR = trial.suggest_float("SOFT_COMBINED_REWARD_STRENGTH_TR", 2.0, 20.0)
+            config.SOFT_COMBINED_REWARD_MAX_TR      = trial.suggest_float("SOFT_COMBINED_REWARD_MAX_TR", 5.0, 80.0)
+            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR", 0.05, 6.0)
+            config.SOFT_COMBINED_ANCHOR_OFFSET_TR   = trial.suggest_float("SOFT_COMBINED_ANCHOR_OFFSET_TR", -60.0, 0.0)
+            config.SOFT_COMBINED_PENALTY_STRENGTH_TR = trial.suggest_float("SOFT_COMBINED_PENALTY_STRENGTH_TR", -200.0, 0.0)
             
         if direction in ["tr-en", "both"]:
-            config.SOFT_COMBINED_REWARD_STRENGTH_EN = trial.suggest_float("SOFT_COMBINED_REWARD_STRENGTH_EN", 2.0, 12.0)
-            config.SOFT_COMBINED_REWARD_MAX_EN      = trial.suggest_float("SOFT_COMBINED_REWARD_MAX_EN", 5.0, 40.0)
-            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN", 0.05, 2.0)
-            config.SOFT_COMBINED_ANCHOR_OFFSET_EN   = trial.suggest_float("SOFT_COMBINED_ANCHOR_OFFSET_EN", -20.0, 0.0)
-            config.SOFT_COMBINED_PENALTY_STRENGTH_EN = trial.suggest_float("SOFT_COMBINED_PENALTY_STRENGTH_EN", -120.0, 0.0)
+            config.SOFT_COMBINED_REWARD_STRENGTH_EN = trial.suggest_float("SOFT_COMBINED_REWARD_STRENGTH_EN", 2.0, 20.0)
+            config.SOFT_COMBINED_REWARD_MAX_EN      = trial.suggest_float("SOFT_COMBINED_REWARD_MAX_EN", 5.0, 80.0)
+            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN", 0.05, 6.0)
+            config.SOFT_COMBINED_ANCHOR_OFFSET_EN   = trial.suggest_float("SOFT_COMBINED_ANCHOR_OFFSET_EN", -60.0, 0.0)
+            config.SOFT_COMBINED_PENALTY_STRENGTH_EN = trial.suggest_float("SOFT_COMBINED_PENALTY_STRENGTH_EN", -200.0, 0.0)
 
     # 2. Run evaluation
     all_results = []
@@ -245,13 +245,36 @@ def run_study(mode, direction, en_tr_model, tr_en_model, en_tr_all, tr_en_all, n
     for k, v in study.best_params.items():
         print(f"    {k:<25}: {v}")
         
-    # Save to file
+    # Save to file only if it is better than the existing best score
     suffix = f"_{direction}" if direction != "both" else ""
     out_path = os.path.join(config.RESULTS_DIR, f"best_params_{mode}{suffix}.json")
     os.makedirs(config.RESULTS_DIR, exist_ok=True)
-    with open(out_path, "w") as f:
-        json.dump(study.best_params, f, indent=2)
-    print(f"  Saved parameters to → {out_path}")
+    
+    should_write = True
+    old_score = None
+    if os.path.exists(out_path):
+        try:
+            with open(out_path, "r") as f:
+                old_data = json.load(f)
+            if isinstance(old_data, dict) and "score" in old_data:
+                old_score = old_data["score"]
+                if old_score >= study.best_value:
+                    should_write = False
+        except Exception as e:
+            print(f"  Could not read old parameters file: {e}")
+            
+    if should_write:
+        with open(out_path, "w") as f:
+            json.dump({
+                "score": study.best_value,
+                "params": study.best_params
+            }, f, indent=2)
+        if old_score is not None:
+            print(f"  New score ({study.best_value:.4f}) is better than old score ({old_score:.4f}). Saved new parameters to → {out_path}")
+        else:
+            print(f"  Saved parameters and score ({study.best_value:.4f}) to → {out_path}")
+    else:
+        print(f"  New score ({study.best_value:.4f}) is NOT better than old score ({old_score:.4f}). Kept existing parameters.")
 
 
 def main():
