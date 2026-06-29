@@ -19,10 +19,11 @@ import matplotlib.patches as mpatches
 import numpy as np
 import matplotlib.patheffects as pe
 
-OUT_DIR = os.path.join(os.path.dirname(__file__), "paper", "figures")
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUT_DIR = os.path.join(SCRIPT_DIR, "paper", "figures")
 os.makedirs(OUT_DIR, exist_ok=True)
 
-RESULTS_DIR = os.path.join(os.path.dirname(__file__), "results")
+RESULTS_DIR = os.path.join(SCRIPT_DIR, "results")
 
 # ── colour palette ─────────────────────────────────────────────────────────────
 HARD_COLOR  = "#E07B54"
@@ -42,7 +43,7 @@ def _latest(pattern):
 def save(fig, name):
     path = os.path.join(OUT_DIR, name)
     fig.savefig(path, dpi=200, bbox_inches="tight")
-    print(f"  Saved → {path}")
+    print(f'  Saved → "{path}"')
     plt.close(fig)
 
 
@@ -467,4 +468,4 @@ if __name__ == "__main__":
     fig_anchor_heatmap()
     fig_length_ratio()
     fig_latency()
-    print("Done. All figures saved to:", OUT_DIR)
+    print(f'Done. All figures saved to: "{OUT_DIR}"')

@@ -18,74 +18,74 @@ from main import load_test_cases, set_seeds
 def objective_generic(trial, mode, direction, en_tr_model, tr_en_model, en_tr_cases, tr_en_cases):
     # 1. Suggest parameters based on mode and direction
     if mode == "hard_inclusion":
-        if direction in ["en-tr", "both"]:
+        if direction == "en-tr":
             config.HARD_INCLUSION_BOOST_TR  = trial.suggest_float("HARD_INCLUSION_BOOST_TR", 2.0, 25.0)
             config.SUFFIX_PENALTY_TR        = trial.suggest_float("SUFFIX_PENALTY_TR", -25.0, -1.0)
             config.HARD_INCL_EARLY_TOKENS_TR = trial.suggest_int("HARD_INCL_EARLY_TOKENS_TR", 0, 10)
             config.HARD_INCL_SWEET_RANK_TR   = trial.suggest_int("HARD_INCL_SWEET_RANK_TR", 50, 600)
             config.HARD_INCL_SWEET_BUFFER_TR = trial.suggest_float("HARD_INCL_SWEET_BUFFER_TR", 1.0, 15.0)
-            config.HARD_INCL_ANCHOR_START_TR = trial.suggest_float("HARD_INCL_ANCHOR_START_TR", -40.0, 5.0)
-            config.HARD_INCL_ANCHOR_RANGE_TR = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_TR", 1.0, 50.0)
-            
-        if direction in ["tr-en", "both"]:
+            config.HARD_INCL_ANCHOR_START_TR = trial.suggest_float("HARD_INCL_ANCHOR_START_TR", -40.0, -5.0)
+            config.HARD_INCL_ANCHOR_RANGE_TR = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_TR", 1.0, 30.0)
+
+        elif direction == "tr-en":
             config.HARD_INCLUSION_BOOST_EN  = trial.suggest_float("HARD_INCLUSION_BOOST_EN", 2.0, 25.0)
             config.SUFFIX_PENALTY_EN        = trial.suggest_float("SUFFIX_PENALTY_EN", -25.0, -1.0)
             config.HARD_INCL_EARLY_TOKENS_EN = trial.suggest_int("HARD_INCL_EARLY_TOKENS_EN", 0, 10)
             config.HARD_INCL_SWEET_RANK_EN   = trial.suggest_int("HARD_INCL_SWEET_RANK_EN", 50, 600)
             config.HARD_INCL_SWEET_BUFFER_EN = trial.suggest_float("HARD_INCL_SWEET_BUFFER_EN", 1.0, 15.0)
-            config.HARD_INCL_ANCHOR_START_EN = trial.suggest_float("HARD_INCL_ANCHOR_START_EN", -40.0, 5.0)
-            config.HARD_INCL_ANCHOR_RANGE_EN = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_EN", 1.0, 50.0)
+            config.HARD_INCL_ANCHOR_START_EN = trial.suggest_float("HARD_INCL_ANCHOR_START_EN", -40.0, -5.0)
+            config.HARD_INCL_ANCHOR_RANGE_EN = trial.suggest_float("HARD_INCL_ANCHOR_RANGE_EN", 1.0, 30.0)
 
     elif mode == "hard_combined":
-        if direction in ["en-tr", "both"]:
+        if direction == "en-tr":
             config.HARD_COMBINED_BOOST_TR  = trial.suggest_float("HARD_COMBINED_BOOST_TR", 2.0, 25.0)
             config.HARD_COMBINED_SUFFIX_PENALTY_TR = trial.suggest_float("HARD_COMBINED_SUFFIX_PENALTY_TR", -25.0, -1.0)
             config.HARD_COMBINED_EARLY_TOKENS_TR = trial.suggest_int("HARD_COMBINED_EARLY_TOKENS_TR", 0, 10)
             config.HARD_COMBINED_SWEET_RANK_TR   = trial.suggest_int("HARD_COMBINED_SWEET_RANK_TR", 50, 600)
             config.HARD_COMBINED_SWEET_BUFFER_TR = trial.suggest_float("HARD_COMBINED_SWEET_BUFFER_TR", 1.0, 15.0)
-            config.HARD_COMBINED_ANCHOR_START_TR = trial.suggest_float("HARD_COMBINED_ANCHOR_START_TR", -40.0, 5.0)
-            config.HARD_COMBINED_ANCHOR_RANGE_TR = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_TR", 1.0, 50.0)
-            
-        if direction in ["tr-en", "both"]:
+            config.HARD_COMBINED_ANCHOR_START_TR = trial.suggest_float("HARD_COMBINED_ANCHOR_START_TR", -40.0, -5.0)
+            config.HARD_COMBINED_ANCHOR_RANGE_TR = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_TR", 1.0, 30.0)
+
+        elif direction == "tr-en":
             config.HARD_COMBINED_BOOST_EN  = trial.suggest_float("HARD_COMBINED_BOOST_EN", 2.0, 25.0)
             config.HARD_COMBINED_SUFFIX_PENALTY_EN = trial.suggest_float("HARD_COMBINED_SUFFIX_PENALTY_EN", -25.0, -1.0)
             config.HARD_COMBINED_EARLY_TOKENS_EN = trial.suggest_int("HARD_COMBINED_EARLY_TOKENS_EN", 0, 10)
             config.HARD_COMBINED_SWEET_RANK_EN   = trial.suggest_int("HARD_COMBINED_SWEET_RANK_EN", 50, 600)
             config.HARD_COMBINED_SWEET_BUFFER_EN = trial.suggest_float("HARD_COMBINED_SWEET_BUFFER_EN", 1.0, 15.0)
-            config.HARD_COMBINED_ANCHOR_START_EN = trial.suggest_float("HARD_COMBINED_ANCHOR_START_EN", -40.0, 5.0)
-            config.HARD_COMBINED_ANCHOR_RANGE_EN = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_EN", 1.0, 50.0)
-            
+            config.HARD_COMBINED_ANCHOR_START_EN = trial.suggest_float("HARD_COMBINED_ANCHOR_START_EN", -40.0, -5.0)
+            config.HARD_COMBINED_ANCHOR_RANGE_EN = trial.suggest_float("HARD_COMBINED_ANCHOR_RANGE_EN", 1.0, 30.0)
+
     elif mode == "soft_reward":
-        if direction in ["en-tr", "both"]:
+        if direction == "en-tr":
             config.SOFT_REWARD_STRENGTH_TR  = trial.suggest_float("SOFT_REWARD_STRENGTH_TR", 2.0, 15.0)
             config.SOFT_REWARD_MAX_TR       = trial.suggest_float("SOFT_REWARD_MAX_TR", 5.0, 25.0)
-            config.SOFT_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_TR", 0.05, 6.0)
+            config.SOFT_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_TR", 0.05, 3.0)
             config.ANCHOR_OFFSET_TR         = trial.suggest_float("ANCHOR_OFFSET_TR", -40.0, 0.0)
-            
-        if direction in ["tr-en", "both"]:
+
+        elif direction == "tr-en":
             config.SOFT_REWARD_STRENGTH_EN  = trial.suggest_float("SOFT_REWARD_STRENGTH_EN", 2.0, 15.0)
             config.SOFT_REWARD_MAX_EN       = trial.suggest_float("SOFT_REWARD_MAX_EN", 5.0, 25.0)
-            config.SOFT_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_EN", 0.05, 6.0)
+            config.SOFT_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_REWARD_CURRICULUM_RATE_EN", 0.05, 3.0)
             config.ANCHOR_OFFSET_EN         = trial.suggest_float("ANCHOR_OFFSET_EN", -40.0, 0.0)
-            
+
     elif mode == "soft_penalty":
-        if direction in ["en-tr", "both"]:
+        if direction == "en-tr":
             config.SOFT_PENALTY_STRENGTH_TR = trial.suggest_float("SOFT_PENALTY_STRENGTH_TR", -150.0, -10.0)
-        if direction in ["tr-en", "both"]:
+        elif direction == "tr-en":
             config.SOFT_PENALTY_STRENGTH_EN = trial.suggest_float("SOFT_PENALTY_STRENGTH_EN", -150.0, -10.0)
-            
+
     elif mode == "soft_combined":
-        if direction in ["en-tr", "both"]:
+        if direction == "en-tr":
             config.SOFT_COMBINED_REWARD_STRENGTH_TR = trial.suggest_float("SOFT_COMBINED_REWARD_STRENGTH_TR", 2.0, 15.0)
             config.SOFT_COMBINED_REWARD_MAX_TR      = trial.suggest_float("SOFT_COMBINED_REWARD_MAX_TR", 5.0, 40.0)
-            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR", 0.05, 6.0)
+            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_TR", 0.05, 3.0)
             config.SOFT_COMBINED_ANCHOR_OFFSET_TR   = trial.suggest_float("SOFT_COMBINED_ANCHOR_OFFSET_TR", -40.0, 0.0)
             config.SOFT_COMBINED_PENALTY_STRENGTH_TR = trial.suggest_float("SOFT_COMBINED_PENALTY_STRENGTH_TR", -100.0, -10.0)
-            
-        if direction in ["tr-en", "both"]:
+
+        elif direction == "tr-en":
             config.SOFT_COMBINED_REWARD_STRENGTH_EN = trial.suggest_float("SOFT_COMBINED_REWARD_STRENGTH_EN", 2.0, 15.0)
             config.SOFT_COMBINED_REWARD_MAX_EN      = trial.suggest_float("SOFT_COMBINED_REWARD_MAX_EN", 5.0, 40.0)
-            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN", 0.05, 6.0)
+            config.SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN = trial.suggest_float("SOFT_COMBINED_REWARD_CURRICULUM_RATE_EN", 0.05, 3.0)
             config.SOFT_COMBINED_ANCHOR_OFFSET_EN   = trial.suggest_float("SOFT_COMBINED_ANCHOR_OFFSET_EN", -40.0, 0.0)
             config.SOFT_COMBINED_PENALTY_STRENGTH_EN = trial.suggest_float("SOFT_COMBINED_PENALTY_STRENGTH_EN", -100.0, -10.0)
 
@@ -93,9 +93,9 @@ def objective_generic(trial, mode, direction, en_tr_model, tr_en_model, en_tr_ca
     all_results = []
     
     eval_tasks = []
-    if direction in ["en-tr", "both"] and en_tr_model is not None:
+    if direction == "en-tr" and en_tr_model is not None:
         eval_tasks.append((en_tr_cases, en_tr_model))
-    if direction in ["tr-en", "both"] and tr_en_model is not None:
+    elif direction == "tr-en" and tr_en_model is not None:
         eval_tasks.append((tr_en_cases, tr_en_model))
         
     for cases, model in eval_tasks:
@@ -144,10 +144,18 @@ def objective_generic(trial, mode, direction, en_tr_model, tr_en_model, en_tr_ca
     trial.set_user_attr("bleu", avg_bleu)
     trial.set_user_attr("length_ratio", avg_len_ratio)
     
-    # Continuous length ratio penalty (encourage terminating output near 1.0)
-    # Stricter penalty: small buffer, high multiplier to prevent word appending
-    length_penalty = max(0.0, abs(avg_len_ratio - 1.0) - 0.02) * 2000.0
-    
+    # Pure-quadratic asymmetric length penalty — only upward deviation penalised.
+    # 5% buffer for natural morphological / tokenisation length variation.
+    # Quadratic growth ensures the curve is zero at the boundary and
+    # explosive beyond it — making ratio ≥ 1.10 a mathematical loser:
+    #   max positive score = sat(200) + bleu(100) = 300
+    #   ratio 1.05 → penalty    0   (natural zone, free)
+    #   ratio 1.08 → penalty  135   (warning — needs sat ≥ 67% just to break even)
+    #   ratio 1.10 → penalty  375   (> 300 max — IMPOSSIBLE to win, appending killed)
+    #   ratio 1.20 → penalty 3375   (completely eliminated)
+    upward_dev = max(0.0, avg_len_ratio - 1.05)
+    length_penalty = (upward_dev ** 2) * 150_000
+
     # Composite score
     score = (sat_rate * 200) + avg_bleu - length_penalty
     
@@ -159,23 +167,23 @@ def objective_generic(trial, mode, direction, en_tr_model, tr_en_model, en_tr_ca
 
 def objective_dba(trial, direction, en_tr_model, tr_en_model, en_tr_cases, tr_en_cases):
     # 1. Suggest parameters for DBA
-    if direction in ["en-tr", "both"]:
+    if direction == "en-tr":
         config.DBA_NUM_BEAMS_TR = trial.suggest_int("DBA_NUM_BEAMS_TR", 4, 16)
         config.DBA_LENGTH_PENALTY_TR = trial.suggest_float("DBA_LENGTH_PENALTY_TR", -5.0, 2.0)
         config.DBA_REPETITION_PENALTY_TR = trial.suggest_float("DBA_REPETITION_PENALTY_TR", 1.0, 1.5)
-        
-    if direction in ["tr-en", "both"]:
+
+    elif direction == "tr-en":
         config.DBA_NUM_BEAMS_EN = trial.suggest_int("DBA_NUM_BEAMS_EN", 4, 16)
         config.DBA_LENGTH_PENALTY_EN = trial.suggest_float("DBA_LENGTH_PENALTY_EN", -5.0, 2.0)
         config.DBA_REPETITION_PENALTY_EN = trial.suggest_float("DBA_REPETITION_PENALTY_EN", 1.0, 1.5)
 
     # 2. Run evaluation
     all_results = []
-    
+
     eval_tasks = []
-    if direction in ["en-tr", "both"] and en_tr_model is not None:
+    if direction == "en-tr" and en_tr_model is not None:
         eval_tasks.append((en_tr_cases, en_tr_model))
-    if direction in ["tr-en", "both"] and tr_en_model is not None:
+    elif direction == "tr-en" and tr_en_model is not None:
         eval_tasks.append((tr_en_cases, tr_en_model))
         
     for cases, model in eval_tasks:
@@ -213,10 +221,16 @@ def objective_dba(trial, direction, en_tr_model, tr_en_model, en_tr_cases, tr_en
     trial.set_user_attr("bleu", avg_bleu)
     trial.set_user_attr("length_ratio", avg_len_ratio)
     
-    # Continuous length ratio penalty (encourage terminating output near 1.0)
-    # Stricter penalty: small buffer, high multiplier to prevent word appending
-    length_penalty = max(0.0, abs(avg_len_ratio - 1.0) - 0.02) * 2500.0
-        
+    # Pure-quadratic asymmetric length penalty for DBA.
+    # 3% buffer: beam search produces on-length outputs when constrained
+    # correctly; DBA's known failure mode is severe appending (ratio > 2).
+    #   ratio 1.03 → penalty    0   (natural zone)
+    #   ratio 1.10 → penalty  735   (completely eliminated)
+    #   ratio 1.50 → penalty 27350  (absurdly eliminated)
+    #   ratio 2.00 → penalty 141k   (DBA appending stomped)
+    upward_dev = max(0.0, avg_len_ratio - 1.03)
+    length_penalty = (upward_dev ** 2) * 150_000
+
     score = (sat_rate * 200) + avg_bleu - length_penalty
     
     # Print progress with breakdown
@@ -278,13 +292,7 @@ def run_study(mode, direction, en_tr_model, tr_en_model, en_tr_all, tr_en_all, n
         else:
             print(f"  New score ({score:.4f}) is NOT better than old score ({old_score:.4f}). Kept existing parameters for {target_direction}.")
 
-    if direction == "both":
-        params_tr = {k: v for k, v in study.best_params.items() if k.endswith("_TR")}
-        params_en = {k: v for k, v in study.best_params.items() if k.endswith("_EN")}
-        save_params("en-tr", params_tr, study.best_value)
-        save_params("tr-en", params_en, study.best_value)
-    else:
-        save_params(direction, study.best_params, study.best_value)
+    save_params(direction, study.best_params, study.best_value)
 
 
 def main():
@@ -318,9 +326,9 @@ def main():
         print("\n[Step 1] Loading models...")
         en_tr_model = None
         tr_en_model = None
-        if direction in ["en-tr", "both"]:
+        if direction == "en-tr":
             en_tr_model = model_loader.load_en_tr()
-        if direction in ["tr-en", "both"]:
+        elif direction == "tr-en":
             tr_en_model = model_loader.load_tr_en()
         
         # 2. Load test cases and pre-calculate baselines

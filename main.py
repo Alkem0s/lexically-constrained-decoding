@@ -446,9 +446,12 @@ def main():
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     n_seeds = len(seeds)
 
-    seed_aggregates: List[Dict] = []
-    last_all_results: List[SampleResult] = []
-    last_all_interp:  List[Dict] = []
+    seed_aggregates_en_tr: List[Dict] = []
+    seed_aggregates_tr_en: List[Dict] = []
+    last_en_tr_results: List[SampleResult] = []
+    last_tr_en_results: List[SampleResult] = []
+    last_en_tr_interp:  List[Dict] = []
+    last_tr_en_interp:  List[Dict] = []
 
     for seed_idx, seed in enumerate(seeds):
         print(f"\n{'='*70}")
@@ -456,18 +459,15 @@ def main():
         print(f"{'='*70}")
         set_seeds(seed)
 
-        all_results: List[SampleResult] = []
-        all_interp:  List[Dict] = []
-
         # ── EN → TR ───────────────────────────────────────────────────────────
         if seed_idx == 0:
             print("\n[Step 1] Loading EN→TR model...")
         en_tr_model = model_loader.load_en_tr()
 
+        seed_en_tr_results: List[SampleResult] = []
+        seed_en_tr_interp:  List[Dict] = []
         if en_tr_cases:
-            en_tr_results, en_tr_interp = run_direction(en_tr_model, en_tr_cases, "EN→TR")
-            all_results.extend(en_tr_results)
-            all_interp.extend(en_tr_interp)
+            seed_en_tr_results, seed_en_tr_interp = run_direction(en_tr_model, en_tr_cases, "EN→TR")
         else:
             print("  [SKIP] No EN→TR cases loaded.")
 
@@ -480,10 +480,10 @@ def main():
             print("\n[Step 2] Loading TR→EN model...")
         tr_en_model = model_loader.load_tr_en()
 
+        seed_tr_en_results: List[SampleResult] = []
+        seed_tr_en_interp:  List[Dict] = []
         if tr_en_cases:
-            tr_en_results, tr_en_interp = run_direction(tr_en_model, tr_en_cases, "TR→EN")
-            all_results.extend(tr_en_results)
-            all_interp.extend(tr_en_interp)
+            seed_tr_en_results, seed_tr_en_interp = run_direction(tr_en_model, tr_en_cases, "TR→EN")
         else:
             print("  [SKIP] No TR→EN cases loaded.")
 
@@ -491,30 +491,54 @@ def main():
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
 
-        # Aggregate this seed's results
-        print(f"\n[Seed {seed_idx + 1}] Aggregating...")
-        agg = evaluation.aggregate_results(all_results)
-        evaluation.print_aggregate(agg)
-        seed_aggregates.append(agg)
+        # Aggregate this seed's results — directions kept strictly separate
+        if seed_en_tr_results:
+            print(f"\n[Seed {seed_idx + 1}] Aggregating EN→TR...")
+            agg_en_tr = evaluation.aggregate_results(seed_en_tr_results)
+            evaluation.print_aggregate(agg_en_tr)
+            seed_aggregates_en_tr.append(agg_en_tr)
 
-        last_all_results = all_results
-        last_all_interp  = all_interp
+        if seed_tr_en_results:
+            print(f"\n[Seed {seed_idx + 1}] Aggregating TR→EN...")
+            agg_tr_en = evaluation.aggregate_results(seed_tr_en_results)
+            evaluation.print_aggregate(agg_tr_en)
+            seed_aggregates_tr_en.append(agg_tr_en)
 
-    # ── Average across seeds ───────────────────────────────────────────────────
-    print(f"\n{'='*70}")
-    print(f"  Final averaged aggregate over {n_seeds} seed(s): {seeds}")
-    print(f"{'='*70}")
-    agg_final = _average_aggregates(seed_aggregates)
-    evaluation.print_aggregate(agg_final)
+        last_en_tr_results = seed_en_tr_results
+        last_tr_en_results = seed_tr_en_results
+        last_en_tr_interp  = seed_en_tr_interp
+        last_tr_en_interp  = seed_tr_en_interp
 
+    # ── Average across seeds — directions kept strictly separate ──────────────
     os.makedirs(config.RESULTS_DIR, exist_ok=True)
-    agg_path = os.path.join(config.RESULTS_DIR, f"aggregate_{run_id}.json")
-    with open(agg_path, "w") as f:
-        json.dump(agg_final, f, indent=2)
-    print(f"  Saved averaged aggregate → {agg_path}")
 
-    # Save last seed's full translations for qualitative review
-    save_results(last_all_results, last_all_interp, run_id)
+    if seed_aggregates_en_tr:
+        print(f"\n{'='*70}")
+        print(f"  EN→TR  —  final averaged aggregate over {len(seed_aggregates_en_tr)} seed(s): {seeds}")
+        print(f"{'='*70}")
+        agg_en_tr_final = _average_aggregates(seed_aggregates_en_tr)
+        evaluation.print_aggregate(agg_en_tr_final)
+        agg_en_tr_path = os.path.join(config.RESULTS_DIR, f"aggregate_en_tr_{run_id}.json")
+        with open(agg_en_tr_path, "w") as f:
+            json.dump(agg_en_tr_final, f, indent=2)
+        print(f"  Saved EN→TR averaged aggregate → {agg_en_tr_path}")
+
+    if seed_aggregates_tr_en:
+        print(f"\n{'='*70}")
+        print(f"  TR→EN  —  final averaged aggregate over {len(seed_aggregates_tr_en)} seed(s): {seeds}")
+        print(f"{'='*70}")
+        agg_tr_en_final = _average_aggregates(seed_aggregates_tr_en)
+        evaluation.print_aggregate(agg_tr_en_final)
+        agg_tr_en_path = os.path.join(config.RESULTS_DIR, f"aggregate_tr_en_{run_id}.json")
+        with open(agg_tr_en_path, "w") as f:
+            json.dump(agg_tr_en_final, f, indent=2)
+        print(f"  Saved TR→EN averaged aggregate → {agg_tr_en_path}")
+
+    # Save last seed's full translations for qualitative review — per direction
+    if last_en_tr_results:
+        save_results(last_en_tr_results, last_en_tr_interp, f"en_tr_{run_id}")
+    if last_tr_en_results:
+        save_results(last_tr_en_results, last_tr_en_interp, f"tr_en_{run_id}")
 
     print("\n  Done.\n")
 
