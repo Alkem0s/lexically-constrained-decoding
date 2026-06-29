@@ -116,11 +116,10 @@ def fig_architecture():
 # ─────────────────────────────────────────────────────────────────────────────
 # Figure 1: Consolidated Quality Overview
 # Baseline BLEU + Reference BLEU + ChrF grouped bars, satisfaction overlay
-# (replaces the old separate fig1/fig5 — saves a figure slot)
 # ─────────────────────────────────────────────────────────────────────────────
 
-def fig_quality_overview():
-    agg_path = _latest("aggregate_*.json")
+def fig_quality_overview(direction):
+    agg_path = _latest(f"aggregate_{direction}_*.json")
     with open(agg_path) as f:
         agg = json.load(f)
 
@@ -200,8 +199,10 @@ def fig_quality_overview():
     ax1.set_ylabel("Score", fontsize=10)
     ax1.set_ylim(0, 105)
     ax1.grid(axis="y", linestyle=":", alpha=0.5, zorder=0)
-    ax1.set_title("Translation Quality (Baseline BLEU / Reference BLEU / ChrF) and\n"
-                  "Constraint Satisfaction per Decoding Mode", fontsize=11, y=1.16)
+
+    dir_title = "EN→TR" if direction == "en_tr" else "TR→EN"
+    ax1.set_title(f"Translation Quality & Constraint Satisfaction ({dir_title})\n"
+                  "Baseline BLEU / Reference BLEU / ChrF per Decoding Mode", fontsize=11, y=1.16)
 
     # Legend
     hard_p  = mpatches.Patch(color=HARD_COLOR, label="Hard modes")
@@ -217,57 +218,14 @@ def fig_quality_overview():
                fontsize=7.5, loc="lower center", bbox_to_anchor=(0.5, 1.04), ncol=4)
 
     fig.tight_layout()
-    save(fig, "fig1_quality_overview.png")
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Figure 2: HPO Convergence — objective score over 50 trials
-# ─────────────────────────────────────────────────────────────────────────────
-
-def fig_hpo_convergence():
-    """
-    Reads the Optuna trial log embedded in the HPO console output.
-    Since we don't have a saved Optuna study object, we reconstruct
-    the data from the best_params.json and use synthetic trial data
-    representative of what was reported during the HPO run.
-    """
-    trial_scores = [
-        1001.12, 1003.37, 1002.88, 1003.57, 1005.12,
-        1006.34, 1007.23, 1004.89, 1008.01, 1007.45,
-        1009.12, 1009.34, 1008.78, 1010.23, 1010.56,
-        1010.67, 1009.89, 1011.23, 1011.45, 1011.78,
-        1012.01, 1011.56, 1012.34, 1012.89, 1013.12,
-        1013.45, 1013.23, 1013.67, 1013.89, 1014.01,
-        1013.78, 1014.12, 1013.56, 1014.23, 1014.45,
-        1014.34, 1014.67, 1014.56, 1014.78, 1014.89,
-        1014.67, 1015.01, 1014.89, 1015.12, 1015.23,
-        1015.12, 1015.34, 1015.23, 1015.45, 1015.56,
-    ]
-    trials = np.arange(1, len(trial_scores) + 1)
-    best_so_far = np.maximum.accumulate(trial_scores)
-
-    fig, ax = plt.subplots(figsize=(7, 3.8))
-    ax.scatter(trials, trial_scores, s=20, color="#A8C5E0",
-               alpha=0.7, zorder=3, label="Trial score")
-    ax.plot(trials, best_so_far, color="#1A5276", linewidth=2,
-            zorder=4, label="Running best")
-    ax.axvline(10, color="crimson", linestyle="--",
-               linewidth=1.5, label="Convergence (~trial 10)")
-
-    ax.set_xlabel("Trial Number", fontsize=10)
-    ax.set_ylabel("Objective Score (1000·Sat + BLEU)", fontsize=10)
-    ax.set_title("Optuna HPO Convergence over 50 Trials", fontsize=11)
-    ax.legend(fontsize=8.5)
-    ax.grid(linestyle=":", alpha=0.5)
-    fig.tight_layout()
-    save(fig, "fig2_hpo_convergence.png")
+    save(fig, f"fig1_quality_overview_{direction}.png")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Figure 3: Dynamic Anchor Schedule Heatmap
 # ─────────────────────────────────────────────────────────────────────────────
 
-def fig_anchor_heatmap():
+def fig_anchor_heatmap(direction):
     """
     Simulates the mathematical dynamic anchoring schedule based on the
     optimized hyperparameters. (Raw token logs are not saved to disk).
@@ -275,10 +233,12 @@ def fig_anchor_heatmap():
     import config
     n_steps = 25
     src_len = 20
-    grace_period = getattr(config, "HARD_INCL_EARLY_TOKENS_TR", 1)
-    buffer       = getattr(config, "HARD_INCL_SWEET_BUFFER_TR", 4.66)
-    anchor_start = getattr(config, "HARD_INCL_ANCHOR_START_TR", -16.54)
-    anchor_range = getattr(config, "HARD_INCL_ANCHOR_RANGE_TR", 14.05)
+    
+    suffix = "TR" if direction == "en_tr" else "EN"
+    grace_period = getattr(config, f"HARD_INCL_EARLY_TOKENS_{suffix}", 1)
+    buffer       = getattr(config, f"HARD_INCL_SWEET_BUFFER_{suffix}", 4.66)
+    anchor_start = getattr(config, f"HARD_INCL_ANCHOR_START_{suffix}", -16.54)
+    anchor_range = getattr(config, f"HARD_INCL_ANCHOR_RANGE_{suffix}", 14.05)
 
     n_tokens = 4
     matrix = np.zeros((n_tokens, n_steps))
@@ -306,7 +266,9 @@ def fig_anchor_heatmap():
     ax.set_yticklabels([f"Word {i+1}" for i in range(n_tokens)], fontsize=9)
     ax.set_xlabel("Decoding Step ($t$)", fontsize=10)
     ax.set_ylabel("Constraint Words", fontsize=10)
-    ax.set_title("Analytical Simulation of Dynamic Anchor Boost ($\\delta_t$)", fontsize=11)
+    
+    dir_title = "EN→TR" if direction == "en_tr" else "TR→EN"
+    ax.set_title(f"Analytical Simulation of Dynamic Anchor Boost $\\delta_t$ ({dir_title})", fontsize=11)
 
     cbar = plt.colorbar(im, ax=ax)
     cbar.set_label("Applied Boost $\\delta_t$ (logits)", fontsize=9)
@@ -323,15 +285,15 @@ def fig_anchor_heatmap():
     ax.legend(fontsize=8.5, loc="upper left")
 
     fig.tight_layout()
-    save(fig, "fig3_anchor_heatmap.png")
+    save(fig, f"fig3_anchor_heatmap_{direction}.png")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Figure 4: Length Ratio comparison (incl. DBA baseline)
 # ─────────────────────────────────────────────────────────────────────────────
 
-def fig_length_ratio():
-    agg_path = _latest("aggregate_*.json")
+def fig_length_ratio(direction):
+    agg_path = _latest(f"aggregate_{direction}_*.json")
     with open(agg_path) as f:
         agg = json.load(f)
 
@@ -361,7 +323,7 @@ def fig_length_ratio():
     ax.bar(x, ratios, color=colors, width=0.55, edgecolor="white",
            linewidth=0.8, zorder=3)
     ax.axhline(1.0, color="black", linewidth=1.5, linestyle="-",
-               zorder=4, label="Unconstrained baseline (1.0)")
+           zorder=4, label="Unconstrained baseline (1.0)")
 
     for xi, r in zip(x, ratios):
         ax.text(xi, r + 0.01, f"{r:.3f}", ha="center",
@@ -371,7 +333,9 @@ def fig_length_ratio():
     ax.set_xticklabels(labels, fontsize=9)
     ax.set_ylabel("Avg. Output Length Ratio\n(constrained / unconstrained)", fontsize=9.5)
     ax.set_ylim(0.9, max_ratio * 1.12)
-    ax.set_title("Output Length Ratio per Decoding Mode\n"
+    
+    dir_title = "EN→TR" if direction == "en_tr" else "TR→EN"
+    ax.set_title(f"Output Length Ratio per Decoding Mode ({dir_title})\n"
                  "(Ratio > 1 indicates output inflation; DBA shown for comparison)", fontsize=10.5)
     ax.grid(axis="y", linestyle=":", alpha=0.5, zorder=0)
 
@@ -383,23 +347,20 @@ def fig_length_ratio():
     ax.legend(handles=[hard_patch, soft_patch, dba_patch, baseline], fontsize=8.5)
 
     fig.tight_layout()
-    save(fig, "fig4_length_ratio.png")
-
-
-# (fig_reference_quality merged into fig_quality_overview above)
+    save(fig, f"fig4_length_ratio_{direction}.png")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Figure 6: Decoding Latency comparison
 # ─────────────────────────────────────────────────────────────────────────────
 
-def fig_latency():
+def fig_latency(direction):
     """
     Horizontal bar chart of average decoding latency per sentence (ms)
     for all modes including the DBA baseline. Highlights the speed advantage
     of logit-level approaches.
     """
-    agg_path = _latest("aggregate_*.json")
+    agg_path = _latest(f"aggregate_{direction}_*.json")
     with open(agg_path) as f:
         agg = json.load(f)
 
@@ -440,7 +401,9 @@ def fig_latency():
     ax.set_yticks(y)
     ax.set_yticklabels(labels, fontsize=9)
     ax.set_xlabel("Average Latency per Sentence (ms)", fontsize=10)
-    ax.set_title("Decoding Latency Comparison\n(lower is better; DBA shown for reference)",
+    
+    dir_title = "EN→TR" if direction == "en_tr" else "TR→EN"
+    ax.set_title(f"Decoding Latency Comparison ({dir_title})\n(lower is better; DBA shown for reference)",
                  fontsize=11)
     ax.grid(axis="x", linestyle=":", alpha=0.5, zorder=0)
     ax.set_xlim(0, max(latency) * 1.22)
@@ -448,12 +411,11 @@ def fig_latency():
     hard_patch = mpatches.Patch(color=HARD_COLOR, label="Hard modes")
     soft_patch = mpatches.Patch(color=SOFT_COLOR, label="Soft modes")
     dba_patch  = mpatches.Patch(color=DBA_COLOR,  label="HuggingFace DBA")
-    base_patch = mpatches.Patch(color=BASE_COLOR,  label="Unconstrained")
-    ax.legend(handles=[hard_patch, soft_patch, dba_patch, base_patch],
+    ax.legend(handles=[hard_patch, soft_patch, dba_patch],
               fontsize=8.5, loc="lower right")
 
     fig.tight_layout()
-    save(fig, "fig6_latency.png")
+    save(fig, f"fig6_latency_{direction}.png")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -463,9 +425,10 @@ def fig_latency():
 if __name__ == "__main__":
     print("Generating paper figures...")
     fig_architecture()
-    fig_quality_overview()
-    fig_hpo_convergence()
-    fig_anchor_heatmap()
-    fig_length_ratio()
-    fig_latency()
+    for direction in ["en_tr", "tr_en"]:
+        print(f"Generating figures for direction: {direction}...")
+        fig_quality_overview(direction)
+        fig_anchor_heatmap(direction)
+        fig_length_ratio(direction)
+        fig_latency(direction)
     print(f'Done. All figures saved to: "{OUT_DIR}"')
