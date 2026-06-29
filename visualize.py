@@ -168,9 +168,10 @@ def fig_quality_overview(direction):
         ci = modes.index("hard_combined")
         ax1.hlines(mean_hard_b, ci - w*1.6, ci - w*0.4,
                    colors="crimson", linewidths=1.8, linestyles="--", zorder=5)
+        y_offset = 40 if direction == "en_tr" else 28
         ax1.annotate(f"Exp. Base\n({mean_hard_b:.1f})",
                      xy=(ci - w, mean_hard_b),
-                     xytext=(ci - w - 0.6, mean_hard_b + 22),
+                     xytext=(ci - w - 0.6, mean_hard_b + y_offset),
                      ha="center", va="bottom", fontsize=7, color="crimson", fontweight="bold",
                      arrowprops=dict(arrowstyle="->", color="crimson", lw=0.9,
                                      connectionstyle="arc3,rad=-0.25"))

@@ -1,6 +1,6 @@
 # Research Notes — HPO Parameter Plateaus and Optimization Landscape
 
-During our Hyperparameter Optimization (HPO) sweeps, we observed that many trials for decoding modes like `soft_penalty` and `soft_reward` yield identical metric scores (e.g. exactly `1057.410` or `1064.400`). This document analyzes these findings and details the underlying mechanics of this parameter plateau phenomenon.
+During our Hyperparameter Optimization (HPO) sweeps, we observed that many trials for decoding modes like `soft_penalty` and `soft_reward` yield identical metric scores. This document analyzes these findings and details the underlying mechanics of this parameter plateau phenomenon.
 
 ---
 
@@ -45,18 +45,6 @@ $$\text{target\_baseline} = \text{max\_logits} + \text{anchor\_offset} + \text{e
 
 > [!IMPORTANT]
 > **Offset Guidelines**: Keep `anchor_offset` ranges bounded away from `0` (e.g., search within `[-60.0, -15.0]`) to avoid wasting HPO trial budget on aggressive, low-BLEU search regions.
-
-## 4. Empirical Convergence & Trial Budget Analysis
-We ran quick 5-trial HPO sweeps inside the WSL2 `tm` environment to measure convergence speed and score variance across different decoding modes. Here are the findings:
-
-| Mode | Average Time/Trial | Best Score (5 Trials) | Best Score Found at Trial | Plateaued Early? | Trial Scores History |
-| --- | --- | --- | --- | --- | --- |
-| `soft_penalty` | 25.0s | 1052.43 | Trial 0 | Yes | 1052.43 → 1052.43 → 1052.43 → 1052.43 → 1052.43 |
-| `hard_inclusion` | 73.7s | 978.74 | Trial 1 | Yes | 945.28 → 978.74 → 903.72 → 954.15 → 863.38 |
-| `dba` | 184.2s | -430.33 | Trial 0 | Yes | -430.33 → -980.60 → -1276.03 → -1223.61 → -1292.81 |
-| `soft_reward` | 48.0s | 1081.37 | Trial 0 | Yes | 1081.37 → 1081.37 → 1081.37 → 1081.37 → 1081.37 |
-| `soft_combined` | 38.3s | 885.43 | Trial 0 | Yes | 885.43 → 885.43 → 885.43 → 745.31 → 885.43 |
-| `hard_combined` | 93.1s | 927.50 | Trial 0 | Yes | 927.50 → 875.34 → 902.51 → 902.16 → 881.36 |
 
 ### Recommendations on Trial Budgets:
 *   **`soft_penalty`**: Requires **5–10 trials** maximum. It has a flat optimization landscape (suppressing forbidden tokens requires any sufficiently negative logit value), so it converges almost instantly.
