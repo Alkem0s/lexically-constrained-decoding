@@ -246,17 +246,53 @@ def fig_anchor_heatmap(direction):
 
     for step in range(n_steps):
         t = step + 1
-        if t <= grace_period:
-            continue
 
         progress = min(1.0, t / max(1, src_len * 0.8))
         target_anchor = anchor_start + (anchor_range * progress)
-        base_boost = max(0, 10.0 + target_anchor)
+        
+        # We assume the pre-intervention logit difference (max_logit - target_logit) is ~10.0 logits.
+        base_boost = max(0.0, 10.0 + target_anchor)
 
-        matrix[0, step] = base_boost
-        matrix[1, step] = buffer if t == 8  else base_boost
-        matrix[2, step] = buffer if t == 15 else base_boost
-        matrix[3, step] = buffer if t in [10, 11] else base_boost
+        # Simulating active and post-generation states for each constraint word:
+        # Word 1 (Index 0): generated at step 5
+        if t <= grace_period:
+            matrix[0, step] = 0.0
+        elif t < 5:
+            matrix[0, step] = base_boost
+        elif t == 5:
+            matrix[0, step] = buffer
+        else:
+            matrix[0, step] = 0.0
+
+        # Word 2 (Index 1): generated at step 8
+        if t <= grace_period:
+            matrix[1, step] = 0.0
+        elif t < 8:
+            matrix[1, step] = base_boost
+        elif t == 8:
+            matrix[1, step] = buffer
+        else:
+            matrix[1, step] = 0.0
+
+        # Word 3 (Index 2): generated at step 15
+        if t <= grace_period:
+            matrix[2, step] = 0.0
+        elif t < 15:
+            matrix[2, step] = base_boost
+        elif t == 15:
+            matrix[2, step] = buffer
+        else:
+            matrix[2, step] = 0.0
+
+        # Word 4 (Index 3): generated at steps 10-11
+        if t <= grace_period:
+            matrix[3, step] = 0.0
+        elif t < 10:
+            matrix[3, step] = base_boost
+        elif t in [10, 11]:
+            matrix[3, step] = buffer
+        else:
+            matrix[3, step] = 0.0
 
     fig, ax = plt.subplots(figsize=(8, 3.5))
     im = ax.imshow(matrix, aspect="auto", cmap="YlOrRd", vmin=0)
@@ -277,13 +313,13 @@ def fig_anchor_heatmap(direction):
     ax.axvspan(-0.5, grace_period - 0.5, alpha=0.15, color="royalblue",
                label=f"Grace period ($\\tau={grace_period}$)")
 
-    for t_idx, step_num in [(1, 8), (2, 15), (3, 10), (3, 11)]:
+    for t_idx, step_num in [(0, 5), (1, 8), (2, 15), (3, 10), (3, 11)]:
         ax.text(step_num - 1, t_idx, "*", color="black", ha="center", va="center",
                 fontsize=16, fontweight="bold")
 
     ax.plot([], [], marker="*", color="black", linestyle="None",
             label="Natural Fit (Sweet Rank)")
-    ax.legend(fontsize=8.5, loc="upper left")
+    ax.legend(fontsize=8.5, loc="upper right")
 
     fig.tight_layout()
     save(fig, f"fig3_anchor_heatmap_{direction}.png")

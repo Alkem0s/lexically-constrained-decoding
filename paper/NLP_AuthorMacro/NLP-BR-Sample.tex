@@ -1,0 +1,83 @@
+% NLP-BR-Sample.tex
+% v1.1, released 10 Apr 2024
+% Copyright 2024 Cambridge University Press
+
+\documentclass[bookreview]{CUP-JNL-NLP}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{natbib}
+\ifpdf%
+\usepackage{epstopdf}%
+\else%
+\fi
+\usepackage{multirow}
+
+\begin{document}
+\label{firstpage}
+
+\lefttitle{Book Review}
+\righttitle{Book Review}
+
+\jnlPage{\pageref{firstpage}}{\pageref{lastpage}}
+\jnlDoiYr{2024}
+\doival{10.1017/xxxxx}
+
+\title{Book Review}
+
+\maketitle
+
+\bktext{Computational Linguistics, by Author. Cham, Springer Nature,
+2024. ISBN 9123456789. IX + 22 pages.}
+
+The layout book review design for the {\em Natural Language Processing} journal
+has been implemented as a \LaTeX\ style file. The NLP style file is based
+on the ARTICLE style as discussed in the \LaTeX\ manual. Commands which
+differ from the standard \LaTeX\ interface, or which are provided in addition
+to the standard interface, are explained in this guide. This guide is not a
+substitute for the \LaTeX\ manual itself.
+
+The \LaTeX\ document preparation system is a special version of the
+\TeX\ typesetting program. \LaTeX\ adds to \TeX\ a collection of
+commands which simplify typesetting by allowing the author to
+concentrate on the logical structure of the document rather than
+its visual layout.
+
+\LaTeX\ provides a consistent and comprehensive document preparation
+interface. There are simple-to-use commands for generating a table of
+contents, lists of figures and/or tables, and indexes. \LaTeX\ can
+automatically number list entries, equations, figures, tables, and
+footnotes, as well as parts, chapters, sections and subsections.
+Using this numbering system, bibliographic citations, page references
+and cross references to any other numbered entity ({\it e.g.\ } chapter,
+section, equation, figure, list entry) are quite straightforward.
+
+The use of document class allows a simple change of style (or style option)
+to transform the appearance of your document. The CUP NLP class file preserves
+the standard \LaTeX\ interface such that any document which can be produced
+using the standard \LaTeX\ ARTICLE style can also be produced with the
+NLP style. However, the fonts (sizes) and measure of text is slightly different
+from that for ARTICLE, therefore line breaks will change and it is possible
+that equations may need re-setting.
+
+\begin{contrib}
+Author 1
+Affiliation 1 Line 1,
+Affiliation 1 Line 2
+Email 1\\
+Author 2
+Affiliation 2 Line 1,
+Affiliation 2 Line 2
+Email 2
+\end{contrib}
+
+\begin{thebibliography}{}
+  \bibitem[\protect\citeauthoryear{Akmajian and Lehrer}{Akmajian and Lehrer}{1976}]{akm76}
+   \textbf{Akmajian and Lehrer A.} (1976). NP-like quantifiers and the
+   problem of determining the head of an NP. {\it Linguistic
+   Analysis\/} \textbf{2}, 295--313.
+\end{thebibliography}
+
+\label{lastpage}
+
+\end{document}
