@@ -3,3 +3,12 @@ models/
 results/old/
 *.docx
 *.zip
+.tex
+.eps
+.cls
+.bib
+.bst
+.docx
+
+paper/TLP/
+paper/NLP_AuthorMacro/
