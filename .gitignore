@@ -1,6 +1,8 @@
 __pycache__/
 models/
 results/old/
+paper/TLP
+paper/NLP_AuthorMacro
 *.docx
 *.zip
 *.tex
@@ -8,6 +10,3 @@ results/old/
 *.cls
 *.bib
 *.bst
-
-paper/TLP/
-paper/NLP_AuthorMacro/
