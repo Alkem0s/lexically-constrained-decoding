@@ -1,8 +1,7 @@
 __pycache__/
 models/
 results/old/
-paper/TLP
-paper/NLP_AuthorMacro
+paper/
 *.docx
 *.zip
 *.tex
