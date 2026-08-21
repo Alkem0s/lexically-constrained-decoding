@@ -197,40 +197,6 @@ In hard constraint settings, target constraint tokens initially rank between pos
 | **Sample 2**<br>($\text{TR}\rightarrow\text{EN}$) | **Source:** *Dedektif önemli bir ipucu buldu.*<br>**Required:** [*evidence*]<br>**Forbidden:** [*clue*] | **Reference**<br>**Unconstrained**<br>**Hard Exclusion**<br>**Hard Inclusion**<br>**Soft Reward (Escal.)**<br>**HuggingFace DBA** | The detective found crucial evidence.<br>The detective found an important clue.<br>The detective found an important lead.<br>The detective found important evidence.<br>The detective found crucial evidence.<br>The detective found an important evidence. |
 | **Sample 3**<br>($\text{EN}\rightarrow\text{TR}$) | **Source:** *The doctor advised the patient to exercise.*<br>**Required:** [*hekim*]<br>**Forbidden:** [*doktor*] | **Reference**<br>**Unconstrained**<br>**Hard Exclusion**<br>**Hard Inclusion**<br>**Soft Reward (Escal.)**<br>**HuggingFace DBA** | Hekim hastaya egzersiz yapmasını tavsiye etti.<br>Doktor hastaya egzersiz yapmasını tavsiye etti.<br>Tabip hastaya egzersiz yapmasını tavsiye etti.<br>Hekim hastaya egzersiz yapmasını tavsiye etti.<br>Hekim hastaya egzersiz yapmasını tavsiye etti.<br>Hekim hastaya egzersiz yapmasını tavsiye etti doktor hekim hekim. |
 
----
-
-## Repository Structure
-
-```
-lexically-constrained-decoding/
-├── figures/                          # High-resolution vector/PNG experimental figures
-│   ├── fig0_architecture.png
-│   ├── fig1_quality_overview_en_tr.png
-│   ├── fig1_quality_overview_tr_en.png
-│   ├── fig3_anchor_heatmap_en_tr.png
-│   ├── fig3_anchor_heatmap_tr_en.png
-│   ├── fig4_length_ratio_en_tr.png
-│   ├── fig4_length_ratio_tr_en.png
-│   ├── fig6_latency_en_tr.png
-│   └── fig6_latency_tr_en.png
-├── paper/
-│   ├── paper_NLP.tex                 # Latest Cambridge NLP submission manuscript
-│   └── references.bib                # Complete bibliography
-├── config.py                         # Central hyperparameter configuration
-├── constraints.py                    # LogitsProcessor classes (HardExclusion, HardInclusion, SoftConstraint)
-├── decoding.py                       # Decoding pipeline, generation wrappers, escalation ladders
-├── evaluation.py                     # Metric calculation (BLEU, ChrF, Satisfaction, Length Ratio)
-├── generate_large_set.py             # 500-sample test set mining & reference-difference pipeline
-├── hpo.py                            # Optuna TPE multi-objective hyperparameter optimization
-├── interpretability.py               # Step-level token rank and probability logging
-├── main.py                           # Full evaluation benchmark runner
-├── model_loader.py                   # HuggingFace MarianMT model loader and local caching
-├── visualize.py                      # Matplotlib script generating all paper figures
-├── test_cases_eval_large.json        # Held-out 500-sentence bilingual evaluation corpus
-└── results/                          # Serialized experiment logs, metrics, and JSON dumps
-```
-
----
 
 ## Installation & Quickstart
 
