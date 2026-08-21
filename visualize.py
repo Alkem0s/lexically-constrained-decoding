@@ -20,8 +20,10 @@ import numpy as np
 import matplotlib.patheffects as pe
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-OUT_DIR = os.path.join(SCRIPT_DIR, "paper", "figures")
+OUT_DIR = os.path.join(SCRIPT_DIR, "figures")
+PAPER_OUT_DIR = os.path.join(SCRIPT_DIR, "paper", "figures")
 os.makedirs(OUT_DIR, exist_ok=True)
+os.makedirs(PAPER_OUT_DIR, exist_ok=True)
 
 RESULTS_DIR = os.path.join(SCRIPT_DIR, "results")
 
@@ -43,7 +45,9 @@ def _latest(pattern):
 def save(fig, name):
     path = os.path.join(OUT_DIR, name)
     fig.savefig(path, dpi=200, bbox_inches="tight")
-    print(f'  Saved → "{path}"')
+    paper_path = os.path.join(PAPER_OUT_DIR, name)
+    fig.savefig(paper_path, dpi=200, bbox_inches="tight")
+    print(f'  Saved → "{path}" & "{paper_path}"')
     plt.close(fig)
 
 

@@ -33,7 +33,7 @@ This project implements and evaluates a lightweight, plug-and-play, beam-search-
 
 ## System Architecture & Methodology
 
-![System Architecture](./paper/figures/fig0_architecture.png)
+![System Architecture](./figures/fig0_architecture.png)
 
 At decoding step $t$, the transformer decoder produces raw, unnormalized logits $\mathbf{l}_t \in \mathbb{R}^{|\mathcal{V}|}$. Active logit processors apply additive or replacement transformations $\Delta \mathbf{l}_t$ before softmax normalization:
 
@@ -62,8 +62,8 @@ $$\delta_t = \begin{cases}
 * **EOS Blocking & Safety Valve:** Suppresses `<eos>` with $\gamma_{\text{eos}}(t) \in [-50.0, -20.0]$ while constraints remain unsatisfied, with an emergency safety valve releasing suppression when length exceeds $1.5 \times L_{\text{src}}$ to prevent infinite generation loops.
 
 #### Dynamic Anchor Progress Schedules
-![Dynamic Anchor Schedule EN-TR](./paper/figures/fig3_anchor_heatmap_en_tr.png)
-![Dynamic Anchor Schedule TR-EN](./paper/figures/fig3_anchor_heatmap_tr_en.png)
+![Dynamic Anchor Schedule EN-TR](./figures/fig3_anchor_heatmap_en_tr.png)
+![Dynamic Anchor Schedule TR-EN](./figures/fig3_anchor_heatmap_tr_en.png)
 
 ### 3. Soft Constraints (Penalty & Curriculum Reward)
 * **Soft Logit Penalty:** Decrements forbidden token logits by a constant negative bias $\lambda_{\text{pen}} < 0$:
@@ -148,8 +148,8 @@ The `soft_reward_only` strategy executes a 3-tier escalation ladder:
 | **HuggingFace DBA Baseline** | 250 | 97.2% | 49.08 | 50.38 | 70.36 | 1.289 | 784.0 | 1.00 |
 
 #### Translation Quality Overview
-![Translation Quality Overview EN-TR](./paper/figures/fig1_quality_overview_en_tr.png)
-![Translation Quality Overview TR-EN](./paper/figures/fig1_quality_overview_tr_en.png)
+![Translation Quality Overview EN-TR](./figures/fig1_quality_overview_en_tr.png)
+![Translation Quality Overview TR-EN](./figures/fig1_quality_overview_tr_en.png)
 
 ---
 
@@ -162,8 +162,8 @@ In $\text{EN}\rightarrow\text{TR}$, HuggingFace Dynamic Beam Allocation (DBA) ex
 * **Logit-Level Superiority:** Logit manipulation steers probabilities at the output projection layer, allowing self-attention heads to seamlessly synthesize inflected surface forms while preserving clean sentence length (**$1.063\times$**).
 
 #### Output Length Ratio Comparison
-![Output Length Ratio EN-TR](./paper/figures/fig4_length_ratio_en_tr.png)
-![Output Length Ratio TR-EN](./paper/figures/fig4_length_ratio_tr_en.png)
+![Output Length Ratio EN-TR](./figures/fig4_length_ratio_en_tr.png)
+![Output Length Ratio TR-EN](./figures/fig4_length_ratio_tr_en.png)
 
 ### 2. Computational Latency & Speedup
 Logit manipulation operates in $\mathcal{O}(|\mathcal{V}|)$ time on GPU without dynamic state-bank tracking or CPU-GPU synchronization bottlenecks:
@@ -171,8 +171,8 @@ Logit manipulation operates in $\mathcal{O}(|\mathcal{V}|)$ time on GPU without 
 * In $\text{TR}\rightarrow\text{EN}$, **Hard Inclusion executes in 239.9 ms** (**$3.3\times$ speedup** over DBA at 784.0 ms).
 
 #### Decoding Latency Comparison
-![Decoding Latency EN-TR](./paper/figures/fig6_latency_en_tr.png)
-![Decoding Latency TR-EN](./paper/figures/fig6_latency_tr_en.png)
+![Decoding Latency EN-TR](./figures/fig6_latency_en_tr.png)
+![Decoding Latency TR-EN](./figures/fig6_latency_tr_en.png)
 
 ### 3. Step-Level Token Interpretability Dynamics
 Step-level logging across all 500 evaluation sentences reveals the magnitude of probability intervention required during decoding:
@@ -203,18 +203,18 @@ In hard constraint settings, target constraint tokens initially rank between pos
 
 ```
 lexically-constrained-decoding/
+├── figures/                          # High-resolution vector/PNG experimental figures
+│   ├── fig0_architecture.png
+│   ├── fig1_quality_overview_en_tr.png
+│   ├── fig1_quality_overview_tr_en.png
+│   ├── fig3_anchor_heatmap_en_tr.png
+│   ├── fig3_anchor_heatmap_tr_en.png
+│   ├── fig4_length_ratio_en_tr.png
+│   ├── fig4_length_ratio_tr_en.png
+│   ├── fig6_latency_en_tr.png
+│   └── fig6_latency_tr_en.png
 ├── paper/
 │   ├── paper_NLP.tex                 # Latest Cambridge NLP submission manuscript
-│   ├── figures/                      # High-resolution vector/PNG experimental figures
-│   │   ├── fig0_architecture.png
-│   │   ├── fig1_quality_overview_en_tr.png
-│   │   ├── fig1_quality_overview_tr_en.png
-│   │   ├── fig3_anchor_heatmap_en_tr.png
-│   │   ├── fig3_anchor_heatmap_tr_en.png
-│   │   ├── fig4_length_ratio_en_tr.png
-│   │   ├── fig4_length_ratio_tr_en.png
-│   │   ├── fig6_latency_en_tr.png
-│   │   └── fig6_latency_tr_en.png
 │   └── references.bib                # Complete bibliography
 ├── config.py                         # Central hyperparameter configuration
 ├── constraints.py                    # LogitsProcessor classes (HardExclusion, HardInclusion, SoftConstraint)
