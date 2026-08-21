@@ -2,7 +2,7 @@
 
 **Authors:** Alkım Gönenç Efe, Emre Şatır  
 **Affiliation:** Department of Computer Engineering, İzmir Katip Çelebi University, İzmir, Turkey  
-**Paper:** [paper/paper_NLP.tex](file:///c:/Users/efe20/Desktop/Inventory/Programming/Python/Uni%20CENG/Machine%20Translation/lexically-constrained-decoding/paper/paper_NLP.tex) | [PDF Manuscript](file:///c:/Users/efe20/Desktop/Inventory/Programming/Python/Uni%20CENG/Machine%20Translation/lexically-constrained-decoding/paper/lexically_constrained_decoding_NLP.pdf)
+**Paper:** [paper/paper_NLP.tex](./paper/paper_NLP.tex) | [PDF Manuscript](./paper/lexically_constrained_decoding_NLP.pdf)
 
 ---
 
@@ -11,28 +11,6 @@
 Lexically constrained decoding enables practitioners to inject domain-specific terminology, named entities, and standardized glossaries into Neural Machine Translation (NMT) outputs at inference time without requiring parameter fine-tuning or model retraining. While prevailing approaches modify the structural beam search algorithm—such as Grid Beam Search (GBS) and Dynamic Beam Allocation (DBA)—they often introduce severe computational overhead, complex multi-bank state tracking, and heightened susceptibility to ungrammatical sequence inflation when applied to morphologically rich agglutinative languages.
 
 This project implements and evaluates a lightweight, plug-and-play, beam-search-agnostic **logit manipulation framework** that directly steers the token probability distribution at each autoregressive decoding step through standard HuggingFace `LogitsProcessor` interfaces. We evaluate six decoding strategies across **English $\leftrightarrow$ Turkish ($\text{EN}\leftrightarrow\text{TR}$)** translation using Helsinki-NLP OPUS-MT transformer models on a curated bilingual corpus of **500 sentence pairs** (250 $\text{EN}\rightarrow\text{TR}$ and 250 $\text{TR}\rightarrow\text{EN}$) categorized by linguistic domain and difficulty tier.
-
-```
-                      ┌───────────────────────────────────────────────┐
-                      │              MarianMT Decoder                 │
-                      └──────────────────────┬────────────────────────┘
-                                             │ Output Logits  l_t ∈ ℝ^|V|
-                                             ▼
-                      ┌───────────────────────────────────────────────┐
-                      │    Logit Manipulation Pipeline (LogitsProc)   │
-                      │                                               │
-                      │  • Hard Exclusion Masking (l_t → -∞)          │
-                      │  • Dynamic Anchor Scheduling & Boost (δ_t)    │
-                      │  • Suffix Boundary Penalty (γ_suffix)         │
-                      │  • Soft Curriculum Reward (λ_eff) & Penalty   │
-                      │  • EOS Blocking (γ_eos) & Safety Valve        │
-                      └──────────────────────┬────────────────────────┘
-                                             │ Modified Logits l̃_t
-                                             ▼
-                      ┌───────────────────────────────────────────────┐
-                      │          Standard Beam Search Loop            │
-                      └───────────────────────────────────────────────┘
-```
 
 ### Key Empirical Highlights
 * **Superior Quality–Satisfaction Equilibrium:** Curriculum-anchored soft reward with multi-tier escalation achieves **99.2% / 98.8%** satisfaction with baseline BLEU preservation of **72.32 / 81.65** and near-natural length ratios (**1.062 / 1.058**).
@@ -55,7 +33,7 @@ This project implements and evaluates a lightweight, plug-and-play, beam-search-
 
 ## System Architecture & Methodology
 
-![System Architecture](paper/figures/fig0_architecture.png)
+![System Architecture](./paper/figures/fig0_architecture.png)
 
 At decoding step $t$, the transformer decoder produces raw, unnormalized logits $\mathbf{l}_t \in \mathbb{R}^{|\mathcal{V}|}$. Active logit processors apply additive or replacement transformations $\Delta \mathbf{l}_t$ before softmax normalization:
 
@@ -83,9 +61,9 @@ $$\delta_t = \begin{cases}
 * **Morphological Boundary Suffix Penalty ($\gamma_{\text{suffix}}$):** Applies a negative penalty to non-boundary subwords at step $t+1$ after constraint completion to prevent improper suffix concatenation.
 * **EOS Blocking & Safety Valve:** Suppresses `<eos>` with $\gamma_{\text{eos}}(t) \in [-50.0, -20.0]$ while constraints remain unsatisfied, with an emergency safety valve releasing suppression when length exceeds $1.5 \times L_{\text{src}}$ to prevent infinite generation loops.
 
-| Dynamic Anchor Schedule (EN $\rightarrow$ TR) | Dynamic Anchor Schedule (TR $\rightarrow$ EN) |
-| :---: | :---: |
-| ![Anchor Heatmap EN-TR](paper/figures/fig3_anchor_heatmap_en_tr.png) | ![Anchor Heatmap TR-EN](paper/figures/fig3_anchor_heatmap_tr_en.png) |
+#### Dynamic Anchor Progress Schedules
+![Dynamic Anchor Schedule EN-TR](./paper/figures/fig3_anchor_heatmap_en_tr.png)
+![Dynamic Anchor Schedule TR-EN](./paper/figures/fig3_anchor_heatmap_tr_en.png)
 
 ### 3. Soft Constraints (Penalty & Curriculum Reward)
 * **Soft Logit Penalty:** Decrements forbidden token logits by a constant negative bias $\lambda_{\text{pen}} < 0$:
@@ -169,9 +147,9 @@ The `soft_reward_only` strategy executes a 3-tier escalation ladder:
 | **Soft Combined** | 247 | 71.3% | 66.52 | 54.75 | 71.62 | 1.013 | 236.8 | 1.32 |
 | **HuggingFace DBA Baseline** | 250 | 97.2% | 49.08 | 50.38 | 70.36 | 1.289 | 784.0 | 1.00 |
 
-| Translation Quality Overview (EN $\rightarrow$ TR) | Translation Quality Overview (TR $\rightarrow$ EN) |
-| :---: | :---: |
-| ![Quality EN-TR](paper/figures/fig1_quality_overview_en_tr.png) | ![Quality TR-EN](paper/figures/fig1_quality_overview_tr_en.png) |
+#### Translation Quality Overview
+![Translation Quality Overview EN-TR](./paper/figures/fig1_quality_overview_en_tr.png)
+![Translation Quality Overview TR-EN](./paper/figures/fig1_quality_overview_tr_en.png)
 
 ---
 
@@ -183,18 +161,18 @@ In $\text{EN}\rightarrow\text{TR}$, HuggingFace Dynamic Beam Allocation (DBA) ex
 * **Mechanistic Cause:** DBA partitions beam search into discrete constraint banks ($0, \dots, C$) governed by a finite-state prefix trie. When translating into agglutinative Turkish, natural phrasing requires inflected suffixes. If an inflected surface form diverges from the registered trie lemma, Bank $C$ remains unsatisfied. As the hypothesis reaches its natural syntactic conclusion, the model attempts to emit `<eos>`, but DBA blocks termination. The decoder enters a degenerative loop, babbling filler tokens and appending raw bare lemmas at the end of the sentence before closing.
 * **Logit-Level Superiority:** Logit manipulation steers probabilities at the output projection layer, allowing self-attention heads to seamlessly synthesize inflected surface forms while preserving clean sentence length (**$1.063\times$**).
 
-| Output Length Ratio (EN $\rightarrow$ TR) | Output Length Ratio (TR $\rightarrow$ EN) |
-| :---: | :---: |
-| ![Length Ratio EN-TR](paper/figures/fig4_length_ratio_en_tr.png) | ![Length Ratio TR-EN](paper/figures/fig4_length_ratio_tr_en.png) |
+#### Output Length Ratio Comparison
+![Output Length Ratio EN-TR](./paper/figures/fig4_length_ratio_en_tr.png)
+![Output Length Ratio TR-EN](./paper/figures/fig4_length_ratio_tr_en.png)
 
 ### 2. Computational Latency & Speedup
 Logit manipulation operates in $\mathcal{O}(|\mathcal{V}|)$ time on GPU without dynamic state-bank tracking or CPU-GPU synchronization bottlenecks:
 * Single-pass **Hard Inclusion executes in 943.3 ms** in $\text{EN}\rightarrow\text{TR}$ (**$2.1\times$ speedup** over DBA at 2003.3 ms).
 * In $\text{TR}\rightarrow\text{EN}$, **Hard Inclusion executes in 239.9 ms** (**$3.3\times$ speedup** over DBA at 784.0 ms).
 
-| Decoding Latency (EN $\rightarrow$ TR) | Decoding Latency (TR $\rightarrow$ EN) |
-| :---: | :---: |
-| ![Latency EN-TR](paper/figures/fig6_latency_en_tr.png) | ![Latency TR-EN](paper/figures/fig6_latency_tr_en.png) |
+#### Decoding Latency Comparison
+![Decoding Latency EN-TR](./paper/figures/fig6_latency_en_tr.png)
+![Decoding Latency TR-EN](./paper/figures/fig6_latency_tr_en.png)
 
 ### 3. Step-Level Token Interpretability Dynamics
 Step-level logging across all 500 evaluation sentences reveals the magnitude of probability intervention required during decoding:
