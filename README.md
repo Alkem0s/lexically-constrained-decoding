@@ -229,20 +229,3 @@ To regenerate all figures and heatmaps from the latest results:
 ```bash
 python visualize.py
 ```
-
----
-
-## Citation
-
-If you use this code or findings in your research, please cite our paper:
-
-```bibtex
-@article{efe2026lexically,
-  title={Lexically Constrained and Interpretable Decoding for Neural Machine Translation: A Morphology-Aware Logit Manipulation Framework},
-  author={Efe, Alk{\i}m G{\"o}nen{\c{c}} and {\c{S}}at{\i}r, Emre},
-  journal={Natural Language Processing},
-  publisher={Cambridge University Press},
-  year={2026},
-  url={https://github.com/Alkem0s/lexically-constrained-decoding}
-}
-```
