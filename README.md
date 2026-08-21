@@ -2,7 +2,7 @@
 
 **Authors:** Alkım Gönenç Efe, Emre Şatır  
 **Affiliation:** Department of Computer Engineering, İzmir Katip Çelebi University, İzmir, Turkey  
-**Paper:** [paper/paper_NLP.tex](./paper/paper_NLP.tex) | [PDF Manuscript](./paper/lexically_constrained_decoding_NLP.pdf)
+**Paper:** [PDF Manuscript](./lexically_constrained_decoding_NLP.pdf)
 
 ---
 
